@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary
 {
-    public interface ICharactor
+    public interface ICharacter
     {
         int RegistrationNumber { get; }
         string Name { get; }

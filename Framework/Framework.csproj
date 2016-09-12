@@ -41,7 +41,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharactorInfo.cs" />
+    <Compile Include="CharacterInfo.cs" />
     <Compile Include="DataBase.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

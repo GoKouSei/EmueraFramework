@@ -45,7 +45,7 @@
     <Compile Include="Draw\ConsoleStringPart.cs" />
     <Compile Include="Draw\Point.cs" />
     <Compile Include="ErbFunction.cs" />
-    <Compile Include="ICharactor.cs" />
+    <Compile Include="ICharacter.cs" />
     <Compile Include="IDataBase.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IFrontEnd.cs" />

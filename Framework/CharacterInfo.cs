@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Framework
 {
-    class CharactorInfo : ICharactor
+    class CharacterInfo : ICharacter
     {
-        internal CharactorInfo(
+        internal CharacterInfo(
             int registrationNumber,
             Tuple<string, Type, int>[] variableInfo,
             Dictionary<string, object> customVariables,

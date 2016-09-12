@@ -44,11 +44,11 @@ namespace SharedLibrary
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
 
-        ICharactor GetChara(int num);
+        ICharacter GetChara(int num);
         void AddChara(int num);
         void AddVoidChara(int num);
         void DelChara(int num);
-        int[] RegistedCharactors { get; }
+        int[] RegistedCharacters { get; }
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);

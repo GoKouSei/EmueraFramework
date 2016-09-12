@@ -16,8 +16,8 @@ namespace Framework
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Func<object[],object>> _methods = new Dictionary<string, Func<object[], object>>();
         private Dictionary<SystemFunctionCode, Func<object[], object>> _systemFunctions = new Dictionary<SystemFunctionCode, Func<object[], object>>();
-        private Dictionary<int, CharactorInfo> _charactors = new Dictionary<int, CharactorInfo>();
-        private Dictionary<int, CharactorInfo> _defaultCharactors = new Dictionary<int, CharactorInfo>();
+        private Dictionary<int, CharacterInfo> _characters = new Dictionary<int, CharacterInfo>();
+        private Dictionary<int, CharacterInfo> _defaultCharacters = new Dictionary<int, CharacterInfo>();
         private Tuple<string, Type, int>[] _charaVariableInfo;
         private IFrontEnd _frontEnd;
         private Dictionary<string, Dictionary<string, int>> _nameDic;
@@ -39,7 +39,7 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public int[] RegistedCharactors => _charactors.Keys.ToArray();
+        public int[] RegistedCharacters => _characters.Keys.ToArray();
 
         public FrameworkState State { get; private set; }
 
@@ -73,7 +73,7 @@ namespace Framework
                 {
                     foreach (var defaultChara in defaultCharas)
                     {
-                        _defaultCharactors.Add(defaultChara.Item1, new CharactorInfo(defaultChara.Item1, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Item2));
+                        _defaultCharacters.Add(defaultChara.Item1, new CharacterInfo(defaultChara.Item1, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Item2));
                     }
                 }
 
@@ -188,10 +188,10 @@ namespace Framework
             throw new NotImplementedException();
         }
 
-        public ICharactor GetChara(int num)
+        public ICharacter GetChara(int num)
         {
-            CharactorInfo chara;
-            if(_charactors.TryGetValue(num,out chara))
+            CharacterInfo chara;
+            if(_characters.TryGetValue(num,out chara))
             {
                 return chara;
             }
@@ -203,14 +203,14 @@ namespace Framework
 
         public void AddChara(int num)
         {
-            CharactorInfo defaultChara;
-            if (_defaultCharactors.TryGetValue(num, out defaultChara))
+            CharacterInfo defaultChara;
+            if (_defaultCharacters.TryGetValue(num, out defaultChara))
             {
-                if (_charactors.ContainsKey(num))
+                if (_characters.ContainsKey(num))
                 {
                     throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
                 }
-                _charactors.Add(num, _defaultCharactors[num]);
+                _characters.Add(num, _defaultCharacters[num]);
             }
             else
             {
@@ -220,17 +220,17 @@ namespace Framework
 
         public void AddVoidChara(int num)
         {
-            if (_charactors.ContainsKey(num))
+            if (_characters.ContainsKey(num))
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _charactors.Add(num, new CharactorInfo(num, _charaVariableInfo, _customCharaVariables, _nameDic));
+            _characters.Add(num, new CharacterInfo(num, _charaVariableInfo, _customCharaVariables, _nameDic));
         }
 
         public void DelChara(int num)
         {
-            if (_charactors.ContainsKey(num))
-                _charactors.Remove(num);
+            if (_characters.ContainsKey(num))
+                _characters.Remove(num);
         }
         
     }
