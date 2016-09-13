@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SharedLibrary.Data;
+using SharedLibrary.Function;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -25,12 +27,13 @@ namespace SharedLibrary
             Tuple<string, Type, int>[] variableInfo,
             Tuple<string, Type, int>[] charaVariableInfo,
             DefaultCharaInfo[] defaultCharas,
-            Dictionary<string, Dictionary<string, int>> nameDic);
+            NameDictionary nameDic);
 
         /// <summary>
         /// Start Script
         /// </summary>
         void Run();
+
         /// <summary>
         /// End Script
         /// </summary>

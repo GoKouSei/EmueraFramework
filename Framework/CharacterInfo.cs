@@ -1,9 +1,6 @@
-﻿using SharedLibrary;
+﻿using SharedLibrary.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Framework
 {
@@ -13,7 +10,7 @@ namespace Framework
             int registrationNumber,
             Tuple<string, Type, int>[] variableInfo,
             Dictionary<string, object> customVariables,
-            Dictionary<string, Dictionary<string, int>> nameDic,
+            NameDictionary nameDic,
             Dictionary<string, Tuple<object, object>[]> defaultInfo=null
             )
         {

@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+﻿using Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedLibrary;
-using Framework;
+using SharedLibrary.Data;
+using SharedLibrary.Function;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace FrameworkTest
 {
@@ -23,12 +24,18 @@ namespace FrameworkTest
         public void DataBaseTest()
         {
             Main framework = Init();
+            framework.Data.ABL = 100;
+            Assert.AreEqual(100, (long)framework.Data.ABL);
             framework.Data.ABL[5] = 10;
             Assert.AreEqual<long>(10, framework.Data.ABL[5]);
+            framework.Data["ABL", 10] = 10;
+            Assert.AreEqual<long>(10, framework.Data.ABL[10]);
             framework.Data.ABL["HP"] = 10;
             Assert.AreEqual<long>(10, framework.Data.ABL["HP"]);
-            framework.Data.BASE[1] = 5;
-            Assert.AreEqual<long>(5, framework.Data.BASE[1]);
+            framework.Data["ABL", "HP"] = 10;
+            Assert.AreEqual<long>(10, framework.Data.ABL["HP"]);
+            framework.Data["BASE"] = 5;
+            Assert.AreEqual<long>(5, framework.Data.BASE[0]);
 
             framework.AddCustomVariable("Custom", 100L);
             Assert.AreEqual<long>(framework.Data.Custom, 100);
@@ -91,7 +98,7 @@ namespace FrameworkTest
                             {"ABL", new[] { Tuple.Create<object,object>("HP", 100L) } }
                         })
                 },
-                new Dictionary<string, Dictionary<string, int>>() { { "ABL", new Dictionary<string, int>() { { "HP", 0 } } }, });
+                new NameDictionary() { { "ABL", new Dictionary<string, int>() { { "HP", 0 } } }, });
         }
     }
 }

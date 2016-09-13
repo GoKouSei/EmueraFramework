@@ -1,9 +1,8 @@
-﻿using SharedLibrary;
+﻿using SharedLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace Framework
 {
@@ -16,16 +15,16 @@ namespace Framework
         public DataBase(
             Tuple<string, Type, int>[] variableInfo,
             Dictionary<string, object> customVariables,
-            Dictionary<string, Dictionary<string, int>> nameDic,
+            NameDictionary nameDic,
             Dictionary<string, Tuple<object, object>[]> defaultValues = null)
         {
             foreach (var varInfo in variableInfo)
             {
-                Dictionary<string, int> dic;
+                Dictionary<string, int> dic = null;
+                Tuple<object, object>[] infos = null;
                 nameDic.TryGetValue(varInfo.Item1, out dic);
-                _members.Add(varInfo.Item1, Activator.CreateInstance(
-                    //                                              Variable(string name, int capacity, Dictionary<string, int> dic = null, Tuple<object, object>[] defaultValue = null)
-                    typeof(Variable<>).MakeGenericType(varInfo.Item2), varInfo.Item1, varInfo.Item3, dic, defaultValues == null ? null : defaultValues[varInfo.Item1]));
+                defaultValues?.TryGetValue(varInfo.Item1, out infos);
+                _members.Add(varInfo.Item1, Activator.CreateInstance(typeof(Variable<>).MakeGenericType(varInfo.Item2), varInfo.Item1, varInfo.Item3, dic, infos));
             }
 
             _customVariables = customVariables;
@@ -52,17 +51,27 @@ namespace Framework
                         result = var;
                         return true;
                     }
-                    try
-                    {
-                        result = var[indexes[1]];
-                        return true;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
+                    result = var[indexes[1]];
+                    return true;
                 }
                 return false;
+            }
+        }
+        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
+        {
+            if (indexes.Length > 2)
+                throw new ArgumentOutOfRangeException();
+            if (!(indexes[0] is string))
+                throw new ArgumentException("문자열 인덱스가 필요합니다", nameof(indexes));
+            
+            if (indexes.Length == 1)
+            {
+                return TryInput((string)indexes[0], value, 0);
+            }
+
+            else
+            {
+                return TryInput((string)indexes[0], value, indexes[1]);
             }
         }
 
@@ -77,11 +86,28 @@ namespace Framework
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            if (value.GetType() != varType)//Only Accept Variable<T>
+            if (value.GetType() == varType)//Variable<T>
+            {
+                _members.Add(binder.Name, value);
+                return true;
+            }
+            else
+            {
+                return TryInput(binder.Name, value, 0);
+            }
+        }
+
+        private bool TryInput(string name, object value, object index)
+        {
+            if (!_members.ContainsKey(name))
                 return false;
-            if (_members.ContainsKey(binder.Name))
-                return false;
-            _members.Add(binder.Name, value);
+            dynamic var = _members[name];
+            MethodInfo compatibleMethod = var.GetType().GetMethod("IsCompatible")
+                                                       .MakeGenericMethod(value.GetType());
+            var args = new[] { value, Activator.CreateInstance(var.Type) };
+            if (!compatibleMethod.Invoke(var, args))
+                throw new ArgumentException($"잘못된 값입니다 변수명:{var.Name} {value.GetType()}은 {var.Type}이 될수 없습니다");
+            var[index] = args[1];
             return true;
         }
     }

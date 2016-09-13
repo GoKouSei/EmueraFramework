@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary
+namespace SharedLibrary.Data
 {
     public interface ICharacter
     {
@@ -17,10 +17,15 @@ namespace SharedLibrary
         dynamic Data { get; }
     }
 
-    public class DefaultCharaInfo : Tuple<int, Dictionary<string, Tuple<object, object>[]>>
+    public class DefaultCharaInfo
     {
-        public DefaultCharaInfo(int item1, Dictionary<string, Tuple<object, object>[]> item2) : base(item1, item2)
+        public DefaultCharaInfo(int characterNumber, Dictionary<string, Tuple<object, object>[]> info)
         {
+            CharacterNumber = characterNumber;
+            Info = info;
         }
+
+        public int CharacterNumber { get; }
+        public Dictionary<string, Tuple<object, object>[]> Info { get; }
     }
 }

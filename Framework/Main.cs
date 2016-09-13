@@ -1,4 +1,6 @@
 ﻿using SharedLibrary;
+using SharedLibrary.Data;
+using SharedLibrary.Function;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +20,15 @@ namespace Framework
         private Dictionary<SystemFunctionCode, Func<object[], object>> _systemFunctions = new Dictionary<SystemFunctionCode, Func<object[], object>>();
         private Dictionary<int, CharacterInfo> _characters = new Dictionary<int, CharacterInfo>();
         private Dictionary<int, CharacterInfo> _defaultCharacters = new Dictionary<int, CharacterInfo>();
+
         private Tuple<string, Type, int>[] _charaVariableInfo;
         private IFrontEnd _frontEnd;
-        private Dictionary<string, Dictionary<string, int>> _nameDic;
+        private NameDictionary _nameDic;
         private Task<Exception> _scriptTast;
         private ConsoleInput _lastInput;
+
+
+
         private ConsoleInput LastInput
         {
             get
@@ -49,7 +55,7 @@ namespace Framework
             Tuple<string, Type, int>[] variableInfo,
             Tuple<string, Type, int>[] charaVariableInfo,
             DefaultCharaInfo[] defaultCharas,
-            Dictionary<string, Dictionary<string, int>> nameDic)
+            NameDictionary nameDic)
         {
             State = FrameworkState.Initializing;
             
@@ -73,7 +79,7 @@ namespace Framework
                 {
                     foreach (var defaultChara in defaultCharas)
                     {
-                        _defaultCharacters.Add(defaultChara.Item1, new CharacterInfo(defaultChara.Item1, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Item2));
+                        _defaultCharacters.Add(defaultChara.CharacterNumber, new CharacterInfo(defaultChara.CharacterNumber, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Info));
                     }
                 }
 

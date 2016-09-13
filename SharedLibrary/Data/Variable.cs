@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace SharedLibrary
+namespace SharedLibrary.Data
 {
 
     public delegate void VariableChangedHandler<T>(string varName, T oldValue, ref T newValue);
@@ -57,7 +58,7 @@ namespace SharedLibrary
             }
         }
 
-        public T this[int index]
+        public T this[long index]
         {
             get
             {
@@ -92,6 +93,8 @@ namespace SharedLibrary
             {
                 if (index is int)
                     return this[(int)index];
+                else if (index is long)
+                    return this[(long)index];
                 else if (index is string)
                     return this[(string)index];
                 else
@@ -101,10 +104,30 @@ namespace SharedLibrary
             {
                 if (index is int)
                     this[(int)index] = value;
+                else if (index is long)
+                    this[(long)index] = value;
                 else if (index is string)
                     this[(string)index] = value;
                 else
-                    throw new ArgumentException("알수없는 인덱스입니다", nameof(index));
+                    throw new ArgumentException("알수없는 인덱스 " + index.ToString() + " 입니다", nameof(index));
+            }
+        }
+
+        public static implicit operator T(Variable<T> var)
+        {
+            return var[0];
+        }
+
+        public bool IsCompatible<K>(K value,ref T result)
+        {
+            try
+            {
+                result = (T)Convert.ChangeType(value, typeof(T));
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

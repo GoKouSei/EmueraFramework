@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SharedLibrary
+namespace SharedLibrary.Function
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ErbFunctionAttribute : Attribute

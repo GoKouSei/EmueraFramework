@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary
+namespace SharedLibrary.Function
 {
     public enum SystemFunctionCode
     {
