@@ -18,11 +18,6 @@ namespace MinorShift.Emuera.GameProc.Function
 	    public virtual void DoInstruction(ExpressionMediator exm, InstructionLine func, ProcessState state)
 		{ throw new ExeEE("未実装 or 呼び出しミス"); }
 		
-		public virtual Argument CreateArgument(InstructionLine line, ExpressionMediator exm)
-		{
-			throw new ExeEE("実装されていない");
-		}
-			
 	}
 	
 }

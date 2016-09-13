@@ -150,6 +150,7 @@
     <Compile Include="Sub\Word.cs" />
     <Compile Include="Sub\SubWord.cs" />
     <Compile Include="Sub\EraBinaryDataWriter.cs" />
+    <Compile Include="EmueraPlatform.cs" />
     <Compile Include="_Library\SFMT.cs" />
     <Compile Include="_Library\LangManager.cs" />
     <Compile Include="_Library\WinmmTimer.cs" />
@@ -185,6 +186,12 @@
     <Content Include="license.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj">
+      <Project>{855b38af-349c-4abb-a2bc-216189c54886}</Project>
+      <Name>SharedLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
