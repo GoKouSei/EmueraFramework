@@ -17,4 +17,4 @@ csv -> NameDictionary
 
 chara csv -> DefaultCharaInfo
 
-erb -> FunctionLabeledLine(using Emuera) -> Method
+erb -> FunctionLabeledLine(using EmueraCore.dll) -> Method
