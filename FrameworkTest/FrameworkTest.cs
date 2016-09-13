@@ -15,9 +15,7 @@ namespace FrameworkTest
         [TestMethod]
         public void InitializeTest()
         {
-            TestPlatform platform = new TestPlatform();
-            Main framework = new Main();
-            platform.Initialize(null, framework);
+            Main framework = Init();
             framework.Run();
         }
         [TestMethod]
@@ -63,29 +61,45 @@ namespace FrameworkTest
             Assert.AreEqual<long>(100, framework.GetChara(0).Data.ABL["HP"]);
         }
 
+        [TestMethod]
+        public void FunctionCallTest()
+        {
+            var framework = Init();
+            framework.Run();
+            framework.End();
+            Assert.AreEqual<long>(9999, framework.Data.BASE[100]);
+        }
+
 
     }
     public class TestPlatform : IPlatform
     {
         private IFramework _framework;
-        private Tuple<string, Func<object[], object>>[] _methods;
-        public Tuple<string, Func<object[], object>>[] methods => _methods;
+
+        public Method[] methods => null;
 
         public string Name => "TestPlatform";
-        
-        [SystemFunction(SystemFunctionCode.TITLE)]
-        public static object TITLE(object[] args)
+
+        public SystemFunction[] systemFunctions
         {
-            return null;
+            get
+            {
+                return new SystemFunction[] 
+                {
+                    new SystemFunction(SystemFunctionCode.TITLE, TITLE),
+                };
+            }
+        }
+
+        public static void TITLE(IFramework framework)
+        {
+            framework.Data.BASE[100] = 9999;
         }
 
         public void Initialize(List<Tuple<string, Stream>> source, IFramework framework)
         {
             _framework = framework;
-            _methods = new Tuple<string, Func<object[], object>>[]
-            {
-                Tuple.Create<string,Func<object[],object>>("SYSTEM_TITLE", TITLE),
-            };
+
             framework.Initialize
                 (new[] { this },
                 null,

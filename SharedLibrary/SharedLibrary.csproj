@@ -44,13 +44,12 @@
     <Compile Include="Draw\ConsoleLinePart.cs" />
     <Compile Include="Draw\ConsoleStringPart.cs" />
     <Compile Include="Draw\Point.cs" />
-    <Compile Include="Function\ErbFunction.cs" />
     <Compile Include="Data\ICharacter.cs" />
     <Compile Include="Data\IDataBase.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IFrontEnd.cs" />
     <Compile Include="IPlatform.cs" />
-    <Compile Include="Data\Method.cs" />
+    <Compile Include="Function\Method.cs" />
     <Compile Include="Data\NameDictionary.cs" />
     <Compile Include="Function\PrintFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

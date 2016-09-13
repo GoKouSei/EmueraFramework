@@ -62,12 +62,18 @@ namespace SharedLibrary.Data
         {
             get
             {
-                return _data[index];
+                lock (this)
+                {
+                    return _data[index];
+                }
             }
             set
             {
-                VariableChanged?.Invoke(Name, _data[index], ref value);
-                _data[index] = value;
+                lock (this)
+                {
+                    VariableChanged?.Invoke(Name, _data[index], ref value);
+                    _data[index] = value;
+                }
             }
         }
 

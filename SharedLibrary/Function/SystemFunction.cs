@@ -9,40 +9,27 @@ namespace SharedLibrary.Function
 {
     public enum SystemFunctionCode
     {
-        TITLE, FIRST, SHOP, TRAIN, ABLUP, AFTERTRAIN, TURNEND, LOADGAME, SAVEGAME, LOADDATAEND
+        NULL = 0,
+        SHOP = 2,
+        TRAIN = 3,
+        AFTERTRAIN = 4,
+        ABLUP = 5,
+        TURNEND = 6,
+        FIRST = 7,
+        TITLE = 8,
     }
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class SystemFunctionAttribute : Attribute
+    public class SystemFunction
     {
+        private Action<IFramework> _body;
+
         public SystemFunctionCode Code { get; }
-        public SystemFunctionAttribute(SystemFunctionCode code)
+        
+        public SystemFunction(SystemFunctionCode code,Action<IFramework> body)
         {
             Code = code;
+            _body = body;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="methods"></param>
-        /// <param name="systemFunctions"></param>
-        /// <exception cref="ArgumentException"/>
-        public static void GetSystemFunctions(IEnumerable<Tuple<string, Func<object[], object>>> methods, Dictionary<SystemFunctionCode, Func<object[], object>> systemFunctions)
-        {
-            foreach(var method in methods)
-            {
-                var attribute = method.Item2.GetMethodInfo().GetCustomAttribute<SystemFunctionAttribute>();
-                if (attribute != null)
-                {
-                    try
-                    {
-                        systemFunctions.Add(attribute.Code, method.Item2);
-                    }
-                    catch(ArgumentException ae)
-                    {
-                        throw new ArgumentException($"이미 정의된 시스템 함수 {attribute.Code.ToString()}입니다", ae);
-                    }
-                }
-            }
-        }
+        public void Run(IFramework framework) => _body(framework);
     }
 }

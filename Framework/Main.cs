@@ -16,8 +16,8 @@ namespace Framework
 
         private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
-        private Dictionary<string, Func<object[],object>> _methods = new Dictionary<string, Func<object[], object>>();
-        private Dictionary<SystemFunctionCode, Func<object[], object>> _systemFunctions = new Dictionary<SystemFunctionCode, Func<object[], object>>();
+        private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
+        private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
         private Dictionary<int, CharacterInfo> _characters = new Dictionary<int, CharacterInfo>();
         private Dictionary<int, CharacterInfo> _defaultCharacters = new Dictionary<int, CharacterInfo>();
 
@@ -67,11 +67,8 @@ namespace Framework
                 _charaVariableInfo = charaVariableInfo;
                 _nameDic = nameDic;
 
-                List<Tuple<string, Func<object[], object>>> methods = new List<Tuple<string, Func<object[], object>>>();
-                methods.AddRange(platforms.SelectMany(platform => platform.methods));
-
-                ErbFunctionAttribute.GetFunctions(methods, _methods);
-                SystemFunctionAttribute.GetSystemFunctions(methods, _systemFunctions);
+                _methods = platforms.Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
+                _systemFunctions = platforms.Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
 
                 Data = new DataBase(variableInfo, _customVariables, nameDic);
 
@@ -109,12 +106,11 @@ namespace Framework
 
         public object Call(string methodName, params object[] args)
         {
-            Func<object[], object> method;
-            if(!_methods.TryGetValue(methodName,out method))
+            if(!_methods.ContainsKey(methodName))
             {
                 throw new ArgumentException($"정의되지 않은 메소드 {methodName}입니다", nameof(methodName));
             }
-            var result = method(args);
+            var result = _methods[methodName].Run(args);
             Wait();
             return result;
         }
@@ -158,8 +154,7 @@ namespace Framework
         {
             try
             {
-                var func = _systemFunctions[sysFunc];
-                func(null);
+                _systemFunctions[sysFunc].Run(this);
             }
             catch (ArgumentException)
             {
@@ -170,12 +165,18 @@ namespace Framework
         public void Run()
         {
             State = FrameworkState.Running;
-            _scriptTast = Task.Run<Exception>
+            _scriptTast = Task.Run
                 (() =>
                 {
-                    Task workerTask = Task.Run(() => Begin(SystemFunctionCode.TITLE));
-                    workerTask.Wait();
-                    return workerTask.Exception;
+                    try
+                    {
+                        Begin(SystemFunctionCode.TITLE);
+                        return null;
+                    }
+                    catch (Exception e)
+                    {
+                        return e;
+                    }
                 }
                 );
         }
