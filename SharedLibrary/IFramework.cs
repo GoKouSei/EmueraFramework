@@ -24,10 +24,10 @@ namespace SharedLibrary
 
         void Initialize(
             IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo,
-            Tuple<string, Type, int>[] charaVariableInfo,
-            DefaultCharaInfo[] defaultCharas,
-            NameDictionary nameDic);
+            Tuple<string, Type, int>[] variableInfo = null,
+            Tuple<string, Type, int>[] charaVariableInfo = null,
+            DefaultCharaInfo[] defaultCharas = null,
+            NameDictionary nameDic = null);
 
         /// <summary>
         /// Start Script

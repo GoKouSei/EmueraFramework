@@ -13,20 +13,22 @@ namespace Framework
         private Type varType = typeof(Variable<>);
 
         public DataBase(
-            Tuple<string, Type, int>[] variableInfo,
             Dictionary<string, object> customVariables,
-            NameDictionary nameDic,
+            Tuple<string, Type, int>[] variableInfo = null,
+            NameDictionary nameDic = null,
             Dictionary<string, Tuple<object, object>[]> defaultValues = null)
         {
-            foreach (var varInfo in variableInfo)
+            if (variableInfo != null)
             {
-                Dictionary<string, int> dic = null;
-                Tuple<object, object>[] infos = null;
-                nameDic.TryGetValue(varInfo.Item1, out dic);
-                defaultValues?.TryGetValue(varInfo.Item1, out infos);
-                _members.Add(varInfo.Item1, Activator.CreateInstance(typeof(Variable<>).MakeGenericType(varInfo.Item2), varInfo.Item1, varInfo.Item3, dic, infos));
+                foreach (var varInfo in variableInfo)
+                {
+                    Dictionary<string, int> dic = null;
+                    Tuple<object, object>[] infos = null;
+                    nameDic.TryGetValue(varInfo.Item1, out dic);
+                    defaultValues?.TryGetValue(varInfo.Item1, out infos);
+                    _members.Add(varInfo.Item1, Activator.CreateInstance(typeof(Variable<>).MakeGenericType(varInfo.Item2), varInfo.Item1, varInfo.Item3, dic, infos));
+                }
             }
-
             _customVariables = customVariables;
         }
 

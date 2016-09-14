@@ -5,6 +5,7 @@ using MinorShift._Library;
 using MinorShift.Emuera.GameView;
 using MinorShift.Emuera.GameData.Expression;
 using System.IO;
+using System.Linq;
 
 namespace MinorShift.Emuera
 {
@@ -32,11 +33,7 @@ namespace MinorShift.Emuera
 		TODO: 1819 MainWindow & Consoleの入力・表示組とProcess&Dataのデータ処理組だけでも分離したい
 
 		*/
-		/// <summary>
-		/// アプリケーションのメイン エントリ ポイントです。
-		/// </summary>
-		[STAThread]
-		public static GameProc.LabelDictionary Main(string root)
+		public static SharedLibrary.IPlatform Main(string root)
 		{
 
             ExeDir = root;
@@ -55,7 +52,9 @@ namespace MinorShift.Emuera
 			ConfigData.Instance.LoadConfig();
 
             EmueraConsole console = new EmueraConsole();
-            return console.Initialize();
+            console.Initialize();
+
+            return new EmueraPlatform(GlobalStatic.LabelDictionary.GetAllLabelName());
 		}
 
 		/// <summary>

@@ -208,8 +208,12 @@ namespace MinorShift.Emuera.GameProc
 				{
 					methodStack = 0;
 					systemProcRunning = true;
-					while (state.ScriptEnd && console.IsRunning)
-						runSystemProc();
+                    while (state.ScriptEnd && console.IsRunning)
+                    {
+                        if (state.SystemState == SystemStateCode.Normal)
+                            return;//End Method
+                        runSystemProc();
+                    }
 					if (!console.IsRunning)
 						break;
 					systemProcRunning = false;

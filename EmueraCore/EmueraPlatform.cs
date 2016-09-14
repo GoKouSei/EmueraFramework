@@ -12,7 +12,7 @@ namespace MinorShift.Emuera
 {
     class EmueraPlatform:IPlatform
     {
-        static HashSet<string> methods;
+        IEnumerable<string> _methodNames;
 
         public string Name
         {
@@ -26,7 +26,9 @@ namespace MinorShift.Emuera
         {
             get
             {
-                return null;
+                return (from codeName in Enum.GetNames(typeof(SystemFunctionCode))
+                        select (SystemFunctionCode)(Enum.Parse(typeof(SystemFunctionCode), codeName)) into code
+                        select new SystemFunction(code, framework => Begin(code, framework))).ToArray();
             }
         }
 
@@ -34,8 +36,13 @@ namespace MinorShift.Emuera
         {
             get
             {
-                return methods.Select(method => new Method(method, args => Call(method, args))).ToArray();
+                return _methodNames.Select(method => new Method(method, args => Call(method,false, args))).ToArray();
             }
+        }
+
+        public EmueraPlatform(IEnumerable<string> methodNames)
+        {
+            _methodNames = methodNames;
         }
 
         public void Initialize(List<Tuple<string, Stream>> source, IFramework framework)
@@ -45,8 +52,17 @@ namespace MinorShift.Emuera
 
         object Call(string name,params object[] args)
         {
-            var func = GlobalStatic.LabelDictionary.GetNonEventLabel(name);
+            var func = GameProc.CalledFunction.CallFunction(GlobalStatic.Process, name, null);
+            if (func == null)
+                throw new ArgumentException($"메소드 {name}은 정의되지 않았습니다");
+            GlobalStatic.Process.getCurrentState.IntoFunction(func, null,GlobalStatic.EMediator);
             return null;
+        }
+
+        void Begin(SystemFunctionCode code,IFramework framework)
+        {
+            GlobalStatic.Process.getCurrentState.SetBegin(code.ToString());
+            GlobalStatic.Process.DoScript();
         }
     }
 }

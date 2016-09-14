@@ -15,7 +15,7 @@ namespace Framework
             )
         {
             RegistrationNumber = registrationNumber;
-            Data = new DataBase(variableInfo, customVariables, nameDic, defaultInfo);
+            Data = new DataBase(customVariables, variableInfo, nameDic, defaultInfo);
         }
 
         public string CallName => Data.CALLNAME;

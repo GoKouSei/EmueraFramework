@@ -98,7 +98,7 @@ namespace MinorShift.Emuera.GameView
 			}
 		}
 
-		public LabelDictionary Initialize()
+		public void Initialize()
 		{
 			GlobalStatic.Console = this;
             emuera = new GameProc.Process(this);
@@ -106,9 +106,8 @@ namespace MinorShift.Emuera.GameView
 			if (!emuera.Initialize())
 			{
 				state = ConsoleState.Error;
-				return null;
+				return;
 			}
-            return GlobalStatic.LabelDictionary;
 		}
 		
 

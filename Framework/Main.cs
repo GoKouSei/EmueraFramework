@@ -52,10 +52,10 @@ namespace Framework
 
         public void Initialize(
             IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo,
-            Tuple<string, Type, int>[] charaVariableInfo,
-            DefaultCharaInfo[] defaultCharas,
-            NameDictionary nameDic)
+            Tuple<string, Type, int>[] variableInfo = null,
+            Tuple<string, Type, int>[] charaVariableInfo = null,
+            DefaultCharaInfo[] defaultCharas = null,
+            NameDictionary nameDic = null)
         {
             State = FrameworkState.Initializing;
             
@@ -70,7 +70,7 @@ namespace Framework
                 _methods = platforms.Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
                 _systemFunctions = platforms.Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
 
-                Data = new DataBase(variableInfo, _customVariables, nameDic);
+                Data = new DataBase(_customVariables, variableInfo, nameDic);
 
                 if (defaultCharas != null)
                 {
@@ -165,7 +165,7 @@ namespace Framework
         public void Run()
         {
             State = FrameworkState.Running;
-            _scriptTast = Task.Run
+            _scriptTast = Task.Factory.StartNew
                 (() =>
                 {
                     try
@@ -177,7 +177,7 @@ namespace Framework
                     {
                         return e;
                     }
-                }
+                },TaskCreationOptions.LongRunning
                 );
         }
 

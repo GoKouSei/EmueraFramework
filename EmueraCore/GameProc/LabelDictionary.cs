@@ -247,6 +247,11 @@ namespace MinorShift.Emuera.GameProc
 			return ret;
 		}
 
+        internal IEnumerable<string> GetAllLabelName()
+        {
+            return labelAtDic.Keys;
+        }
+
         internal GotoLabelLine GetLabelDollar(string key, FunctionLabelLine labelAtLine)
 		{
 			foreach (GotoLabelLine label in labelDollarList)
