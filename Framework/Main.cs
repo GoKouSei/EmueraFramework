@@ -23,7 +23,7 @@ namespace Framework
 
         private Tuple<string, Type, int>[] _charaVariableInfo;
         private IFrontEnd _frontEnd;
-        private NameDictionary _nameDic;
+        private IEmuera _emuera;
         private Task<Exception> _scriptTast;
         private ConsoleInput _lastInput;
 
@@ -51,11 +51,8 @@ namespace Framework
 
 
         public void Initialize(
-            IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo = null,
-            Tuple<string, Type, int>[] charaVariableInfo = null,
-            DefaultCharaInfo[] defaultCharas = null,
-            NameDictionary nameDic = null)
+            IEmuera emuera, IFrontEnd frontEnd,
+            params IPlatform[] platforms)
         {
             State = FrameworkState.Initializing;
             
@@ -64,22 +61,11 @@ namespace Framework
             try
             {
                 _frontEnd = frontEnd;
-                _charaVariableInfo = charaVariableInfo;
-                _nameDic = nameDic;
 
                 _methods = platforms.Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
                 _systemFunctions = platforms.Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
-
-                Data = new DataBase(_customVariables, variableInfo, nameDic);
-
-                if (defaultCharas != null)
-                {
-                    foreach (var defaultChara in defaultCharas)
-                    {
-                        _defaultCharacters.Add(defaultChara.CharacterNumber, new CharacterInfo(defaultChara.CharacterNumber, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Info));
-                    }
-                }
-
+                
+                
             }
             catch (Exception e)
             {
@@ -231,7 +217,7 @@ namespace Framework
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _characters.Add(num, new CharacterInfo(num, _charaVariableInfo, _customCharaVariables, _nameDic));
+            _characters.Add(num, new CharacterInfo(num, _charaVariableInfo, _customCharaVariables));
         }
 
         public void DelChara(int num)

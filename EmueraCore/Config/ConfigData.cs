@@ -16,8 +16,8 @@ namespace MinorShift.Emuera
 	/// </summary>
 	internal sealed class ConfigData
 	{
-		readonly static string configPath = Program.ExeDir + "emuera.config";
-		readonly static string configdebugPath = Program.DebugDir + "debug.config";
+		readonly static string configPath = Emuera.ExeDir + "emuera.config";
+		readonly static string configdebugPath = Emuera.DebugDir + "debug.config";
 
 		static ConfigData() { }
 		private static ConfigData instance = new ConfigData();
@@ -393,12 +393,12 @@ namespace MinorShift.Emuera
 
 		public bool LoadConfig()
 		{
-			string defaultConfigPath = Program.CsvDir + "_default.config";
-			string fixedConfigPath = Program.CsvDir + "_fixed.config";
+			string defaultConfigPath = Emuera.CsvDir + "_default.config";
+			string fixedConfigPath = Emuera.CsvDir + "_fixed.config";
 			if(!File.Exists(defaultConfigPath))
-				defaultConfigPath = Program.CsvDir + "default.config";
+				defaultConfigPath = Emuera.CsvDir + "default.config";
 			if (!File.Exists(fixedConfigPath))
-				fixedConfigPath = Program.CsvDir + "fixed.config";
+				fixedConfigPath = Emuera.CsvDir + "fixed.config";
 
 			loadConfig(defaultConfigPath, false);
 			loadConfig(configPath, false);

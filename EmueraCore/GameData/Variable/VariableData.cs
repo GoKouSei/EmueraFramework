@@ -311,7 +311,7 @@ namespace MinorShift.Emuera.GameData.Variable
 			varTokenDic.Add("WINDOW_TITLE", new WINDOW_TITLE_Token(VariableCode.WINDOW_TITLE, this));
 			varTokenDic.Add("MONEYLABEL", new MONEYLABEL_Token(VariableCode.MONEYLABEL, this));
 			varTokenDic.Add("DRAWLINESTR", new DRAWLINESTR_Token(VariableCode.DRAWLINESTR, this));
-			if (!Program.DebugMode)
+			if (!Emuera.DebugMode)
 			{
 				varTokenDic.Add("__FILE__", new EmptyStrToken(VariableCode.__FILE__, this));
 				varTokenDic.Add("__FUNCTION__", new EmptyStrToken(VariableCode.__FUNCTION__, this));

@@ -94,7 +94,7 @@ namespace MinorShift.Emuera.GameProc
 	{
 		public ProcessState(EmueraConsole console)
 		{
-			if (Program.DebugMode)//DebugModeでなければ知らなくて良い
+			if (Emuera.DebugMode)//DebugModeでなければ知らなくて良い
 				this.console = console;
 		}
 		readonly EmueraConsole console = null;

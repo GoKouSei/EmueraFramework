@@ -8,7 +8,7 @@ namespace SharedLibrary.Data
 {
     public interface ICharacter
     {
-        int RegistrationNumber { get; }
+        int No { get; }
         string Name { get; }
         string CallName { get; }
         /// <summary>

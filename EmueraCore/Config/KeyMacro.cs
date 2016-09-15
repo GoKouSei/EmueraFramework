@@ -6,7 +6,7 @@ namespace MinorShift.Emuera
 {
 	internal static class KeyMacro
 	{
-		readonly static string macroPath = Program.ExeDir + "macro.txt";
+		readonly static string macroPath = Emuera.ExeDir + "macro.txt";
 		public const string gID = "グループ";
 		public const int MaxGroup = 10;
 		public const int MaxFkey = 12;

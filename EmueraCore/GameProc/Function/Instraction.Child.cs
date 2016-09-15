@@ -754,7 +754,7 @@ namespace MinorShift.Emuera.GameProc.Function
 				}
 				if (callfArg.FuncTerm == null)
 				{
-					if (!Program.AnalysisMode)
+					if (!Emuera.AnalysisMode)
 						ParserMediator.Warn("指定された関数名\"@" + callfArg.ConstStr + "\"は存在しません", func, 2, true, false);
 					else
 						ParserMediator.Warn(callfArg.ConstStr, func, 2, true, false);

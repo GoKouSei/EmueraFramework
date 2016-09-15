@@ -61,19 +61,24 @@ namespace Framework
         }
         public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
         {
-            if (indexes.Length > 2)
-                throw new ArgumentOutOfRangeException();
-            if (!(indexes[0] is string))
-                throw new ArgumentException("문자열 인덱스가 필요합니다", nameof(indexes));
+            if (indexes.Length > 2) throw new ArgumentOutOfRangeException();
+            if (!(indexes[0] is string)) throw new ArgumentException("string index is required", nameof(indexes));
+
+            var varName = (string)indexes[0];
+
+            if (value.GetType() == varType && !_members.ContainsKey(varName))
+            {
+                _members.Add(varName, value);
+            }
             
             if (indexes.Length == 1)
             {
-                return TryInput((string)indexes[0], value, 0);
+                return TryInput(varName, value, 0);
             }
 
             else
             {
-                return TryInput((string)indexes[0], value, indexes[1]);
+                return TryInput(varName, value, indexes[1]);
             }
         }
 
@@ -90,6 +95,7 @@ namespace Framework
         {
             if (value.GetType() == varType)//Variable<T>
             {
+                if (_members.ContainsKey(binder.Name)) throw new ArgumentException($"variable name {binder.Name} is alreay registed");
                 _members.Add(binder.Name, value);
                 return true;
             }
@@ -108,7 +114,7 @@ namespace Framework
                                                        .MakeGenericMethod(value.GetType());
             var args = new[] { value, Activator.CreateInstance(var.Type) };
             if (!compatibleMethod.Invoke(var, args))
-                throw new ArgumentException($"잘못된 값입니다 변수명:{var.Name} {value.GetType()}은 {var.Type}이 될수 없습니다");
+                throw new ArgumentException($"wrong value variable name:{var.Name} {value.GetType()} is can't be {var.Type}");
             var[index] = args[1];
             return true;
         }

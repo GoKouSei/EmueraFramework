@@ -1,4 +1,5 @@
-﻿using SharedLibrary.Data;
+﻿using SharedLibrary;
+using SharedLibrary.Data;
 using System;
 using System.Collections.Generic;
 
@@ -6,21 +7,16 @@ namespace Framework
 {
     class CharacterInfo : ICharacter
     {
-        internal CharacterInfo(
-            int registrationNumber,
-            Tuple<string, Type, int>[] variableInfo,
-            Dictionary<string, object> customVariables,
-            NameDictionary nameDic,
-            Dictionary<string, Tuple<object, object>[]> defaultInfo=null
-            )
+        IEmuera _emuera;
+        internal CharacterInfo(int registrationNumber,IEmuera emuera)
         {
-            RegistrationNumber = registrationNumber;
-            Data = new DataBase(customVariables, variableInfo, nameDic, defaultInfo);
+            _emuera = emuera;
+            emuera.
         }
 
         public string CallName => Data.CALLNAME;
         public string Name => Data.NAME;
-        public int RegistrationNumber { get; private set; }
+        public int No =>Data
 
         public dynamic Data { get; }
 

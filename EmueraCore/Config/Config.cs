@@ -140,9 +140,9 @@ namespace MinorShift.Emuera
 			DrawableWidth = WindowX - DrawingParam_ShapePositionShift;
 
 			if (UseSaveFolder)
-				SavDir = Program.ExeDir + "sav\\";
+				SavDir = Emuera.ExeDir + "sav\\";
 			else
-				SavDir = Program.ExeDir;
+				SavDir = Emuera.ExeDir;
 			if (UseSaveFolder && !Directory.Exists(SavDir))
 				createSavDirAndMoveFiles();
 		}
@@ -168,8 +168,8 @@ namespace MinorShift.Emuera
 			{
 				return;
 			}
-			bool existGlobal = File.Exists(Program.ExeDir + "global.sav");
-			string[] savFiles = Directory.GetFiles(Program.ExeDir, "save*.sav", SearchOption.TopDirectoryOnly);
+			bool existGlobal = File.Exists(Emuera.ExeDir + "global.sav");
+			string[] savFiles = Directory.GetFiles(Emuera.ExeDir, "save*.sav", SearchOption.TopDirectoryOnly);
 			if (!existGlobal && savFiles.Length == 0)
 				return;
 			//ダイアログが開いている間にフォルダを消してしまうような邪悪なユーザーがいるかもしれない
@@ -180,9 +180,9 @@ namespace MinorShift.Emuera
 			//ダイアログが開いている間にファイルを変更するような邪悪なユーザーがいるかもしれない
 			try
 			{
-				if (File.Exists(Program.ExeDir + "global.sav"))
-					File.Move(Program.ExeDir + "global.sav", SavDir + "global.sav");
-				savFiles = Directory.GetFiles(Program.ExeDir, "save*.sav", SearchOption.TopDirectoryOnly);
+				if (File.Exists(Emuera.ExeDir + "global.sav"))
+					File.Move(Emuera.ExeDir + "global.sav", SavDir + "global.sav");
+				savFiles = Directory.GetFiles(Emuera.ExeDir, "save*.sav", SearchOption.TopDirectoryOnly);
 				foreach (string oldpath in savFiles)
 					File.Move(oldpath, SavDir + Path.GetFileName(oldpath));
 			}
@@ -216,8 +216,8 @@ namespace MinorShift.Emuera
 			SearchOption option = SearchOption.TopDirectoryOnly;
 			if (SearchSubdirectory)
 				option = SearchOption.AllDirectories;
-			string[] erbFiles = Directory.GetFiles(Program.ErbDir, "*.ERB", option);
-			string[] csvFiles = Directory.GetFiles(Program.CsvDir, "*.CSV", option);
+			string[] erbFiles = Directory.GetFiles(Emuera.ErbDir, "*.ERB", option);
+			string[] csvFiles = Directory.GetFiles(Emuera.CsvDir, "*.CSV", option);
 			long[] writetimes = new long[erbFiles.Length + csvFiles.Length];
 			for (int i = 0; i < erbFiles.Length; i++)
 				if (Path.GetExtension(erbFiles[i]).Equals(".ERB", StringComparison.OrdinalIgnoreCase))

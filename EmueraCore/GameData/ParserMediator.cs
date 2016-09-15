@@ -23,7 +23,7 @@ namespace MinorShift.Emuera
 		/// <param name="?"></param>
 		public static void ConfigWarn(string str, ScriptPosition pos, int level, string stack)
 		{
-			if (level < Config.DisplayWarningLevel && !Program.AnalysisMode)
+			if (level < Config.DisplayWarningLevel && !Emuera.AnalysisMode)
 				return;
 			warningList.Add(new ParserWarning(str, pos, level, stack));
 		}
@@ -98,7 +98,7 @@ namespace MinorShift.Emuera
 
 		public static void Warn(string str, ScriptPosition pos, int level, string stack)
 		{
-			if (level < Config.DisplayWarningLevel && !Program.AnalysisMode)
+			if (level < Config.DisplayWarningLevel && !Emuera.AnalysisMode)
 				return;
 			if (console != null)
 				warningList.Add(new ParserWarning(str, pos, level, stack));
@@ -122,7 +122,7 @@ namespace MinorShift.Emuera
                 line.IsError = true;
                 line.ErrMes = str;
             }
-            if (level < Config.DisplayWarningLevel && !Program.AnalysisMode)
+            if (level < Config.DisplayWarningLevel && !Emuera.AnalysisMode)
                 return;
             if (isBackComp && !Config.WarnBackCompatibility)
                 return;

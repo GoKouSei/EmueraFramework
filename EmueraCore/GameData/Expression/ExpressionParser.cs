@@ -237,7 +237,7 @@ namespace MinorShift.Emuera.GameData.Expression
 				IOperandTerm mToken = GlobalStatic.IdentifierDictionary.GetFunctionMethod(GlobalStatic.LabelDictionary, idStr, args, false);
 				if (mToken == null)
 				{
-					if (!Program.AnalysisMode)
+					if (!Emuera.AnalysisMode)
 						GlobalStatic.IdentifierDictionary.ThrowException(idStr, true);
 					else
 					{

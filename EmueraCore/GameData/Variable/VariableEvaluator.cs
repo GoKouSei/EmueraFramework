@@ -1706,10 +1706,10 @@ namespace MinorShift.Emuera.GameData.Variable
 		private string getSaveDataPath(int index) { return string.Format("{0}save{1:00}.sav", Config.SavDir, index); }
 		private string getSaveDataPath(string s) { return string.Format("{0}save{1:00}.sav", Config.SavDir, s); }
 
-		private string getSaveDataPathV(int index) { return Program.DatDir + string.Format("var_{0:00}.dat", index); }
-		private string getSaveDataPathC(int index) { return Program.DatDir + string.Format("chara_{0:00}.dat", index); }
-		private string getSaveDataPathV(string s) { return Program.DatDir + "var_" + s + ".dat"; }
-		private string getSaveDataPathC(string s) { return Program.DatDir + "chara_" + s + ".dat"; }
+		private string getSaveDataPathV(int index) { return Emuera.DatDir + string.Format("var_{0:00}.dat", index); }
+		private string getSaveDataPathC(int index) { return Emuera.DatDir + string.Format("chara_{0:00}.dat", index); }
+		private string getSaveDataPathV(string s) { return Emuera.DatDir + "var_" + s + ".dat"; }
+		private string getSaveDataPathC(string s) { return Emuera.DatDir + "chara_" + s + ".dat"; }
 
 		/// <summary>
 		/// DatFolderが存在せず、かつ作成に失敗したらエラーを投げる
@@ -1717,11 +1717,11 @@ namespace MinorShift.Emuera.GameData.Variable
 		/// <returns></returns>
 		public void CreateDatFolder()
 		{
-			if (Directory.Exists(Program.DatDir))
+			if (Directory.Exists(Emuera.DatDir))
 				return;
 			try
 			{
-				Directory.CreateDirectory(Program.DatDir);
+				Directory.CreateDirectory(Emuera.DatDir);
 			}
 			catch
 			{
@@ -1732,12 +1732,12 @@ namespace MinorShift.Emuera.GameData.Variable
 		public List<string> GetDatFiles(bool charadat, string pattern)
 		{
 			List<string> files = new List<string>();
-			if (!Directory.Exists(Program.DatDir))
+			if (!Directory.Exists(Emuera.DatDir))
 				return files;
 			string searchPattern = "var_" + pattern + ".dat";
 			if (charadat)
 				searchPattern = "chara_" + pattern + ".dat";
-			string[] pathes = Directory.GetFiles(Program.DatDir, searchPattern, SearchOption.TopDirectoryOnly);
+			string[] pathes = Directory.GetFiles(Emuera.DatDir, searchPattern, SearchOption.TopDirectoryOnly);
 			foreach (string path in pathes)
 			{
 				if (!Path.GetExtension(path).Equals(".dat", StringComparison.OrdinalIgnoreCase))

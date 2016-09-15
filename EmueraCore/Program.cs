@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MinorShift.Emuera
 {
-	public static class Program
+	public static class Emuera
 	{
 		/*
 		コードの開始地点。
@@ -33,7 +33,7 @@ namespace MinorShift.Emuera
 		TODO: 1819 MainWindow & Consoleの入力・表示組とProcess&Dataのデータ処理組だけでも分離したい
 
 		*/
-		public static SharedLibrary.IPlatform Main(string root)
+		public static SharedLibrary.IEmuera Init(string root)
 		{
 
             ExeDir = root;

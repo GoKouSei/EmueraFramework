@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkTest", "FrameworkT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmueraCore", "EmueraCore\EmueraCore.csproj", "{F3B2ED56-A5BF-45DA-A270-3ED0F775320B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProgram", "TestProgram\TestProgram.csproj", "{EAEC68DC-534F-4A93-AC8F-F6A84E8929C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F3B2ED56-A5BF-45DA-A270-3ED0F775320B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3B2ED56-A5BF-45DA-A270-3ED0F775320B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3B2ED56-A5BF-45DA-A270-3ED0F775320B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAEC68DC-534F-4A93-AC8F-F6A84E8929C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAEC68DC-534F-4A93-AC8F-F6A84E8929C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAEC68DC-534F-4A93-AC8F-F6A84E8929C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAEC68DC-534F-4A93-AC8F-F6A84E8929C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

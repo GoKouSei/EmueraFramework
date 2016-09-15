@@ -136,7 +136,7 @@ namespace MinorShift.Emuera.GameProc
 					return;
 			skipPrint = false;
 			deleteAllPrevState();
-			if (Program.AnalysisMode)
+			if (Emuera.AnalysisMode)
 			{
 				System.Media.SystemSounds.Asterisk.Play();
 				console.ThrowTitleError(false);

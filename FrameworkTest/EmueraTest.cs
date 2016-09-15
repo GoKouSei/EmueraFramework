@@ -15,10 +15,11 @@ namespace FrameworkTest
     {
         public IFramework EmueraInit()
         {
-            var platform = Program.Main(@"C:\TestEra\");
-            var framwork = new Main();
-            framwork.Initialize(new[] { platform }, null);
-            return framwork;
+            var platform = Emuera.Init(@"C:\TestEra\");
+            var framework = new Main();
+            platform.Initialize(null, framework);
+            framework.Initialize(new[] { platform }, null);
+            return framework;
         }
 
         [TestMethod]

@@ -31,7 +31,7 @@ namespace MinorShift.Emuera.GameProc
 					throw new CodeEE(line.ErrMes);
 				else if (func != null)
 				{//1753 InstructionLineを先に持ってきてみる。わずかに速くなった気がしないでもない
-					if (!Program.DebugMode && func.Function.IsDebug())
+					if (!Emuera.DebugMode && func.Function.IsDebug())
 					{//非DebugモードでのDebug系命令。何もしない。（SIF文のためにコメント行扱いにはできない）
 						continue;
 					}

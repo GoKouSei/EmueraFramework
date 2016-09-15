@@ -88,8 +88,8 @@ namespace MinorShift.Emuera.GameProc
 			labelDic.Initialized = false;
 			foreach (string fpath in path)
 			{
-				if (fpath.StartsWith(Program.ErbDir, Config.SCIgnoreCase) && !Program.AnalysisMode)
-					fname = fpath.Substring(Program.ErbDir.Length);
+				if (fpath.StartsWith(Emuera.ErbDir, Config.SCIgnoreCase) && !Emuera.AnalysisMode)
+					fname = fpath.Substring(Emuera.ErbDir.Length);
 				else
 					fname = fpath;
                 loadErb(fpath, fname, isOnlyEvent);
@@ -146,7 +146,7 @@ namespace MinorShift.Emuera.GameProc
 						ppMatch.Push("ELSEIF");
 						disabledStack.Push(Disabled);
 						doneStack.Push(done);
-						Disabled = !Program.DebugMode;
+						Disabled = !Emuera.DebugMode;
 						done = !Disabled;
 						break;
 					case "IF_NDEBUG":
@@ -158,7 +158,7 @@ namespace MinorShift.Emuera.GameProc
 						ppMatch.Push("ELSEIF");
 						disabledStack.Push(Disabled);
 						doneStack.Push(done);
-						Disabled = Program.DebugMode;
+						Disabled = Emuera.DebugMode;
 						done = !Disabled;
 						break;
 					case "IF":
@@ -337,7 +337,7 @@ namespace MinorShift.Emuera.GameProc
 							else// if (label is FunctionLabelLine)
 							{
 								labelDic.AddLabel(label);
-								if (!label.IsEvent && (Config.WarnNormalFunctionOverloading || Program.AnalysisMode))
+								if (!label.IsEvent && (Config.WarnNormalFunctionOverloading || Emuera.AnalysisMode))
 								{
 									FunctionLabelLine seniorLabel = labelDic.GetSameNameLabel(label);
                                     if (seniorLabel != null)
@@ -643,7 +643,7 @@ namespace MinorShift.Emuera.GameProc
 					if (label.Depth != labelDepth)
 						continue;
                     //解析モード時は呼ばれなかったものをここで解析
-                    if (Program.AnalysisMode)
+                    if (Emuera.AnalysisMode)
                         checkFunctionWithCatch(label);
 					bool ignore = false;
 					if (notCalledWarning == DisplayWarningFlag.ONCE)
@@ -709,7 +709,7 @@ namespace MinorShift.Emuera.GameProc
 		public Dictionary<string, Int64> warningDic = new Dictionary<string, Int64>();
 		private void printFunctionNotFoundWarning(string str, LogicalLine line, int level, bool isError)
 		{
-			if (Program.AnalysisMode)
+			if (Emuera.AnalysisMode)
 			{
 				if (warningDic.ContainsKey(str))
 					warningDic[str]++;
@@ -747,7 +747,7 @@ namespace MinorShift.Emuera.GameProc
 					}
 				}
 			}
-			if (ignore && !Program.AnalysisMode)
+			if (ignore && !Emuera.AnalysisMode)
 			{
 				ignoredFNFWarningCount++;
 				return;
@@ -804,7 +804,7 @@ namespace MinorShift.Emuera.GameProc
 						continue;
 					}
 				}
-                if (Config.NeedReduceArgumentOnLoad || Program.AnalysisMode || func.Function.IsForceSetArg())
+                if (Config.NeedReduceArgumentOnLoad || Emuera.AnalysisMode || func.Function.IsForceSetArg())
                     ArgumentParser.SetArgumentTo(func);
 			}
 		}
@@ -1355,7 +1355,7 @@ namespace MinorShift.Emuera.GameProc
 					}
 					if (FunctionNotFoundName != null)
 					{
-						if (!Program.AnalysisMode)
+						if (!Emuera.AnalysisMode)
 							printFunctionNotFoundWarning("指定された関数名\"@" + FunctionNotFoundName + "\"は存在しません", func, 2, true);
 						else
 							printFunctionNotFoundWarning(FunctionNotFoundName, func, 2, true);

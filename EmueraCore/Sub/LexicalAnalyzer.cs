@@ -746,7 +746,7 @@ namespace MinorShift.Emuera.Sub
 							return count;
 						goto case ' ';
 					case ';':
-						if (st.CurrentEqualTo(";#;") && Program.DebugMode)
+						if (st.CurrentEqualTo(";#;") && Emuera.DebugMode)
 						{
 							st.Jump(3);
 							continue;
@@ -951,7 +951,7 @@ namespace MinorShift.Emuera.Sub
 					case '$':
 						throw new CodeEE("字句解析中に予期しない文字'" + st.Current + "'を発見しました");
 					case ';'://1807 行中コメント
-						if (st.CurrentEqualTo(";#;") && Program.DebugMode)
+						if (st.CurrentEqualTo(";#;") && Emuera.DebugMode)
 						{
 							st.Jump(3);
 							break;

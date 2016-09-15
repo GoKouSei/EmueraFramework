@@ -58,18 +58,18 @@ namespace MinorShift.Emuera.GameProc
 					ParserMediator.FlushWarningList();
 				}
 				
-                if (Config.UseKeyMacro && !Program.AnalysisMode)
+                if (Config.UseKeyMacro && !Emuera.AnalysisMode)
                 {
-                    if (File.Exists(Program.ExeDir + "macro.txt"))
+                    if (File.Exists(Emuera.ExeDir + "macro.txt"))
                     {
-                        KeyMacro.LoadMacroFile(Program.ExeDir + "macro.txt");
+                        KeyMacro.LoadMacroFile(Emuera.ExeDir + "macro.txt");
                     }
                 }
-                if (Config.UseReplaceFile && !Program.AnalysisMode)
+                if (Config.UseReplaceFile && !Emuera.AnalysisMode)
                 {
-					if (File.Exists(Program.CsvDir + "_Replace.csv"))
+					if (File.Exists(Emuera.CsvDir + "_Replace.csv"))
 					{
-						ConfigData.Instance.LoadReplaceFile(Program.CsvDir + "_Replace.csv");
+						ConfigData.Instance.LoadReplaceFile(Emuera.CsvDir + "_Replace.csv");
 						if (ParserMediator.HasWarning)
 						{
 							ParserMediator.FlushWarningList();
@@ -81,20 +81,20 @@ namespace MinorShift.Emuera.GameProc
 
 				if (Config.UseRenameFile)
                 {
-                    if (File.Exists(Program.CsvDir + "_Rename.csv"))
+                    if (File.Exists(Emuera.CsvDir + "_Rename.csv"))
                     {
-                        ParserMediator.LoadEraExRenameFile(Program.CsvDir + "_Rename.csv");
+                        ParserMediator.LoadEraExRenameFile(Emuera.CsvDir + "_Rename.csv");
                     }
                 }
 				gamebase = new GameBase();
-                if (!gamebase.LoadGameBaseCsv(Program.CsvDir + "GAMEBASE.CSV"))
+                if (!gamebase.LoadGameBaseCsv(Emuera.CsvDir + "GAMEBASE.CSV"))
                 {
                     return false;
                 }
 				GlobalStatic.GameBaseData = gamebase;
 
 				ConstantData constant = new ConstantData(gamebase);
-				constant.LoadData(Program.CsvDir, console, Config.DisplayReport);
+				constant.LoadData(Emuera.CsvDir, console, Config.DisplayReport);
 				GlobalStatic.ConstantData = constant;
 				TrainName = constant.GetCsvNameList(VariableCode.TRAINNAME);
 
@@ -115,17 +115,17 @@ namespace MinorShift.Emuera.GameProc
 				HeaderFileLoader hLoader = new HeaderFileLoader(console, idDic, this);
 
 				LexicalAnalyzer.UseMacro = false;
-				if (!hLoader.LoadHeaderFiles(Program.ErbDir, Config.DisplayReport))
+				if (!hLoader.LoadHeaderFiles(Emuera.ErbDir, Config.DisplayReport))
 				{
 					return false;
 				}
 				LexicalAnalyzer.UseMacro = idDic.UseMacro();
 
 				ErbLoader loader = new ErbLoader(console, exm, this);
-                if (Program.AnalysisMode)
-                    noError = loader.loadErbs(Program.AnalysisFiles, labelDic);
+                if (Emuera.AnalysisMode)
+                    noError = loader.loadErbs(Emuera.AnalysisFiles, labelDic);
                 else
-                    noError = loader.LoadErbFiles(Program.ErbDir, Config.DisplayReport, labelDic);
+                    noError = loader.LoadErbFiles(Emuera.ErbDir, Config.DisplayReport, labelDic);
                 initSystemProcess();
                 initialiing = false;
             }
@@ -147,7 +147,7 @@ namespace MinorShift.Emuera.GameProc
 			saveCurrentState(false);
 			state.SystemState = SystemStateCode.System_Reloaderb;
 			ErbLoader loader = new ErbLoader(console, exm, this);
-            loader.LoadErbFiles(Program.ErbDir, false, labelDic);
+            loader.LoadErbFiles(Emuera.ErbDir, false, labelDic);
 		}
 
 		public void ReloadPartialErb(List<string> path)

@@ -23,11 +23,8 @@ namespace SharedLibrary
         FrameworkState State { get; }
 
         void Initialize(
-            IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo = null,
-            Tuple<string, Type, int>[] charaVariableInfo = null,
-            DefaultCharaInfo[] defaultCharas = null,
-            NameDictionary nameDic = null);
+            IEmuera emuera, IFrontEnd frontEnd,
+            params IPlatform[] platforms);
 
         /// <summary>
         /// Start Script

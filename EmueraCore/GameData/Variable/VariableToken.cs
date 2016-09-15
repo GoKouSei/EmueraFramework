@@ -606,10 +606,10 @@ namespace MinorShift.Emuera.GameData.Variable
 			public Int1DVariableToken(VariableCode varCode, VariableData varData)
 				: base(varCode, varData)
 			{
-				CanRestructure = false;
-				array = varData.DataIntegerArray[VarCodeInt];
-				IsForbid = array.Length == 0;
-			}
+                CanRestructure = false;
+                array = varData.DataIntegerArray[VarCodeInt];
+                IsForbid = array.Length == 0;
+            }
 			Int64[] array;
 			public override Int64 GetIntValue(ExpressionMediator exm, Int64[] arguments)
 			{
