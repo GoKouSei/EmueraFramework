@@ -39,12 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ConsoleInput.cs" />
+    <Compile Include="Data\ICharacter.cs" />
     <Compile Include="Draw\ConsoleButtonPart.cs" />
     <Compile Include="Draw\ConsoleLine.cs" />
     <Compile Include="Draw\ConsoleLinePart.cs" />
     <Compile Include="Draw\ConsoleStringPart.cs" />
     <Compile Include="Draw\Point.cs" />
-    <Compile Include="Data\ICharacter.cs" />
     <Compile Include="IEmuera.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IFrontEnd.cs" />
@@ -53,7 +53,6 @@
     <Compile Include="Function\PrintFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Function\SystemFunction.cs" />
-    <Compile Include="Data\Variable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

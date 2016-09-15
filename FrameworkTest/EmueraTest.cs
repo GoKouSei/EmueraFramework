@@ -18,7 +18,7 @@ namespace FrameworkTest
             var platform = Emuera.Init(@"C:\TestEra\");
             var framework = new Main();
             platform.Initialize(null, framework);
-            framework.Initialize(new[] { platform }, null);
+            framework.Initialize(platform, null);
             return framework;
         }
 

@@ -18,10 +18,7 @@ namespace Framework
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
-        private Dictionary<int, CharacterInfo> _characters = new Dictionary<int, CharacterInfo>();
-        private Dictionary<int, CharacterInfo> _defaultCharacters = new Dictionary<int, CharacterInfo>();
 
-        private Tuple<string, Type, int>[] _charaVariableInfo;
         private IFrontEnd _frontEnd;
         private IEmuera _emuera;
         private Task<Exception> _scriptTast;
@@ -45,7 +42,7 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public int[] RegistedCharacters => _characters.Keys.ToArray();
+        public long[] RegistedCharacters => _emuera.RegistedCharacters;
 
         public FrameworkState State { get; private set; }
 
@@ -55,17 +52,18 @@ namespace Framework
             params IPlatform[] platforms)
         {
             State = FrameworkState.Initializing;
-            
+
             string errMes = "";
 
             try
             {
                 _frontEnd = frontEnd;
+                _emuera = emuera;
 
-                _methods = platforms.Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
-                _systemFunctions = platforms.Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
-                
-                
+                _methods = platforms.Union(new[] { emuera }).Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
+                _systemFunctions = platforms.Union(new[] { emuera }).Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
+
+                Data = new DataBase(emuera, _customVariables);
             }
             catch (Exception e)
             {
@@ -92,7 +90,7 @@ namespace Framework
 
         public object Call(string methodName, params object[] args)
         {
-            if(!_methods.ContainsKey(methodName))
+            if (!_methods.ContainsKey(methodName))
             {
                 throw new ArgumentException($"정의되지 않은 메소드 {methodName}입니다", nameof(methodName));
             }
@@ -163,7 +161,7 @@ namespace Framework
                     {
                         return e;
                     }
-                },TaskCreationOptions.LongRunning
+                }, TaskCreationOptions.LongRunning
                 );
         }
 
@@ -181,50 +179,11 @@ namespace Framework
             throw new NotImplementedException();
         }
 
-        public ICharacter GetChara(int num)
-        {
-            CharacterInfo chara;
-            if(_characters.TryGetValue(num,out chara))
-            {
-                return chara;
-            }
-            else
-            {
-                throw new ArgumentException($"등록되지 않은 캐릭터 번호 [{num}] 입니다", nameof(num));
-            }
-        }
+        public void AddChara(long charaNo) => _emuera.AddChara(charaNo);
 
-        public void AddChara(int num)
-        {
-            CharacterInfo defaultChara;
-            if (_defaultCharacters.TryGetValue(num, out defaultChara))
-            {
-                if (_characters.ContainsKey(num))
-                {
-                    throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
-                }
-                _characters.Add(num, _defaultCharacters[num]);
-            }
-            else
-            {
-                throw new ArgumentException($"정의되지 않은 캐릭터 번호 [{num}] 입니다", nameof(num));
-            }
-        }
+        public void DelChara(long charaNo) => _emuera.DelChara(charaNo);
 
-        public void AddVoidChara(int num)
-        {
-            if (_characters.ContainsKey(num))
-            {
-                throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
-            }
-            _characters.Add(num, new CharacterInfo(num, _charaVariableInfo, _customCharaVariables));
-        }
+        public ICharacter GetChara(long charaNo) => new CharacterInfo(charaNo, _emuera, _customCharaVariables);
 
-        public void DelChara(int num)
-        {
-            if (_characters.ContainsKey(num))
-                _characters.Remove(num);
-        }
-        
     }
 }

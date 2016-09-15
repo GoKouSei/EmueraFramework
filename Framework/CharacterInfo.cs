@@ -7,16 +7,14 @@ namespace Framework
 {
     class CharacterInfo : ICharacter
     {
-        IEmuera _emuera;
-        internal CharacterInfo(int registrationNumber,IEmuera emuera)
+        internal CharacterInfo(long registrationNumber, IEmuera emuera, Dictionary<string, object> customVariable)
         {
-            _emuera = emuera;
-            emuera.
+            Data = new CharaDataBase(registrationNumber, emuera, customVariable);
         }
 
         public string CallName => Data.CALLNAME;
         public string Name => Data.NAME;
-        public int No =>Data
+        public long No => Data.NO;
 
         public dynamic Data { get; }
 

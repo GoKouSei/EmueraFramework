@@ -2,18 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Framework
 {
-    class DataBase : DynamicObject
+    class CharaDataBase:DynamicObject
     {
         private Dictionary<string, object> _customVariables;
         private IEmuera _emuera;
+        private int _charaNo;
 
-        public DataBase(
-            IEmuera emuera,
+        public CharaDataBase(
+            long charaNo,IEmuera emuera,
             Dictionary<string, object> customVariables)
         {
+            _charaNo = (int)charaNo;
             _emuera = emuera;
             _customVariables = customVariables;
         }
@@ -24,17 +29,18 @@ namespace Framework
             if (indexes[0] is string)
             {
                 var index = indexes[0] as string;
-                var intIndexes = new int[indexes.Length - 1];
+                var intIndexes = new int[indexes.Length];
                 try
                 {
+                    intIndexes[0] = _charaNo;
                     for (int i = 1; i < indexes.Length; i++)
                     {
                         if (indexes[i] is int)
-                            intIndexes[i - 1] = (int)indexes[i];
+                            intIndexes[i] = (int)indexes[i];
                         else if (indexes[i] is long)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i - 1] is string)
-                            intIndexes[i - 1] = int.Parse((string)indexes[i]);
+                            intIndexes[i] = (int)indexes[i];
+                        else if (indexes[i] is string)
+                            intIndexes[i] = int.Parse((string)indexes[i]);
                         else
                             return false;
                     }
@@ -55,23 +61,23 @@ namespace Framework
             }
             return false;
         }
-
         public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
         {
             if (indexes[0] is string)
             {
                 var index = indexes[0] as string;
-                var intIndexes = new int[indexes.Length - 1];
+                var intIndexes = new int[indexes.Length];
                 try
                 {
+                    intIndexes[0] = _charaNo;
                     for (int i = 1; i < indexes.Length; i++)
                     {
                         if (indexes[i] is int)
-                            intIndexes[i - 1] = (int)indexes[i];
+                            intIndexes[i] = (int)indexes[i];
                         else if (indexes[i] is long)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i - 1] is string)
-                            intIndexes[i - 1] = int.Parse((string)indexes[i]);
+                            intIndexes[i] = (int)indexes[i];
+                        else if (indexes[i] is string)
+                            intIndexes[i] = int.Parse((string)indexes[i]);
                         else
                             return false;
                     }
@@ -102,8 +108,7 @@ namespace Framework
             }
             catch
             {
-                if (_customVariables.TryGetValue(binder.Name, out result)) return true;
-                else return false;
+                return _customVariables.TryGetValue(binder.Name, out result);
             }
 
         }

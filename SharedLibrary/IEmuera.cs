@@ -8,9 +8,12 @@ namespace SharedLibrary
 {
     public interface IEmuera:IPlatform
     {
-        string GetStrValue(string name, params int[] indexes);
-        void SetStrValue(string name, string value, params int[] indexes);
-        long GetIntValue(string name, params int[] indexes);
-        void SetIntValue(string name, long value, params int[] indexes);
+        object GetValue(string name, params int[] indexes);
+        void SetValue(string name, object value, params int[] indexes);
+        void AddChara(long charaNo);
+        void AddCharaFromCSV(long csvNumber);
+        void DelChara(long charaNo);
+
+        long[] RegistedCharacters { get; }
     }
 }

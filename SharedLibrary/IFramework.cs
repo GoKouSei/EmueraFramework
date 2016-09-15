@@ -17,7 +17,7 @@ namespace SharedLibrary
         Running,
         Waiting,
     }
-    public interface IFramework:IDataBase
+    public interface IFramework
     {
         string Name { get; }
         FrameworkState State { get; }
@@ -44,11 +44,12 @@ namespace SharedLibrary
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
 
-        ICharacter GetChara(int num);
-        void AddChara(int num);
-        void AddVoidChara(int num);
-        void DelChara(int num);
-        int[] RegistedCharacters { get; }
+        dynamic Data { get; }
+        
+        void AddChara(long charaNo);
+        void DelChara(long charaNo);
+        ICharacter GetChara(long charaNo);
+        long[] RegistedCharacters { get; }
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);

@@ -63,7 +63,7 @@ namespace MinorShift.Emuera.GameView
 		const string ErrorButtonsText = "__openFileWithDebug__";
 
 		MinorShift.Emuera.GameProc.Process emuera;
-		ConsoleState state = ConsoleState.Initializing;
+		internal ConsoleState state = ConsoleState.Initializing;
 		public bool Enabled { get { return true; } }
 
 		/// <summary>
