@@ -36,7 +36,7 @@ namespace MinorShift.Emuera
         {
             get
             {
-                return _methodNames.Select(method => new Method(method, args => Call(method,false, args))).ToArray();
+                return _methodNames.Select(method => new Method(method, args => Call(method, args))).ToArray();
             }
         }
 
@@ -50,16 +50,18 @@ namespace MinorShift.Emuera
             throw new NotImplementedException();
         }
 
-        object Call(string name,params object[] args)
+        object Call(string name, object[] args)
         {
+            if (name == null)
+                throw new ArgumentNullException();
             var func = GameProc.CalledFunction.CallFunction(GlobalStatic.Process, name, null);
             if (func == null)
-                throw new ArgumentException($"메소드 {name}은 정의되지 않았습니다");
+                throw new ArgumentException($"Method [{name}] is undefined");
             GlobalStatic.Process.getCurrentState.IntoFunction(func, null,GlobalStatic.EMediator);
             return null;
         }
 
-        void Begin(SystemFunctionCode code,IFramework framework)
+        void Begin(SystemFunctionCode code, IFramework framework)
         {
             GlobalStatic.Process.getCurrentState.SetBegin(code.ToString());
             GlobalStatic.Process.DoScript();
