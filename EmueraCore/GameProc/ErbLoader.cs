@@ -668,19 +668,19 @@ namespace MinorShift.Emuera.GameProc
 						ignoredFNCWarningCount++;
 					else
 						ParserMediator.Warn("関数@" + label.LabelName + "は定義されていますが一度も呼び出されません", label, 1, false, false);
-					if (!ignoreUncalledFunction)
-						checkFunctionWithCatch(label);
-					else
-					{
-						if (!(label.NextLine is NullLine) && !(label.NextLine is FunctionLabelLine))
-						{
-							if (!label.NextLine.IsError)
-							{
-								label.NextLine.IsError = true;
-								label.NextLine.ErrMes = "呼び出されないはずの関数が呼ばれた";
-							}
-						}
-					}
+					//if (!ignoreUncalledFunction)
+					//	checkFunctionWithCatch(label);
+					//else
+					//{
+					//	if (!(label.NextLine is NullLine) && !(label.NextLine is FunctionLabelLine))
+					//	{
+					//		if (!label.NextLine.IsError)
+					//		{
+					//			label.NextLine.IsError = true;
+					//			label.NextLine.ErrMes = "呼び出されないはずの関数が呼ばれた";
+					//		}
+					//	}
+					//}
 				}
 			}
 			ParserMediator.FlushWarningList();

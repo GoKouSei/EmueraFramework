@@ -419,9 +419,13 @@ namespace MinorShift.Emuera.GameProc
             return;
 		}
 
-		public void IntoFunction(CalledFunction call, UserDefinedFunctionArgument srcArgs, ExpressionMediator exm)
+		public void IntoFunction(CalledFunction call, UserDefinedFunctionArgument srcArgs, ExpressionMediator exm,bool inside=true)
 		{
-
+            if (inside)
+            {
+                EmueraPlatform.framework.Call(call.TopLabel.LabelName);
+                return;
+            }
 			if (call.IsEvent)
 			{
 				foreach (CalledFunction called in functionList)

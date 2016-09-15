@@ -1826,7 +1826,8 @@ namespace MinorShift.Emuera.GameProc.Function
 					termList.Add(0);
 				exm.VEvaluator.SetResultX(termList);
 				state.Return(exm.VEvaluator.RESULT);
-				if (state.ScriptEnd)
+                EmueraPlatform.returnType = typeof(long);
+                if (state.ScriptEnd)
 					return;
 			}
 		}
@@ -1846,6 +1847,7 @@ namespace MinorShift.Emuera.GameProc.Function
 				{
 					exm.VEvaluator.RESULT = 0;
 					state.Return(0);
+                    EmueraPlatform.returnType = typeof(void);
 					return;
 				}
 				List<long> termList = new List<long>();
@@ -1858,7 +1860,8 @@ namespace MinorShift.Emuera.GameProc.Function
 					termList.Add(0);
 				exm.VEvaluator.SetResultX(termList);
 				state.Return(exm.VEvaluator.RESULT);
-			}
+                EmueraPlatform.returnType = typeof(long);
+            }
 		}
 
 		private sealed class CATCH_Instruction : AbstractInstruction

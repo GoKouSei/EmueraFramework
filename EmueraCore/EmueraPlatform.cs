@@ -11,6 +11,7 @@ namespace MinorShift.Emuera
     class EmueraPlatform : IEmuera
     {
         internal static IFramework framework;
+        internal static Type returnType = typeof(void);
         IEnumerable<string> _methodNames;
 
         #region IEmuera
@@ -241,11 +242,29 @@ namespace MinorShift.Emuera
         {
             if (name == null)
                 throw new ArgumentNullException();
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] is long || args[i] is int)
+                    ((IEmuera)this).SetValue("ARG", args[i], i);
+                else if (args[i] is string)
+                    ((IEmuera)this).SetValue("ARGS", args[i], i);
+                else
+                    throw new ArgumentException("매개변수는 string과 int, long 형식만 가능합니다", nameof(args));
+            }
+
             var func = GameProc.CalledFunction.CallFunction(GlobalStatic.Process, name, null);
+
             if (func == null)
                 throw new ArgumentException($"Method [{name}] is undefined");
-            GlobalStatic.Process.getCurrentState.IntoFunction(func, null, GlobalStatic.EMediator);
-            return null;
+
+            GlobalStatic.Process.getCurrentState.IntoFunction(func, null, GlobalStatic.EMediator, false);
+            GlobalStatic.Process.DoScript();
+
+            if (returnType == typeof(long))
+                return ((IEmuera)this).GetValue("RESULT", 0);
+            else
+                return null;
         }
 
         void Begin(SystemFunctionCode code, IFramework framework)
