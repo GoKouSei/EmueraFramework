@@ -15,6 +15,8 @@ namespace SharedLibrary
         int GetColor();
         void SetColor(int color);
         void Print(string str, PrintFlags flag);
+        void DrawLine();
+        void RunRawLine(string rawLine);
         object GetValue(string name, params int[] indexes);
         void SetValue(string name, object value, params int[] indexes);
         void AddChara(long charaNo);

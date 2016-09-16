@@ -13,6 +13,7 @@ namespace TestProgram
         public void SETFLAG(long arg)
         {
             Main.Framework.Data["FLAG"] = arg;
+            long flag = Main.Framework.Data["FLAG"];
             Main.Framework.Print(Main.Framework.Data["FLAG"].ToString(), PrintFlags.NEWLINE);
         }
     }

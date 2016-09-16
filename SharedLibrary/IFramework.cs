@@ -26,6 +26,8 @@ namespace SharedLibrary
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
         void Print(string str, PrintFlags flag);
+        void DrawLine();
+        void RunRawLine(string rawLine);
 
         void SetColor(int color);
         int GetColor();

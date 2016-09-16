@@ -14,6 +14,7 @@ namespace Framework
     {
         public static IFramework Framework { get; private set; }
         public dynamic Data { get; private set; }
+        
 
         private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
@@ -21,6 +22,7 @@ namespace Framework
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
         private IEmuera _emuera;
+        private bool _initialized = false;
 
         public string Name => "EmueraFramework";
 
@@ -42,6 +44,7 @@ namespace Framework
                 Data = new DataBase(emuera, _customVariables);
 
                 Framework = this;
+                _initialized = true;
             }
             catch (Exception e)
             {
@@ -101,7 +104,7 @@ namespace Framework
             {
                 _systemFunctions[sysFunc].Run(this);
             }
-            catch (ArgumentException)
+            catch
             {
                 throw new Exception($"시스템 함수 {sysFunc.ToString()}가 정의되지 않았습니다");
             }
@@ -109,6 +112,8 @@ namespace Framework
 
         public void Run()
         {
+            if (!_initialized)
+                throw new Exception("프레임워크가 초기화되지 않았습니다");
             Begin(SystemFunctionCode.TITLE);
             //_scriptTast = Task.Factory.StartNew
             //    (() =>
@@ -125,6 +130,10 @@ namespace Framework
             //    }, TaskCreationOptions.LongRunning
             //    );
         }
+
+        public void DrawLine() => _emuera.DrawLine();
+
+        public void RunRawLine(string rawLine) => _emuera.RunRawLine(rawLine);
 
         public int GetColor() => _emuera.GetColor();
 

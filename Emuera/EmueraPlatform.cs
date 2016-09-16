@@ -9,6 +9,7 @@ using SharedLibrary.Data;
 using System.Threading.Tasks;
 using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.GameProc;
 
 namespace MinorShift.Emuera
 {
@@ -230,18 +231,23 @@ namespace MinorShift.Emuera
 
         void IEmuera.Print(string str, PrintFlags flag)
         {
-            var func = GameProc.LogicalLineParser.ParseLine(flag.ToPrintString() + " " + str, GlobalStatic.Console) as GameProc.InstructionLine;
-            if (func == null|| !ArgumentParser.SetArgumentTo(func))
+            var func = ParseLine(flag.ToPrintString() + " " + str);
+            if (func == null || !ArgumentParser.SetArgumentTo(func))
                 throw new Exception("변환에 실패했습니다 " + flag.ToPrintString() + " " + str);
-            
+
             func.Function.Instruction.DoInstruction(GlobalStatic.EMediator, func, GlobalStatic.Process.getCurrentState);
             GlobalStatic.Console.RefreshStrings(true);
         }
 
+        private static InstructionLine ParseLine(string rawLine)
+        {
+            return LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
+        }
+
         Task<object> IEmuera.GetInputAsync(ConsoleInputType type)
         {
-            var req = new GameProc.InputRequest();
-            req.InputType = (GameProc.InputType)(Enum.Parse(typeof(GameProc.InputType), ((int)type).ToString()));
+            var req = new InputRequest();
+            req.InputType = (InputType)(Enum.Parse(typeof(InputType), ((int)type).ToString()));
             GlobalStatic.Console.WaitInput(req);
             return Task.Run(() =>
             {
@@ -266,6 +272,21 @@ namespace MinorShift.Emuera
         void IEmuera.DelChara(long charaNo)
         {
             GlobalStatic.VEvaluator.DelCharacter(charaNo);
+        }
+
+        void IEmuera.DrawLine()
+        {
+            GlobalStatic.Console.PrintBar();
+            GlobalStatic.Console.NewLine();
+        }
+
+        void IEmuera.RunRawLine(string rawLine)
+        {
+            var func = ParseLine(rawLine);
+            if (func == null)
+                throw new ArgumentException("Parse Failed Content : " + rawLine);
+            func.Function.Instruction.DoInstruction(GlobalStatic.EMediator, func, GlobalStatic.Process.getCurrentState);
+            GlobalStatic.Console.RefreshStrings(true);
         }
 
         long[] IEmuera.RegistedCharacters => GlobalStatic.VariableData.CharacterList.Select(chara => chara.NO).ToArray();
@@ -328,7 +349,6 @@ namespace MinorShift.Emuera
             GlobalStatic.Console.callEmueraProgram("");
             GlobalStatic.Console.RefreshStrings(true);
         }
-
 
     }
 }

@@ -12,9 +12,9 @@ namespace MinorShift.Emuera
 	internal static class Config
 	{
 
-		#region config
+        #region config
 
-		public static Encoding Encode = Encoding.GetEncoding("SHIFT-JIS");
+        public static Encoding Encode = Encoding.UTF8;//Encoding.GetEncoding("SHIFT-JIS");
 		public static Encoding SaveEncode = Encoding.GetEncoding("SHIFT-JIS");
 		private static Dictionary<ConfigCode, string> nameDic = null;
 		public static string GetConfigName(ConfigCode code)

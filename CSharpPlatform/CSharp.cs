@@ -19,14 +19,24 @@ namespace CSharpPlatform
 
         public void Initialize(string root, IFramework framework)
         {
-            if (!Directory.Exists(root + "DLL\\"))
-                Directory.CreateDirectory(root + "DLL\\");
-            var dllFiles = Directory.GetFiles(root + "DLL\\", "*.dll", SearchOption.TopDirectoryOnly);
+            var dllFiles = Directory.GetFiles(root, "*.dll", SearchOption.TopDirectoryOnly);
+            var assemblys = dllFiles.Select(
+                file =>
+                {
+                    try
+                    {
+                        return Assembly.LoadFrom(file);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }).Where(asm => asm != null);
 
-            var methodGroups = (from file in dllFiles
-                                select Assembly.LoadFrom(file) into assembly
+            var methodGroups = (from assembly in assemblys
                                 from type in assembly.GetTypes()
                                 from method in type.GetMethods()
+                                where ErbMethodAttribute.HasAttribute(method)
                                 group method by method.DeclaringType);
 
             List<Method> methods = new List<Method>();
@@ -36,7 +46,15 @@ namespace CSharpPlatform
                 if (type == typeof(object))
                     continue;
                 var methodList = methodGroup.ToList();
-                var instance = Activator.CreateInstance(type);
+                object instance = null;
+                try
+                {
+                    instance = Activator.CreateInstance(type, null);
+                }
+                catch
+                {
+                    continue;
+                }
                 foreach (var method in methodList)
                 {
                     switch (method.GetParameters().Length)
