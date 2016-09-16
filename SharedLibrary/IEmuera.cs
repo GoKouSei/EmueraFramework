@@ -19,7 +19,7 @@ namespace SharedLibrary
         void AddChara(long charaNo);
         void AddCharaFromCSV(long csvNumber);
         void DelChara(long charaNo);
-        object GetInput(ConsoleInputType type);
+        Task<object> GetInputAsync(ConsoleInputType type);
 
         long[] RegistedCharacters { get; }
     }

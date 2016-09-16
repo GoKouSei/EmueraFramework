@@ -233,9 +233,19 @@ namespace MinorShift.Emuera
             GlobalStatic.Console.RefreshStrings(true);
         }
 
-        object IEmuera.GetInput(ConsoleInputType type)
+        Task<object> IEmuera.GetInputAsync(ConsoleInputType type)
         {
-            throw new NotImplementedException();
+            var req = new GameProc.InputRequest();
+            req.InputType = (GameProc.InputType)(Enum.Parse(typeof(GameProc.InputType), ((int)type).ToString()));
+            GlobalStatic.Console.WaitInput(req);
+            return Task.Run(() =>
+            {
+                while (!GlobalStatic.Console.IsRunning)
+                {
+                    Task.Delay(100).Wait();
+                }
+                return input;
+            });
         }
 
         void IEmuera.AddChara(long charaNo)
@@ -308,17 +318,6 @@ namespace MinorShift.Emuera
             GlobalStatic.Console.RefreshStrings(true);
         }
 
-        public object WaitForInput(ConsoleInputType type)
-        {
-            var req = new GameProc.InputRequest();
-            req.InputType = (GameProc.InputType)(Enum.Parse(typeof(GameProc.InputType), ((int)type).ToString()));
-            GlobalStatic.Console.WaitInput(req);
-            while (!GlobalStatic.Console.IsRunning)
-            {
-                Task.Delay(500).Wait();
-            }
-            return input;
-        }
 
     }
 }

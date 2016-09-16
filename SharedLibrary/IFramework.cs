@@ -43,7 +43,7 @@ namespace SharedLibrary
         void SetColor(int color);
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
-        object GetInput(ConsoleInputType type);
+        Task<object> GetInputAsync(ConsoleInputType type);
 
         dynamic Data { get; }
         

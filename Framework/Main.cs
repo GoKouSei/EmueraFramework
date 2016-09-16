@@ -78,7 +78,7 @@ namespace Framework
             return result;
         }
 
-        public object GetInput(ConsoleInputType type)=> _emuera.GetInput(type);
+        public Task<object> GetInputAsync(ConsoleInputType type)=> _emuera.GetInputAsync(type);
 
         public void DeleteCustomVariable(string name)
         {

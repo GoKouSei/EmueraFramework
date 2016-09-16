@@ -20,10 +20,10 @@ namespace MinorShift.Emuera
                 return new Method[]
                 {
                         new Method("TEST",
-                        (args)=> 
+                        async (args)=>
                         {
                             _framework.Data["FLAG",0] = args[0];
-                            _framework.Data["FLAG",1] = _framework.GetInput(SharedLibrary.Data.ConsoleInputType.INTEGER);
+                            _framework.Data["FLAG",1] = await _framework.GetInputAsync(SharedLibrary.Data.ConsoleInputType.INTEGER);
                             _framework.Print("FLAG:0, FLAG:1", PrintFlags.INTEGER | PrintFlags.NEWLINE);
                         })
                 };
