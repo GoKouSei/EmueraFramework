@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmueraCore\EmueraCore.csproj">
-      <Project>{F3B2ED56-A5BF-45DA-A270-3ED0F775320B}</Project>
-      <Name>EmueraCore</Name>
+    <ProjectReference Include="..\Emuera\Emuera\Emuera.csproj">
+      <Project>{f3b2ed56-a5bf-45da-a270-3ed0f775320b}</Project>
+      <Name>Emuera</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\Framework.csproj">
       <Project>{906379A9-F3B0-4E5B-B1D1-62DC7C9D05A5}</Project>

@@ -22,9 +22,7 @@ namespace SharedLibrary
         string Name { get; }
         FrameworkState State { get; }
 
-        void Initialize(
-            IEmuera emuera, IFrontEnd frontEnd,
-            params IPlatform[] platforms);
+        void Initialize(IEmuera emuera, params IPlatform[] platforms);
 
         /// <summary>
         /// Start Script
@@ -38,11 +36,14 @@ namespace SharedLibrary
         Exception End();
 
         #region IPlatform
+        bool HasMethod(string methodName);
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
-        void Print(string str, int color, PrintFlags flag);
+        void Print(string str, PrintFlags flag);
+        void SetColor(int color);
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
+        object GetInput(ConsoleInputType type);
 
         dynamic Data { get; }
         
@@ -50,9 +51,6 @@ namespace SharedLibrary
         void DelChara(long charaNo);
         ICharacter GetChara(long charaNo);
         long[] RegistedCharacters { get; }
-        #endregion
-        #region IFrontEnd
-        void EnterInput(ConsoleInput input);
         #endregion
     }
 }

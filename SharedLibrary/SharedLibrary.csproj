@@ -38,16 +38,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\ConsoleInput.cs" />
+    <Compile Include="Data\ConsoleInputType.cs" />
     <Compile Include="Data\ICharacter.cs" />
-    <Compile Include="Draw\ConsoleButtonPart.cs" />
-    <Compile Include="Draw\ConsoleLine.cs" />
-    <Compile Include="Draw\ConsoleLinePart.cs" />
-    <Compile Include="Draw\ConsoleStringPart.cs" />
-    <Compile Include="Draw\Point.cs" />
     <Compile Include="IEmuera.cs" />
     <Compile Include="IFramework.cs" />
-    <Compile Include="IFrontEnd.cs" />
     <Compile Include="IPlatform.cs" />
     <Compile Include="Function\Method.cs" />
     <Compile Include="Function\PrintFlags.cs" />

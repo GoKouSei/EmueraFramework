@@ -1,6 +1,5 @@
 ﻿using Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MinorShift.Emuera;
 using SharedLibrary;
 using System;
 using System.Collections.Generic;

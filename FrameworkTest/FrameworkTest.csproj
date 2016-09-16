@@ -57,10 +57,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmueraCore\EmueraCore.csproj">
-      <Project>{f3b2ed56-a5bf-45da-a270-3ed0f775320b}</Project>
-      <Name>EmueraCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Framework\Framework.csproj">
       <Project>{906379a9-f3b0-4e5b-b1d1-62dc7c9d05a5}</Project>
       <Name>Framework</Name>

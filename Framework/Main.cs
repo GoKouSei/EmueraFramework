@@ -19,26 +19,8 @@ namespace Framework
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
-        private IFrontEnd _frontEnd;
         private IEmuera _emuera;
         private Task<Exception> _scriptTast;
-        private ConsoleInput _lastInput;
-
-
-
-        private ConsoleInput LastInput
-        {
-            get
-            {
-                var temp = _lastInput;
-                _lastInput = null;
-                return temp;
-            }
-            set
-            {
-                _lastInput = value;
-            }
-        }
 
         public string Name => "EmueraFramework";
 
@@ -48,8 +30,7 @@ namespace Framework
 
 
         public void Initialize(
-            IEmuera emuera, IFrontEnd frontEnd,
-            params IPlatform[] platforms)
+            IEmuera emuera, params IPlatform[] platforms)
         {
             State = FrameworkState.Initializing;
 
@@ -57,11 +38,10 @@ namespace Framework
 
             try
             {
-                _frontEnd = frontEnd;
                 _emuera = emuera;
 
                 _methods = platforms.Union(new[] { emuera }).Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
-                _systemFunctions = platforms.Union(new[] { emuera }).Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
+                _systemFunctions = emuera.systemFunctions.ToDictionary(func => func.Code);
 
                 Data = new DataBase(emuera, _customVariables);
             }
@@ -95,17 +75,10 @@ namespace Framework
                 throw new ArgumentException($"정의되지 않은 메소드 {methodName}입니다", nameof(methodName));
             }
             var result = _methods[methodName].Run(args);
-            Wait();
             return result;
         }
 
-        private void Wait()
-        {
-            while (State == FrameworkState.Waiting)
-            {
-                Task.Delay(500).Wait();
-            }
-        }
+        public object GetInput(ConsoleInputType type)=> _emuera.GetInput(type);
 
         public void DeleteCustomVariable(string name)
         {
@@ -117,16 +90,6 @@ namespace Framework
         {
             if (_customCharaVariables.ContainsKey(name))
                 _customCharaVariables.Remove(name);
-        }
-
-        public void EnterInput(ConsoleInput input)
-        {
-            if (State != FrameworkState.Waiting)
-            {
-                return;
-            }
-            State = FrameworkState.Running;
-            LastInput = input;
         }
 
         /// <summary>
@@ -149,20 +112,21 @@ namespace Framework
         public void Run()
         {
             State = FrameworkState.Running;
-            _scriptTast = Task.Factory.StartNew
-                (() =>
-                {
-                    try
-                    {
-                        Begin(SystemFunctionCode.TITLE);
-                        return null;
-                    }
-                    catch (Exception e)
-                    {
-                        return e;
-                    }
-                }, TaskCreationOptions.LongRunning
-                );
+            Begin(SystemFunctionCode.TITLE);
+            //_scriptTast = Task.Factory.StartNew
+            //    (() =>
+            //    {
+            //        try
+            //        {
+            //            Begin(SystemFunctionCode.TITLE);
+            //            return null;
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            return e;
+            //        }
+            //    }, TaskCreationOptions.LongRunning
+            //    );
         }
 
         public Exception End()
@@ -170,14 +134,9 @@ namespace Framework
             return _scriptTast.Result;
         }
 
+        public void SetColor(int color) => _emuera.SetColor(color);
 
-        public void Print(string str, int color, PrintFlags flag)
-        {
-            if (flag.HasFlag(PrintFlags.WAIT))
-                State = FrameworkState.Waiting;
-            Wait();
-            throw new NotImplementedException();
-        }
+        public void Print(string str, PrintFlags flag) => _emuera.Print(str, flag);
 
         public void AddChara(long charaNo) => _emuera.AddChara(charaNo);
 
@@ -185,5 +144,6 @@ namespace Framework
 
         public ICharacter GetChara(long charaNo) => new CharacterInfo(charaNo, _emuera, _customCharaVariables);
 
+        public bool HasMethod(string methodName) => _methods.ContainsKey(methodName);
     }
 }

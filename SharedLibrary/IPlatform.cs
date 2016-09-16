@@ -9,7 +9,6 @@ namespace SharedLibrary
     {
         string Name { get; }
         Method[] methods { get; }
-        SystemFunction[] systemFunctions { get; }
         void Initialize(List<Tuple<string, Stream>> source, IFramework framework);
     }
 }
