@@ -319,12 +319,13 @@ namespace MinorShift.Emuera
         {
             if (name == null)
                 throw new ArgumentNullException();
+            int intIndex = 0, strIndex = 0;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] is long || args[i] is int)
-                    ((IEmuera)this).SetValue("ARG", args[i], i);
+                    ((IEmuera)this).SetValue("ARG", args[i], intIndex++);
                 else if (args[i] is string)
-                    ((IEmuera)this).SetValue("ARGS", args[i], i);
+                    ((IEmuera)this).SetValue("ARGS", args[i], strIndex++);
                 else
                     throw new ArgumentException("매개변수는 string과 int, long 형식만 가능합니다", nameof(args));
             }
