@@ -8,7 +8,7 @@ namespace SharedLibrary
     public interface IPlatform
     {
         string Name { get; }
-        Method[] methods { get; }
-        void Initialize(List<Tuple<string, Stream>> source, IFramework framework);
+        Method[] Methods { get; }
+        void Initialize(string root, IFramework framework);
     }
 }

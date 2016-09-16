@@ -38,7 +38,7 @@ namespace MinorShift.Emuera
             }
         }
 
-        Method[] IPlatform.methods
+        Method[] IPlatform.Methods
         {
             get
             {
@@ -46,7 +46,7 @@ namespace MinorShift.Emuera
             }
         }
 
-        void IPlatform.Initialize(List<Tuple<string, Stream>> source, IFramework framework)
+        void IPlatform.Initialize(string root, IFramework framework)
         {
             EmueraPlatform.framework = framework;
             GlobalStatic.Console.state = GameView.ConsoleState.Running;
@@ -218,6 +218,11 @@ namespace MinorShift.Emuera
             return num;
         }
 
+        int IEmuera.GetColor()
+        {
+            return GlobalStatic.Console.StringStyle.Color.ToArgb();
+        }
+
         void IEmuera.SetColor(int color)
         {
             GlobalStatic.Console.SetStringStyle(System.Drawing.Color.FromArgb(color));
@@ -273,14 +278,20 @@ namespace MinorShift.Emuera
 
         internal static void EmueraCall(string labelName,IOperandTerm[] args)
         {
-            framework.Call(labelName, args.Select(arg =>
+            var result = framework.Call(labelName, args.Select(arg =>
              {
                  if (arg.IsInteger)
                      return (object)arg.GetIntValue(GlobalStatic.EMediator);
                  else
                      return (object)arg.GetStrValue(GlobalStatic.EMediator);
              }).ToArray());
-            //ARG,ARGS required
+
+            if (result is int)
+                GlobalStatic.VEvaluator.RESULT = (int)result;
+            else if (result is long)
+                GlobalStatic.VEvaluator.RESULT = (long)result;
+            else if (result is string)
+                GlobalStatic.VEvaluator.RESULTS = (string)result;
         }
 
         object Call(string name, object[] args)

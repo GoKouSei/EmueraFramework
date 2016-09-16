@@ -631,12 +631,12 @@ namespace MinorShift.Emuera.GameProc
 		/// </summary>
 		private void checkScript()
 		{
-            IEmuera platform = new EmueraPlatform(GlobalStatic.LabelDictionary.GetAllLabelName());
+            IEmuera emuera = new EmueraPlatform(GlobalStatic.LabelDictionary.GetAllLabelName());
             IFramework framework = new Main();
-            platform.Initialize(null, framework);
-            IPlatform test = new TestPlatform();
-            test.Initialize(null, framework);
-            framework.Initialize(platform, test);
+            emuera.Initialize(null, framework);
+            IPlatform csharp = new CSharpPlatform.CSharp();
+            csharp.Initialize(Program.ExeDir, framework);
+            framework.Initialize(emuera, csharp);
 
             int usedLabelCount = 0;
 			int labelDepth = -1;

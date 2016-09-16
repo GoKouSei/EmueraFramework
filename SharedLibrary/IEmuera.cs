@@ -12,6 +12,7 @@ namespace SharedLibrary
     {
         SystemFunction[] systemFunctions { get; }
 
+        int GetColor();
         void SetColor(int color);
         void Print(string str, PrintFlags flag);
         object GetValue(string name, params int[] indexes);

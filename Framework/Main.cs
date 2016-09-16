@@ -12,7 +12,8 @@ namespace Framework
 {
     public class Main : IFramework
     {
-        public dynamic Data { get; internal set; }
+        public static IFramework Framework { get; private set; }
+        public dynamic Data { get; private set; }
 
         private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
@@ -20,30 +21,27 @@ namespace Framework
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
         private IEmuera _emuera;
-        private Task<Exception> _scriptTast;
 
         public string Name => "EmueraFramework";
 
         public long[] RegistedCharacters => _emuera.RegistedCharacters;
 
-        public FrameworkState State { get; private set; }
-
 
         public void Initialize(
             IEmuera emuera, params IPlatform[] platforms)
         {
-            State = FrameworkState.Initializing;
-
             string errMes = "";
 
             try
             {
                 _emuera = emuera;
 
-                _methods = platforms.Union(new[] { emuera }).Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
+                _methods = platforms.Union(new[] { emuera }).Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
                 _systemFunctions = emuera.systemFunctions.ToDictionary(func => func.Code);
 
                 Data = new DataBase(emuera, _customVariables);
+
+                Framework = this;
             }
             catch (Exception e)
             {
@@ -111,7 +109,6 @@ namespace Framework
 
         public void Run()
         {
-            State = FrameworkState.Running;
             Begin(SystemFunctionCode.TITLE);
             //_scriptTast = Task.Factory.StartNew
             //    (() =>
@@ -129,10 +126,7 @@ namespace Framework
             //    );
         }
 
-        public Exception End()
-        {
-            return _scriptTast.Result;
-        }
+        public int GetColor() => _emuera.GetColor();
 
         public void SetColor(int color) => _emuera.SetColor(color);
 

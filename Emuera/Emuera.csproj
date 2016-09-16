@@ -236,7 +236,6 @@
     <Compile Include="Sub\Word.cs" />
     <Compile Include="Sub\SubWord.cs" />
     <Compile Include="Sub\EraBinaryDataWriter.cs" />
-    <Compile Include="TestPlatform.cs" />
     <Compile Include="_Library\GDI.cs" />
     <Compile Include="_Library\SFMT.cs" />
     <Compile Include="_Library\LangManager.cs" />
@@ -271,11 +270,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Framework\Framework.csproj">
+    <ProjectReference Include="..\CSharpPlatform\CSharpPlatform.csproj">
+      <Project>{24781af8-6da6-48b2-a0b5-6e1d44a918f0}</Project>
+      <Name>CSharpPlatform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Framework\Framework.csproj">
       <Project>{906379a9-f3b0-4e5b-b1d1-62dc7c9d05a5}</Project>
       <Name>Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SharedLibrary\SharedLibrary.csproj">
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj">
       <Project>{855b38af-349c-4abb-a2bc-216189c54886}</Project>
       <Name>SharedLibrary</Name>
     </ProjectReference>
