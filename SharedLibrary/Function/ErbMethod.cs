@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Function
 {
-    public class ErbMethodAttribute:Attribute
+    public class MethodAttribute:Attribute
     {
-        public static bool HasAttribute(MethodInfo method) => method.GetCustomAttribute(typeof(ErbMethodAttribute)) != null;
+        public static bool HasAttribute(MethodInfo method) => method.GetCustomAttribute(typeof(MethodAttribute)) != null;
     }
 }
