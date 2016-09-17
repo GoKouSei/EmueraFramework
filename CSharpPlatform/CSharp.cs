@@ -19,7 +19,13 @@ namespace CSharpPlatform
 
         public void Initialize(string root, IFramework framework)
         {
-            var dllFiles = Directory.GetFiles(root + "\\DLL", "*.dll", SearchOption.TopDirectoryOnly);
+            if (!Directory.Exists(root + "\\Plugins"))
+            {
+                Methods = new Method[0];
+                framework.Print("Can't find Plugins folder", PrintFlags.NEWLINE);
+                return;
+            }
+            var dllFiles = Directory.GetFiles(root + "\\Plugins", "*.plg", SearchOption.TopDirectoryOnly);
             //Array.ForEach(dllFiles, assembly => 
             //{
             //    try
@@ -67,6 +73,9 @@ namespace CSharpPlatform
                 {
                     continue;
                 }
+                framework.Print("", PrintFlags.NEWLINE);
+                framework.Print($"Plugin {methodGroup.Item1.ManifestModule.ToString()}->{methodGroup.Item3.Name} installed", PrintFlags.NEWLINE);
+                framework.Print("", PrintFlags.NEWLINE);
                 var method = methodGroup.Item3;
                 switch (method.GetParameters().Length)
                 {

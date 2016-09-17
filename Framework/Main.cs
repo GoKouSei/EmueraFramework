@@ -23,6 +23,7 @@ namespace Framework
 
         private IEmuera _emuera;
         private bool _initialized = false;
+        private Queue<Tuple<string, PrintFlags>> _printQueue = new Queue<Tuple<string, PrintFlags>>();
 
         public string Name => "EmueraFramework";
 
@@ -32,6 +33,12 @@ namespace Framework
         public void Initialize(
             IEmuera emuera, params IPlatform[] platforms)
         {
+            while (_printQueue.Count > 0)
+            {
+                var str = _printQueue.Dequeue();
+                emuera.Print(str.Item1, str.Item2);
+            }
+
             string errMes = "";
 
             try
@@ -139,7 +146,11 @@ namespace Framework
 
         public void SetColor(int color) => _emuera.SetColor(color);
 
-        public void Print(string str, PrintFlags flag) => _emuera.Print(str, flag);
+        public void Print(string str, PrintFlags flag)
+        {
+            if (!_initialized) _printQueue.Enqueue(Tuple.Create(str, flag));
+            else _emuera.Print(str, flag);
+        }
 
         public void AddChara(long charaNo) => _emuera.AddChara(charaNo);
 

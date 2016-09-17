@@ -15,11 +15,10 @@ namespace SharedLibrary.Function
         LEFT_ALIGN = 0x4,
         RIGHT_ALIGN = 0x8,
         IGNORE_COLOR = 0x10,
-        BUTTON = 0x20,
-        FORM = 0x40,
-        FORMS = 0x80,
-        INTEGER = 0x100,
-        STRING = 0x200,
+        FORM = 0x20,
+        FORMS = 0x40,
+        INTEGER = 0x80,
+        STRING = 0x100,
     }
 
     public static class PrintTool
