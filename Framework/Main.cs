@@ -15,8 +15,7 @@ namespace Framework
         public static IFramework Framework { get; private set; }
         public dynamic Data { get; private set; }
         
-
-        private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
+        
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
@@ -61,12 +60,10 @@ namespace Framework
                 _customVariables.Add(name, instance);
         }
 
-        public void AddCharaCustomVariable(string name, object instance)
+        public void DeleteCustomVariable(string name)
         {
-            if (_customCharaVariables.ContainsKey(name))
-                throw new ArgumentException($"이미 정의된 변수이름 {name}입니다");
-            else
-                _customCharaVariables.Add(name, instance);
+            if (_customVariables.ContainsKey(name))
+                _customVariables.Remove(name);
         }
 
         public object Call(string methodName, params object[] args)
@@ -81,17 +78,6 @@ namespace Framework
 
         public Task<object> GetInputAsync(ConsoleInputType type)=> _emuera.GetInputAsync(type);
 
-        public void DeleteCustomVariable(string name)
-        {
-            if (_customVariables.ContainsKey(name))
-                _customVariables.Remove(name);
-        }
-
-        public void DeleteCharaCustomVariable(string name)
-        {
-            if (_customCharaVariables.ContainsKey(name))
-                _customCharaVariables.Remove(name);
-        }
 
         /// <summary>
         /// 
@@ -139,13 +125,13 @@ namespace Framework
 
         public void SetColor(int color) => _emuera.SetColor(color);
 
-        public void Print(string str, PrintFlags flag) => _emuera.Print(str, flag);
+        public void Print(string str, PrintFlags flag = PrintFlags.NEWLINE) => _emuera.Print(str, flag);
 
         public void AddChara(long charaNo) => _emuera.AddChara(charaNo);
 
         public void DelChara(long charaNo) => _emuera.DelChara(charaNo);
 
-        public ICharacter GetChara(long charaNo) => new CharacterInfo(charaNo, _emuera, _customCharaVariables);
+        public ICharacter GetChara(long charaNo) => new CharacterInfo(charaNo, _emuera);
 
         public bool HasMethod(string methodName) => _methods.ContainsKey(methodName);
     }

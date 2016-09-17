@@ -38,4 +38,10 @@ namespace SharedLibrary.Function
 
         public object Run(params object[] args) => _body(args);
     }
+
+
+    public class MethodAttribute : Attribute
+    {
+        public static bool IsMethod(MethodInfo method) => method.GetCustomAttribute(typeof(MethodAttribute)) != null;
+    }
 }

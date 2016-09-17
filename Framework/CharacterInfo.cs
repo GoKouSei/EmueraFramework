@@ -7,9 +7,9 @@ namespace Framework
 {
     class CharacterInfo : ICharacter
     {
-        internal CharacterInfo(long registrationNumber, IEmuera emuera, Dictionary<string, object> customVariable)
+        internal CharacterInfo(long registrationNumber, IEmuera emuera)
         {
-            Data = new CharaDataBase(registrationNumber, emuera, customVariable);
+            Data = new CharaDataBase(registrationNumber, emuera);
         }
 
         public string CallName => Data.CALLNAME;

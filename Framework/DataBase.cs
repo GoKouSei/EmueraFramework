@@ -24,28 +24,11 @@ namespace Framework
             if (indexes[0] is string)
             {
                 var index = indexes[0] as string;
-                var intIndexes = new int[indexes.Length - 1];
+                var left = new object[indexes.Length - 1];
+                Array.Copy(indexes, 1, left, 0, left.Length);
                 try
                 {
-                    for (int i = 1; i < indexes.Length; i++)
-                    {
-                        if (indexes[i] is int)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i] is long)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i - 1] is string)
-                            intIndexes[i - 1] = int.Parse((string)indexes[i]);
-                        else
-                            return false;
-                    }
-                }
-                catch
-                {
-                    throw new ArgumentException("인덱스가 잘못되었습니다");
-                }
-                try
-                {
-                    result = _emuera.GetValue(index, intIndexes);
+                    result = _emuera.GetValue(index, left);
                     return true;
                 }
                 catch
@@ -61,28 +44,11 @@ namespace Framework
             if (indexes[0] is string)
             {
                 var index = indexes[0] as string;
-                var intIndexes = new int[indexes.Length - 1];
+                var left = new object[indexes.Length - 1];
+                Array.Copy(indexes, 1, left, 0, left.Length);
                 try
                 {
-                    for (int i = 1; i < indexes.Length; i++)
-                    {
-                        if (indexes[i] is int)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i] is long)
-                            intIndexes[i - 1] = (int)indexes[i];
-                        else if (indexes[i - 1] is string)
-                            intIndexes[i - 1] = int.Parse((string)indexes[i]);
-                        else
-                            return false;
-                    }
-                }
-                catch
-                {
-                    throw new ArgumentException("인덱스가 잘못되었습니다");
-                }
-                try
-                {
-                    _emuera.SetValue(index, value, intIndexes);
+                    _emuera.SetValue(index, value, left);
                     return true;
                 }
                 catch

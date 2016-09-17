@@ -13,13 +13,20 @@ namespace CSharpPlatform
     public class CSharp : IPlatform
     {
 
+        private List<IDisposable> disposList = new List<IDisposable>();
+
         public Method[] Methods { get; private set; }
 
         public string Name => "C#";
 
+        ~CSharp()
+        {
+            ((IDisposable)this).Dispose();
+        }
+
         public void Initialize(string root, IFramework framework)
         {
-            var dllFiles = Directory.GetFiles(root + "\\DLL", "*.dll", SearchOption.TopDirectoryOnly);
+            var dllFiles = Directory.GetFiles(root + "\\Plugins", "*.plg", SearchOption.TopDirectoryOnly);
             //Array.ForEach(dllFiles, assembly => 
             //{
             //    try
@@ -47,11 +54,8 @@ namespace CSharpPlatform
 
 
             var methodGroups = (from assembly in assemblys
-                                from type in assembly.GetTypes()
-                                from method in type.GetMethods()
-                                where MethodAttribute.HasAttribute(method)
-                                select Tuple.Create(assembly, type, method));
-
+                                from Type type in assembly.GetExportedTypes()
+                                select Tuple.Create(assembly, type, type.GetMethods().Where(method => MethodAttribute.IsMethod(method))));
             List<Method> methods = new List<Method>();
             foreach (var methodGroup in methodGroups)
             {
@@ -61,39 +65,46 @@ namespace CSharpPlatform
                 object instance = null;
                 try
                 {
-                    instance = Activator.CreateInstance(methodGroup.Item2);
+                    instance = Activator.CreateInstance(type, framework);
                 }
                 catch
                 {
                     continue;
                 }
-                var method = methodGroup.Item3;
-                switch (method.GetParameters().Length)
+                if(instance is IDisposable)
                 {
-                    case 0:
-                        {
-                            if (method.ReturnType == typeof(void))
-                                methods.Add(new Method(method.Name.ToUpper(), () => { method.Invoke(instance, null); }));
-                            else
-                                methods.Add(new Method(method.Name.ToUpper(), () => method.Invoke(instance, null)));
-                            break;
-                        }
-                    case 1:
-                        {
-                            if (method.ReturnType == typeof(void))
-                                methods.Add(new Method(method.Name.ToUpper(), (args) => { method.Invoke(instance, args); }));
-                            else
-                                methods.Add(new Method(method.Name.ToUpper(), (args) => 
-                                method.Invoke(instance, args)));
-                            break;
-                        }
-                    default:
-                        {
-                            continue;
-                        }
+                    disposList.Add((IDisposable)instance);
+                }
+                foreach (var method in methodGroup.Item3)
+                {
+                    switch (method.GetParameters().Length)
+                    {
+                        case 0:
+                            {
+                                if (method.ReturnType == typeof(void))
+                                    methods.Add(new Method(method.Name.ToUpper(), () => { method.Invoke(instance, null); }));
+                                else
+                                    methods.Add(new Method(method.Name.ToUpper(), () => method.Invoke(instance, null)));
+                                break;
+                            }
+                        default:
+                            {
+                                if (method.ReturnType == typeof(void))
+                                    methods.Add(new Method(method.Name.ToUpper(), (args) => { method.Invoke(instance, args); }));
+                                else
+                                    methods.Add(new Method(method.Name.ToUpper(), (args) => method.Invoke(instance, args)));
+                                break;
+                            }
+                    }
                 }
             }
             Methods = methods.ToArray();
+        }
+
+        void IDisposable.Dispose()
+        {
+            foreach (var dispose in disposList)
+                dispose.Dispose();
         }
     }
 }
