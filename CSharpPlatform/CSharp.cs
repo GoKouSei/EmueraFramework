@@ -82,17 +82,17 @@ namespace CSharpPlatform
                         case 0:
                             {
                                 if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name.ToUpper(), () => { method.Invoke(instance, null); }));
+                                    methods.Add(new Method(method.Name, () => { method.Invoke(instance, null); }));
                                 else
-                                    methods.Add(new Method(method.Name.ToUpper(), () => method.Invoke(instance, null)));
+                                    methods.Add(new Method(method.Name, () => method.Invoke(instance, null)));
                                 break;
                             }
                         default:
                             {
                                 if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name.ToUpper(), (args) => { method.Invoke(instance, args); }));
+                                    methods.Add(new Method(method.Name, (args) => { method.Invoke(instance, args); }));
                                 else
-                                    methods.Add(new Method(method.Name.ToUpper(), (args) => method.Invoke(instance, args)));
+                                    methods.Add(new Method(method.Name, (args) => method.Invoke(instance, args)));
                                 break;
                             }
                     }
