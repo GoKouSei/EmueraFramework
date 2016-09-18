@@ -13,6 +13,7 @@ namespace SharedLibrary
         SystemFunction[] systemFunctions { get; }
 
         int GetColor();
+
         void SetColor(int color);
         void Print(string str, PrintFlags flag);
         void DrawLine();
@@ -25,5 +26,7 @@ namespace SharedLibrary
         Task<object> GetInputAsync(ConsoleInputType type);
 
         long[] RegistedCharacters { get; }
+        int Encoding { get; }
+        string Root { get; }
     }
 }

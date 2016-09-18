@@ -8,6 +8,10 @@ namespace SharedLibrary.Data
 {
     public enum ConsoleInputType
     {
-        VOID,ANYKEY,ENTERKEY,INTEGER,STRING,
+        EnterKey = 1,
+        AnyKey = 2,
+        IntValue = 3,
+        StrValue = 4,
+        Void = 5,
     }
 }

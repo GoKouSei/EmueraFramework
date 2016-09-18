@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary
 {
-    public interface IFramework
+    public interface IFramework:IDisposable
     {
         string Name { get; }
 
-        void Initialize(IEmuera emuera, params IPlatform[] platforms);
+        void Set(IEmuera emuera);
+        void Initialize(params IPlatform[] platforms);
 
         /// <summary>
         /// Start Script
@@ -22,6 +23,10 @@ namespace SharedLibrary
         void Run();
 
         #region IPlatform
+
+        string Root { get; }
+        int Encoding { get; }
+
         bool HasMethod(string methodName);
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);

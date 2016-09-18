@@ -5,10 +5,10 @@ using System.IO;
 
 namespace SharedLibrary
 {
-    public interface IPlatform:IDisposable
+    public interface IPlatform : IDisposable
     {
         string Name { get; }
         Method[] Methods { get; }
-        void Initialize(string root, IFramework framework);
+        void Initialize(IFramework framework);
     }
 }
