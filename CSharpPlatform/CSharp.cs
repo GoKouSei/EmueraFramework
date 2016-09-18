@@ -77,6 +77,7 @@ namespace CSharpPlatform
                 }
                 foreach (var method in methodGroup.Item3)
                 {
+                    framework.Print($"Plugin {methodGroup.Item2.Name} -> {method.Name} installed");
                     switch (method.GetParameters().Length)
                     {
                         case 0:

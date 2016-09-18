@@ -185,6 +185,7 @@ namespace MinorShift.Emuera.GameView
 				window.Focus();
 			}
 			ClearDisplay();
+            Print("Encoding : " + Config.Encode.WebName);
 			if (!emuera.Initialize())
 			{
 				state = ConsoleState.Error;
@@ -194,7 +195,18 @@ namespace MinorShift.Emuera.GameView
 				return;
 			}
 
+            #region Module
+            EmueraPlatform.framework.Print("installed Module : ezEmuera, 에라번역");
+            EmueraPlatform.framework.Print("ezEmuera를 초기화 합니다");
+            int result = EZTrans.Helper.TryLoading(Program.ExeDir + "ezTransPath.txt", true);
+            if (result != 0)
+            {
+                throw new Exception("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
+            }
+            #endregion
+
             EmueraPlatform.framework.Run();
+            EZTrans.TranslateXP.Terminate();
             //callEmueraProgram("");
             //RefreshStrings(true);
         }

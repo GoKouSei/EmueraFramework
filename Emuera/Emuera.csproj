@@ -287,6 +287,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EZTrans\EZTrans\EZTrans.csproj">
+      <Project>{3724f839-bcc8-4eff-a177-ac8247660f94}</Project>
+      <Name>EZTrans</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CSharpPlatform\CSharpPlatform.csproj">
       <Project>{24781af8-6da6-48b2-a0b5-6e1d44a918f0}</Project>
       <Name>CSharpPlatform</Name>
