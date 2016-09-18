@@ -21,13 +21,8 @@ namespace MinorShift.Emuera
         IEnumerable<string> _methodNames;
 
         #region IEmuera
-        string IPlatform.Name
-        {
-            get
-            {
-                return "EmueraCore";
-            }
-        }
+
+        string IPlatform.Name => "Emuera";
 
         SystemFunction[] IEmuera.systemFunctions
         {
@@ -43,11 +38,24 @@ namespace MinorShift.Emuera
         {
             get
             {
-                return _methodNames.Select(method => new Method(method, args => Call(method, args))).ToArray();
+                return _methodNames.Select(method => new Method(method, args => Call(method, args)))
+                    .Union(new[] {
+                        new Method("에라번역", () => 
+                    {
+                        System.Diagnostics.Process eraTrans = new System.Diagnostics.Process();
+                        
+                        eraTrans.StartInfo=new System.Diagnostics.ProcessStartInfo(
+                            Program.ExeDir+"EraTrans\\에라번역.exe",
+                            Program.ErbDir+GlobalStatic.Process.getCurrentLine.Position.Filename+
+                            " "+Config.Encode.CodePage.ToString());
+                        eraTrans.StartInfo.UseShellExecute=true;
+                        eraTrans.Start();
+                        eraTrans.WaitForExit();
+                    }) }).ToArray();
             }
         }
 
-        void IPlatform.Initialize(string root, IFramework framework)
+        void IPlatform.Initialize(IFramework framework)
         {
             EmueraPlatform.framework = framework;
             GlobalStatic.Console.state = GameView.ConsoleState.Running;
@@ -359,12 +367,16 @@ namespace MinorShift.Emuera
         {
             var func = ParseLine(rawLine);
             if (func == null)
-                throw new ArgumentException("Parse Failed Content : " + rawLine);
+                return;
             GlobalStatic.Process.DoDebugNormalFunction(func, false);
             GlobalStatic.Console.RefreshStrings(true);
         }
 
         long[] IEmuera.RegistedCharacters => GlobalStatic.VariableData.CharacterList.Select(chara => chara.NO).ToArray();
+
+        int IEmuera.Encoding => Config.Encode.CodePage;
+
+        string IEmuera.Root => Program.ExeDir;
         #endregion
 
         public EmueraPlatform(IEnumerable<string> methodNames)

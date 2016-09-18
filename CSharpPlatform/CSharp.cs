@@ -24,22 +24,16 @@ namespace CSharpPlatform
             ((IDisposable)this).Dispose();
         }
 
-        public void Initialize(string root, IFramework framework)
+        public void Initialize(IFramework framework)
         {
-            var dllFiles = Directory.GetFiles(root + "\\Plugins", "*.plg", SearchOption.TopDirectoryOnly);
-            //Array.ForEach(dllFiles, assembly => 
-            //{
-            //    try
-            //    {
-            //        Assembly.Load(File.ReadAllBytes(assembly));
-            //    }
-            //    catch
-            //    {
-            //        return;
-            //    }
-                
-            //    });
-            var assemblys = dllFiles.Select(
+            if (!Directory.Exists(framework.Root + "\\Plugins"))
+            {
+                Methods = new Method[0];
+                framework.Print("Can't find Plugins folder", PrintFlags.NEWLINE);
+                return;
+            }
+
+            var assemblys = Directory.GetFiles(framework.Root + "\\Plugins", "*.plg", SearchOption.TopDirectoryOnly).Select(
                 file =>
                 {
                     try
@@ -77,7 +71,10 @@ namespace CSharpPlatform
                 }
                 foreach (var method in methodGroup.Item3)
                 {
-                    framework.Print($"Plugin {methodGroup.Item2.Name} -> {method.Name} installed");
+                    framework.Print("");
+                    framework.Print($"Plugin {methodGroup.Item1.ManifestModule.ToString()}->{method.Name} installed");
+                    framework.Print("");
+                    var paramaters = method.GetParameters();
                     switch (method.GetParameters().Length)
                     {
                         case 0:
@@ -91,9 +88,31 @@ namespace CSharpPlatform
                         default:
                             {
                                 if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name, (args) => { method.Invoke(instance, args); }));
+                                    methods.Add(new Method(method.Name, (args) =>
+                                    {
+                                        if (args.Length < paramaters.Length)
+                                        {
+                                            object[] newPara = new object[paramaters.Length];
+                                            args.CopyTo(newPara, 0);
+                                            for (int i = paramaters.Length - args.Length - 1; i >= 0; i--)
+                                                newPara[args.Length + i] = Type.Missing;
+                                            method.Invoke(instance, newPara);
+                                        }
+                                        else method.Invoke(instance, args);
+                                    }));
                                 else
-                                    methods.Add(new Method(method.Name, (args) => method.Invoke(instance, args)));
+                                    methods.Add(new Method(method.Name, (args) =>
+                                    {
+                                        if (args.Length < paramaters.Length && paramaters[paramaters.Length - 1].IsOptional)
+                                        {
+                                            object[] newPara = new object[paramaters.Length];
+                                            args.CopyTo(newPara, 0);
+                                            for (int i = paramaters.Length - args.Length; i >= 0; i--)
+                                                newPara[args.Length + i] = Type.Missing;
+                                            return method.Invoke(instance, newPara);
+                                        }
+                                        else return method.Invoke(instance, args);
+                                    }));
                                 break;
                             }
                     }

@@ -2214,8 +2214,9 @@ namespace MinorShift.Emuera.GameProc.Function
 				if (spCallArg.IsConst)
 				{
 					call = spCallArg.CallFunc;
-					labelName = spCallArg.ConstStr;
-					arg = spCallArg.UDFArgument;
+                    labelName = spCallArg.ConstStr;
+                    originalName = labelName;
+                    arg = spCallArg.UDFArgument;
 				}
 				else
 				{

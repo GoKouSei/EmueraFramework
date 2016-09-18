@@ -23,8 +23,8 @@ namespace SharedLibrary.Function
         private Action<IFramework> _body;
 
         public SystemFunctionCode Code { get; }
-        
-        public SystemFunction(SystemFunctionCode code,Action<IFramework> body)
+
+        public SystemFunction(SystemFunctionCode code, Action<IFramework> body)
         {
             Code = code;
             _body = body;
