@@ -25,15 +25,15 @@ namespace SharedLibrary
         bool HasMethod(string methodName);
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
-        void Print(string str, PrintFlags flag);
+        void Print(string str, PrintFlags flag = PrintFlags.NEWLINE);
         void DrawLine();
         void RunRawLine(string rawLine);
 
         void SetColor(int color);
         int GetColor();
 
-        void AddCharaCustomVariable(string name, object instance);
-        void DeleteCharaCustomVariable(string name);
+        void AddCustomVariable(string name, object instance);
+        void DeleteCustomVariable(string name);
         Task<object> GetInputAsync(ConsoleInputType type);
 
         dynamic Data { get; }

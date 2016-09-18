@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="Data\ConsoleInputType.cs" />
     <Compile Include="Data\ICharacter.cs" />
-    <Compile Include="Function\ErbMethod.cs" />
     <Compile Include="IEmuera.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IPlatform.cs" />

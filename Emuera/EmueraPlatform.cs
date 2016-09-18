@@ -53,10 +53,42 @@ namespace MinorShift.Emuera
             GlobalStatic.Console.state = GameView.ConsoleState.Running;
         }
 
-        object IEmuera.GetValue(string name, params int[] indexes)
+        object IEmuera.GetValue(string name, params object[] indexes)
         {
+            int[] target = new int[indexes.Length];
             var code = (VariableCode)Enum.Parse(typeof(VariableCode), name);
+            for (int i = 0; i < indexes.Length; i++)
+            {
+                try
+                {
+                    if (indexes[i] is long)
+                        target[i] = (int)(long)indexes[i];
+                    else if (indexes[i] is int)
+                        target[i] = (int)indexes[i];
+                    else if (indexes[i] is string)
+                    {
+                        string temp;
+                        int num;
+                        if (!int.TryParse((string)(indexes[i]), out num))
+                            target[i] = GlobalStatic.ConstantData.GetKeywordDictionary(out temp, code, i)[(string)indexes[i]];
+                        else
+                            target[i] = num;
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    throw new ArgumentException($"알수없는 인덱스 {indexes[i]} 입니다");
+                }
+            }
+            return GetValue(code, target);
+        }
 
+        object GetValue(VariableCode code, int[] indexes)
+        {
             int[] index = new int[(
                 code.HasFlag(VariableCode.__ARRAY_3D__) ? 3 :
                 code.HasFlag(VariableCode.__ARRAY_2D__) ? 2 :
@@ -122,9 +154,42 @@ namespace MinorShift.Emuera
             }
         }
 
-        void IEmuera.SetValue(string name, object value, params int[] indexes)
+        void IEmuera.SetValue(string name,object value,params object[] indexes)
         {
+            int[] target = new int[indexes.Length];
             var code = (VariableCode)Enum.Parse(typeof(VariableCode), name);
+            for (int i = 0; i < indexes.Length; i++)
+            {
+                try
+                {
+                    if (indexes[i] is long)
+                        target[i] = (int)(long)indexes[i];
+                    else if (indexes[i] is int)
+                        target[i] = (int)indexes[i];
+                    else if (indexes[i] is string)
+                    {
+                        string temp;
+                        int num;
+                        if (int.TryParse((string)(indexes[i]), out num))
+                            target[i] = num;
+                        else
+                            target[i] = GlobalStatic.ConstantData.GetKeywordDictionary(out temp, code, i)[(string)indexes[i]];
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch
+                {
+                    throw new ArgumentException($"알수없는 인덱스 {indexes[i]} 입니다");
+                }
+            }
+            SetValue(code, value, target);
+        }
+
+        void SetValue(VariableCode code, object value, int[] indexes)
+        {
             var target = (int)(code & VariableCode.__LOWERCASE__);
 
             int[] index = new int[(
@@ -241,7 +306,17 @@ namespace MinorShift.Emuera
 
         private static InstructionLine ParseLine(string rawLine)
         {
-            return LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
+            var func = LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
+            if (func != null)
+            {
+                if (func.Argument == null)
+                {
+                    ArgumentParser.SetArgumentTo(func);
+                    if (func.IsError)
+                        return null;
+                }
+            }
+            return func;
         }
 
         Task<object> IEmuera.GetInputAsync(ConsoleInputType type)
@@ -285,7 +360,7 @@ namespace MinorShift.Emuera
             var func = ParseLine(rawLine);
             if (func == null)
                 throw new ArgumentException("Parse Failed Content : " + rawLine);
-            func.Function.Instruction.DoInstruction(GlobalStatic.EMediator, func, GlobalStatic.Process.getCurrentState);
+            GlobalStatic.Process.DoDebugNormalFunction(func, false);
             GlobalStatic.Console.RefreshStrings(true);
         }
 
@@ -299,13 +374,13 @@ namespace MinorShift.Emuera
 
         internal static void EmueraCall(string labelName,IOperandTerm[] args)
         {
-            var result = framework.Call(labelName, args.Select(arg =>
-             {
-                 if (arg.IsInteger)
-                     return (object)arg.GetIntValue(GlobalStatic.EMediator);
-                 else
-                     return (object)arg.GetStrValue(GlobalStatic.EMediator);
-             }).ToArray());
+            var result = framework.Call(labelName, args.Select<IOperandTerm, object>(arg =>
+              {
+                  if (arg.IsInteger)
+                      return arg.GetIntValue(GlobalStatic.EMediator);
+                  else
+                      return arg.GetStrValue(GlobalStatic.EMediator);
+              }).ToArray());
 
             if (result is int)
                 GlobalStatic.VEvaluator.RESULT = (int)result;
@@ -330,7 +405,7 @@ namespace MinorShift.Emuera
                     throw new ArgumentException("매개변수는 string과 int, long 형식만 가능합니다", nameof(args));
             }
 
-            var func = GameProc.CalledFunction.CallFunction(GlobalStatic.Process, name, null);
+            var func = CalledFunction.CallFunction(GlobalStatic.Process, name, null);
             if (func == null)
                 throw new ArgumentException($"Method [{name}] is undefined");
 
@@ -351,5 +426,9 @@ namespace MinorShift.Emuera
             GlobalStatic.Console.RefreshStrings(true);
         }
 
+        void IDisposable.Dispose()
+        {
+            return;
+        }
     }
 }

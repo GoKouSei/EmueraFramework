@@ -17,8 +17,8 @@ namespace SharedLibrary
         void Print(string str, PrintFlags flag);
         void DrawLine();
         void RunRawLine(string rawLine);
-        object GetValue(string name, params int[] indexes);
-        void SetValue(string name, object value, params int[] indexes);
+        object GetValue(string name, params object[] indexes);
+        void SetValue(string name, object value, params object[] indexes);
         void AddChara(long charaNo);
         void AddCharaFromCSV(long csvNumber);
         void DelChara(long charaNo);

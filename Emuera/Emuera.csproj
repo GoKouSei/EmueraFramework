@@ -302,11 +302,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(TargetDir)Plugins\" md "$(TargetDir)Plugins\"
-if not exist "$(TargetDir)DLL\" md "$(TargetDir)DLL\"
-move "$(TargetDir)*.plg" "$(TargetDir)Plugins\"
-move "$(TargetDir)*.dll" "$(TargetDir)DLL\"
-move "$(TargetDir)*.pdb" "$(TargetDir)DLL\"</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(TargetDir)DLL\" md "$(TargetDir)DLL\"
+if not exist "$(TargetDir)Plugins\" md "$(TargetDir)Plugins\"
+if exist "$(TargetDir)*.dll" move "$(TargetDir)*.dll" "$(TargetDir)DLL\"
+if exist "$(TargetDir)*.pdb" move "$(TargetDir)*.pdb" "$(TargetDir)DLL\"
+if exist "$(TargetDir)*.plg" move "$(TargetDir)*.plg" "$(TargetDir)Plugins\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

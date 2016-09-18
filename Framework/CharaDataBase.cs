@@ -10,17 +10,14 @@ namespace Framework
 {
     class CharaDataBase:DynamicObject
     {
-        private Dictionary<string, object> _customVariables;
         private IEmuera _emuera;
         private int _charaNo;
 
         public CharaDataBase(
-            long charaNo,IEmuera emuera,
-            Dictionary<string, object> customVariables)
+            long charaNo,IEmuera emuera)
         {
             _charaNo = (int)charaNo;
             _emuera = emuera;
-            _customVariables = customVariables;
         }
 
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
@@ -108,9 +105,9 @@ namespace Framework
             }
             catch
             {
-                return _customVariables.TryGetValue(binder.Name, out result);
+                result = null;
+                return false;
             }
-
         }
     }
 }

@@ -2162,6 +2162,7 @@ namespace MinorShift.Emuera.GameProc.Function
 			}
 			readonly bool isJump;
 			readonly bool isTry;
+            private string originalName;
 
 			public override void SetJumpTo(ref bool useCallForm, InstructionLine func, int currentDepth, ref string FunctionoNotFoundName)
 			{
@@ -2172,10 +2173,11 @@ namespace MinorShift.Emuera.GameProc.Function
 				}
 				SpCallArgment callArg = (SpCallArgment)func.Argument;
 				string labelName = callArg.ConstStr;
+                originalName = labelName;
 				if (Config.ICFunction)
 					labelName = labelName.ToUpper();
 				CalledFunction call = CalledFunction.CallFunction(GlobalStatic.Process, labelName, func);
-                if ((call == null) && !(EmueraPlatform.framework.HasMethod(labelName) && (!func.Function.IsTry())))
+                if ((call == null) && !(EmueraPlatform.framework.HasMethod(originalName) && (!func.Function.IsTry())))
 
                 {
                     FunctionoNotFoundName = labelName;
@@ -2218,15 +2220,16 @@ namespace MinorShift.Emuera.GameProc.Function
 				else
 				{
 					labelName = spCallArg.FuncnameTerm.GetStrValue(exm);
-					if (Config.ICFunction)
+                    originalName = labelName;
+                    if (Config.ICFunction)
 						labelName = labelName.ToUpper();
 					call = CalledFunction.CallFunction(GlobalStatic.Process, labelName, func);
                 }
                 if (call == null)
 				{
-                    if (EmueraPlatform.framework.HasMethod(labelName))
+                    if (EmueraPlatform.framework.HasMethod(originalName))
                     {
-                        EmueraPlatform.EmueraCall(labelName,spCallArg.RowArgs);
+                        EmueraPlatform.EmueraCall(originalName, spCallArg.RowArgs);
                         return;
                     }
 					if (!isTry)
