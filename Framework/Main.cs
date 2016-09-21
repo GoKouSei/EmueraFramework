@@ -1,5 +1,6 @@
 ﻿using SharedLibrary;
 using SharedLibrary.Data;
+using SharedLibrary.Draw;
 using SharedLibrary.Function;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,15 @@ namespace Framework
     {
         public dynamic Data { get; internal set; }
 
+        private Config _config = null;
         private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
-        private Dictionary<int, CharacterInfo> _characters = new Dictionary<int, CharacterInfo>();
-        private Dictionary<int, CharacterInfo> _defaultCharacters = new Dictionary<int, CharacterInfo>();
+        private Dictionary<long, CharacterInfo> _characters = new Dictionary<long, CharacterInfo>();
+        private Dictionary<long, CharacterInfo> _defaultCharacters = new Dictionary<long, CharacterInfo>();
 
-        private Tuple<string, Type, int>[] _charaVariableInfo;
         private IFrontEnd _frontEnd;
-        private NameDictionary _nameDic;
         private Task<Exception> _scriptTast;
         private ConsoleInput _lastInput;
 
@@ -45,17 +45,14 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public int[] RegistedCharacters => _characters.Keys.ToArray();
+        public long[] RegistedCharacters => _characters.Keys.ToArray();
+
+        public int Color { get; set; }
 
         public FrameworkState State { get; private set; }
 
 
-        public void Initialize(
-            IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo = null,
-            Tuple<string, Type, int>[] charaVariableInfo = null,
-            DefaultCharaInfo[] defaultCharas = null,
-            NameDictionary nameDic = null)
+        public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd,Config config)
         {
             State = FrameworkState.Initializing;
             
@@ -64,22 +61,13 @@ namespace Framework
             try
             {
                 _frontEnd = frontEnd;
-                _charaVariableInfo = charaVariableInfo;
-                _nameDic = nameDic;
 
-                _methods = platforms.Where(platform => platform.methods != null).SelectMany(platform => platform.methods).ToDictionary(method => method.Name);
-                _systemFunctions = platforms.Where(platform => platform.systemFunctions != null).SelectMany(platform => platform.systemFunctions).ToDictionary(sysFunc => sysFunc.Code);
+                _methods = platforms.Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
+                _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
-                Data = new DataBase(_customVariables, variableInfo, nameDic);
+                Data = new DataBase(_customVariables, config.VariableInfo, config.NameDic);
 
-                if (defaultCharas != null)
-                {
-                    foreach (var defaultChara in defaultCharas)
-                    {
-                        _defaultCharacters.Add(defaultChara.CharacterNumber, new CharacterInfo(defaultChara.CharacterNumber, _charaVariableInfo, _customCharaVariables, _nameDic, defaultChara.Info));
-                    }
-                }
-
+                _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, _customCharaVariables, config.NameDic, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
             catch (Exception e)
             {
@@ -187,15 +175,31 @@ namespace Framework
         }
 
 
-        public void Print(string str, int color, PrintFlags flag)
+        public void Print(string str, PrintFlags flag = PrintFlags.NEWLINE)
         {
             if (flag.HasFlag(PrintFlags.WAIT))
+            {
                 State = FrameworkState.Waiting;
+                flag |= PrintFlags.NEWLINE;
+            }
+
+            if (flag.HasFlag(PrintFlags.NEWLINE))
+            {
+                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, Color)));
+            }
+            else
+            {
+                _frontEnd.LastLine += new ConsoleStringPart(str, Color);
+            }
             Wait();
-            throw new NotImplementedException();
         }
 
-        public ICharacter GetChara(int num)
+        public void PrintButton(string str,int value,PrintFlags flag)
+        {
+
+        }
+
+        public ICharacter GetChara(long num)
         {
             CharacterInfo chara;
             if(_characters.TryGetValue(num,out chara))
@@ -208,7 +212,7 @@ namespace Framework
             }
         }
 
-        public void AddChara(int num)
+        public void AddChara(long num)
         {
             CharacterInfo defaultChara;
             if (_defaultCharacters.TryGetValue(num, out defaultChara))
@@ -225,16 +229,16 @@ namespace Framework
             }
         }
 
-        public void AddVoidChara(int num)
+        public void AddVoidChara(long num)
         {
             if (_characters.ContainsKey(num))
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _characters.Add(num, new CharacterInfo(num, _charaVariableInfo, _customCharaVariables, _nameDic));
+            _characters.Add(num, new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables, _config.NameDic));
         }
 
-        public void DelChara(int num)
+        public void DelChara(long num)
         {
             if (_characters.ContainsKey(num))
                 _characters.Remove(num);

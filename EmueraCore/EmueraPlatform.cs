@@ -1,38 +1,30 @@
-﻿using MinorShift.Emuera.GameProc.Function;
+﻿using MinorShift.Emuera.GameData.Variable;
 using SharedLibrary;
+using SharedLibrary.Function;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharedLibrary.Function;
 using System.IO;
+using System.Linq;
+using SharedLibrary.Data;
+using System.Threading.Tasks;
+using MinorShift.Emuera.GameData.Expression;
+using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.GameProc;
 
 namespace MinorShift.Emuera
 {
-    class EmueraPlatform:IPlatform
+    class EmueraPlatform : IPlatform
     {
+        internal static IFramework framework;
+        internal static Type returnType = typeof(void);
+        internal static object input;
         IEnumerable<string> _methodNames;
 
-        public string Name
-        {
-            get
-            {
-                return "EmueraCore";
-            }
-        }
+        #region IPlatform
 
-        SystemFunction[] IPlatform.systemFunctions
-        {
-            get
-            {
-                return (from codeName in Enum.GetNames(typeof(SystemFunctionCode))
-                        select (SystemFunctionCode)(Enum.Parse(typeof(SystemFunctionCode), codeName)) into code
-                        select new SystemFunction(code, framework => Begin(code, framework))).ToArray();
-            }
-        }
+        string IPlatform.Name => "Emuera";
 
-        Method[] IPlatform.methods
+        Method[] IPlatform.Methods
         {
             get
             {
@@ -40,31 +32,82 @@ namespace MinorShift.Emuera
             }
         }
 
+        void IPlatform.Initialize(List<Tuple<string, Stream>> source, IFramework framework)
+        {
+            EmueraPlatform.framework = framework;
+            GlobalStatic.Console.state = GameView.ConsoleState.Running;
+        }
+
+        private static InstructionLine ParseLine(string rawLine)
+        {
+            var func = LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
+            if (func != null)
+            {
+                if (func.Argument == null)
+                {
+                    ArgumentParser.SetArgumentTo(func);
+                    if (func.IsError)
+                        return null;
+                }
+            }
+            return func;
+        }
+        #endregion
+
         public EmueraPlatform(IEnumerable<string> methodNames)
         {
             _methodNames = methodNames;
         }
 
-        public void Initialize(List<Tuple<string, Stream>> source, IFramework framework)
+        internal static void EmueraCall(string labelName,IOperandTerm[] args)
         {
-            throw new NotImplementedException();
+            var result = framework.Call(labelName, args.Select<IOperandTerm, object>(arg =>
+              {
+                  if (arg.IsInteger)
+                      return arg.GetIntValue(GlobalStatic.EMediator);
+                  else
+                      return arg.GetStrValue(GlobalStatic.EMediator);
+              }).ToArray());
+
+            if (result is int)
+                GlobalStatic.VEvaluator.RESULT = (int)result;
+            else if (result is long)
+                GlobalStatic.VEvaluator.RESULT = (long)result;
+            else if (result is string)
+                GlobalStatic.VEvaluator.RESULTS = (string)result;
         }
 
         object Call(string name, object[] args)
         {
             if (name == null)
                 throw new ArgumentNullException();
-            var func = GameProc.CalledFunction.CallFunction(GlobalStatic.Process, name, null);
+            int intIndex = 0, strIndex = 0;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] is long || args[i] is int)
+                    framework.Data["ARG",intIndex++] = args[i];
+                else if (args[i] is string)
+                    framework.Data["ARGS", strIndex++] = args[i];
+                else
+                    throw new ArgumentException("매개변수는 string과 int, long 형식만 가능합니다", nameof(args));
+            }
+
+            var func = CalledFunction.CallFunction(GlobalStatic.Process, name, null);
             if (func == null)
                 throw new ArgumentException($"Method [{name}] is undefined");
-            GlobalStatic.Process.getCurrentState.IntoFunction(func, null,GlobalStatic.EMediator);
-            return null;
+
+            GlobalStatic.Process.getCurrentState.IntoFunction(func, null, GlobalStatic.EMediator);
+            GlobalStatic.Process.DoScript();
+
+            if (returnType == typeof(long))
+                return framework.Data.RESULT;
+            else
+                return null;
         }
 
-        void Begin(SystemFunctionCode code, IFramework framework)
+        void IDisposable.Dispose()
         {
-            GlobalStatic.Process.getCurrentState.SetBegin(code.ToString());
-            GlobalStatic.Process.DoScript();
+            return;
         }
     }
 }

@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Draw
 {
-    public class ConsoleButtonPart : ConsoleStringPart
+    public class ConsoleButtonPart : ConsoleLinePart
     {
-        public object Value { get; }
-        public bool IsString => Value is string;
-        public bool IsInteger => Value is long;
-        public ConsoleButtonPart(string str, int color, object value, IFrontEnd frontEnd) : base(str, color, frontEnd)
+        public override string Str { get; }
+
+        public ConsoleButtonPart(string str, int color, int value) : base(color, value)
         {
-            Value = value;
+            Str = str;
+        }
+
+        public ConsoleButtonPart(string str, int color, string value) : base(color, value)
+        {
+            Str = str;
         }
     }
 }

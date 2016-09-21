@@ -8,7 +8,7 @@ namespace SharedLibrary.Data
 {
     public interface ICharacter
     {
-        int RegistrationNumber { get; }
+        long RegistrationNumber { get; }
         string Name { get; }
         string CallName { get; }
         /// <summary>
@@ -19,13 +19,13 @@ namespace SharedLibrary.Data
 
     public class DefaultCharaInfo
     {
-        public DefaultCharaInfo(int characterNumber, Dictionary<string, Tuple<object, object>[]> info)
+        public DefaultCharaInfo(long characterNumber, Dictionary<string, Tuple<object, object>[]> info)
         {
             CharacterNumber = characterNumber;
             Info = info;
         }
 
-        public int CharacterNumber { get; }
+        public long CharacterNumber { get; }
         public Dictionary<string, Tuple<object, object>[]> Info { get; }
     }
 }

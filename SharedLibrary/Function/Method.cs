@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,5 +37,11 @@ namespace SharedLibrary.Function
         }
 
         public object Run(params object[] args) => _body(args);
+    }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class MethodAttribute : Attribute
+    {
+        public static bool IsMethod(MethodInfo method) => method.GetCustomAttribute(typeof(MethodAttribute)) != null;
     }
 }

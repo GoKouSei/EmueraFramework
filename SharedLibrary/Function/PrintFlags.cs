@@ -15,6 +15,5 @@ namespace SharedLibrary.Function
         LEFT_ALIGN = 0x4,
         RIGHT_ALIGN = 0x8,
         IGNORE_COLOR = 0x10,
-        BUTTON = 0x20,
     }
 }

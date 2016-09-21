@@ -22,12 +22,7 @@ namespace SharedLibrary
         string Name { get; }
         FrameworkState State { get; }
 
-        void Initialize(
-            IPlatform[] platforms, IFrontEnd frontEnd,
-            Tuple<string, Type, int>[] variableInfo = null,
-            Tuple<string, Type, int>[] charaVariableInfo = null,
-            DefaultCharaInfo[] defaultCharas = null,
-            NameDictionary nameDic = null);
+        void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config);
 
         /// <summary>
         /// Start Script
@@ -41,17 +36,19 @@ namespace SharedLibrary
         Exception End();
 
         #region IPlatform
+        int Color { get; set; }
+
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
-        void Print(string str, int color, PrintFlags flag);
+        void Print(string str, PrintFlags flag = PrintFlags.NEWLINE);
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
 
-        ICharacter GetChara(int num);
-        void AddChara(int num);
-        void AddVoidChara(int num);
-        void DelChara(int num);
-        int[] RegistedCharacters { get; }
+        ICharacter GetChara(long num);
+        void AddChara(long num);
+        void AddVoidChara(long num);
+        void DelChara(long num);
+        long[] RegistedCharacters { get; }
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);

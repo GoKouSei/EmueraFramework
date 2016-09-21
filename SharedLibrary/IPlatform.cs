@@ -5,11 +5,10 @@ using System.IO;
 
 namespace SharedLibrary
 {
-    public interface IPlatform
+    public interface IPlatform:IDisposable
     {
         string Name { get; }
-        Method[] methods { get; }
-        SystemFunction[] systemFunctions { get; }
+        Method[] Methods { get; }
         void Initialize(List<Tuple<string, Stream>> source, IFramework framework);
     }
 }

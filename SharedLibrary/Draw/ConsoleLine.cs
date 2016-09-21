@@ -10,35 +10,34 @@ namespace SharedLibrary.Draw
     {
         LEFT, CENTER, RIGHT
     }
-    public abstract class ConsoleLine
+    public sealed class ConsoleLine
     {
-        protected ConsoleLinePart[] parts;
-        public Point Location { get; }
-        public int Height { get; }
-        public int Width => parts.Select(part => part.Width).Sum();
+        private List<ConsoleLinePart> _parts = new List<ConsoleLinePart>();
+        public ConsoleLinePart[] Parts => _parts.ToArray();
         public LineAlign Align { get; }
 
-        public ConsoleLine(ConsoleLinePart[] parts,Point location,int height,LineAlign align=LineAlign.LEFT)
+        public ConsoleLine(ConsoleLinePart part, LineAlign align = LineAlign.LEFT)
         {
-            this.parts = parts;
-            Location = location;
-            Height = height;
+            _parts.Add(part);
             Align = align;
         }
 
-        public ConsoleLinePart GetPart(Point p)
+        public ConsoleLine(ConsoleLinePart[] parts, LineAlign align = LineAlign.LEFT)
         {
-            if (p.Y >= Location.Y && p.Y <= Location.Y + Height)
-            {
-                var match = parts.Where(part => part.Contains(Location, p));
-
-                if (match.Any()) return match.First();
-                else return null;
-            }
-            else
-                return null;
+            _parts.AddRange(parts);
+            Align = align;
         }
 
+        public static ConsoleLine operator +(ConsoleLine line,ConsoleLinePart part)
+        {
+            line._parts.Add(part);
+            return line;
+        }
 
+        public static ConsoleLine operator -(ConsoleLine line, ConsoleLinePart part)
+        {
+            line._parts.Remove(part);
+            return line;
+        }
     }
 }

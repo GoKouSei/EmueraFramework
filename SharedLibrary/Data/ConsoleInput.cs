@@ -4,13 +4,31 @@ namespace SharedLibrary.Data
 {
     public class ConsoleInput
     {
-        public Point Point { get; }
-        public ConsoleLine SelectedLine { get; }
-        public ConsoleLinePart SelectedPart => SelectedLine.GetPart(Point);
-        public ConsoleInput(Point point, ConsoleLine selectedLine)
+        public ConsoleInputType Type { get; }
+        public long IntValue { get; }
+        public string StrValue { get; }
+
+        public ConsoleInput(ConsoleInputType type)
         {
-            Point = point;
-            SelectedLine = selectedLine;
+            Type = type;
         }
+
+        public ConsoleInput(long value):this(ConsoleInputType.INTEGER)
+        {
+            IntValue = value;
+        }
+
+        public ConsoleInput(string value) : this(ConsoleInputType.STRING)
+        {
+            StrValue = value;
+        }
+    }
+
+    public enum ConsoleInputType
+    {
+        ANYKEY,
+        ENTERKEY,
+        INTEGER,
+        STRING
     }
 }

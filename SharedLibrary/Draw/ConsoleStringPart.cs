@@ -8,12 +8,10 @@ namespace SharedLibrary.Draw
 {
     public class ConsoleStringPart : ConsoleLinePart
     {
-        public string Str { get; }
-        public int Color { get; }
-        public ConsoleStringPart(string str, int color, IFrontEnd frontEnd) : base(frontEnd.CalcWidth(str))
+        public override string Str { get; }
+        public ConsoleStringPart(string str, int color) : base(color)
         {
             Str = str;
-            Color = color;
         }
     }
 }

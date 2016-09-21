@@ -7,7 +7,7 @@ namespace Framework
     class CharacterInfo : ICharacter
     {
         internal CharacterInfo(
-            int registrationNumber,
+            long registrationNumber,
             Tuple<string, Type, int>[] variableInfo,
             Dictionary<string, object> customVariables,
             NameDictionary nameDic,
@@ -20,7 +20,7 @@ namespace Framework
 
         public string CallName => Data.CALLNAME;
         public string Name => Data.NAME;
-        public int RegistrationNumber { get; private set; }
+        public long RegistrationNumber { get; private set; }
 
         public dynamic Data { get; }
 

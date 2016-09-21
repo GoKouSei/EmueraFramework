@@ -8,18 +8,34 @@ namespace SharedLibrary.Draw
 {
     public abstract class ConsoleLinePart
     {
-        public int Width { get; }
+        public int Color { get; }
+        public bool IsButton { get; }
+        public int? ButtonIntValue { get; }
+        public string ButtonStrValue { get; }
+        public abstract string Str { get; }
 
-
-        public ConsoleLinePart(int width)
+        protected ConsoleLinePart(int color)
         {
-            Width = width;
+            Color = color;
+            IsButton = false;
+            ButtonIntValue = null;
+            ButtonStrValue = null;
         }
 
-        public bool Contains(Point location,Point p)
+        protected ConsoleLinePart(int color, int intValue)
         {
-            return
-                p.X >= location.X && p.X <= location.X + Width;
+            Color = color;
+            IsButton = true;
+            ButtonIntValue = intValue;
+            ButtonStrValue = null;
+        }
+
+        protected ConsoleLinePart(int color, string strValue)
+        {
+            Color = color;
+            IsButton = true;
+            ButtonIntValue = null;
+            ButtonStrValue = strValue;
         }
     }
 }

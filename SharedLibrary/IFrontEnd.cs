@@ -9,9 +9,10 @@ namespace SharedLibrary
 {
     public interface IFrontEnd
     {
+        List<ConsoleLine> Lines { get; }
+        ConsoleLine LastLine { get; set; }
+
         void Initialize(IFramework framework);
-        void UpdateLine(ConsoleLine[] lines);
         void Exit();
-        int CalcWidth(string str);
     }
 }

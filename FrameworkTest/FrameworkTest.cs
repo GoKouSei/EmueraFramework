@@ -76,11 +76,11 @@ namespace FrameworkTest
     {
         private IFramework _framework;
 
-        public Method[] methods => null;
+        public Method[] Methods => null;
 
         public string Name => "TestPlatform";
 
-        public SystemFunction[] systemFunctions
+        public SystemFunction[] SystemFunctions
         {
             get
             {
@@ -96,6 +96,11 @@ namespace FrameworkTest
             framework.Data.BASE[100] = 9999;
         }
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Initialize(List<Tuple<string, Stream>> source, IFramework framework)
         {
             _framework = framework;
@@ -103,16 +108,17 @@ namespace FrameworkTest
             framework.Initialize
                 (new[] { this },
                 null,
+                new Config(
                 new Tuple<string, Type, int>[2] { Tuple.Create("ABL", typeof(long), 1000), Tuple.Create("BASE", typeof(long), 1000) },
                 new Tuple<string, Type, int>[1] { Tuple.Create("ABL", typeof(long), 1000) },
+                new NameDictionary() { { "ABL", new Dictionary<string, int>() { { "HP", 0 } } }, },
                 new DefaultCharaInfo[]
                 {
                     new DefaultCharaInfo(0, new Dictionary<string, Tuple<object,object>[]>()
                         {
                             {"ABL", new[] { Tuple.Create<object,object>("HP", 100L) } }
                         })
-                },
-                new NameDictionary() { { "ABL", new Dictionary<string, int>() { { "HP", 0 } } }, });
+                }));
         }
     }
 }
