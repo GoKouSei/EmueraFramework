@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SharedLibrary.Function
 {
     [Flags]
-    public enum PrintFlags
+    public enum PrintFlags:int
     {
         NONE = 0,
         NEWLINE = 0x1,

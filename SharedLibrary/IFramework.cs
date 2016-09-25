@@ -35,6 +35,20 @@ namespace SharedLibrary
         /// <returns>일어났던 예외(발생하지 않으면 null)</returns>
         Exception End();
 
+
+        /// <summary>
+        /// 사용자 정의 변수를 추가합니다 이미 있는 경우 에러가 발생합니다
+        /// </summary>
+        /// <param name="name">추가할 사용자 정의 변수의 이름</param>
+        /// <param name="instance">사용자 변수</param>
+        /// <exception cref="ArgumentException"/>
+        void AddCustomVariable(string name, object instance);
+        /// <summary>
+        /// 사용자 정의 변수를 제거합니다 없는 경우 무시됩니다
+        /// </summary>
+        /// <param name="name">제거할 사용자 정의 변수의 이름</param>
+        void DeleteCustomVariable(string name);
+
         #region IPlatform
         int Color { get; set; }
 

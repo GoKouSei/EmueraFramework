@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Data
 {
-    public interface ICharacter
+    public interface ICharacter:IDataBase
     {
         long RegistrationNumber { get; }
         string Name { get; }
         string CallName { get; }
-        /// <summary>
-        /// 저장된 데이터 입니다 멤버 또는 인덱스로 접근합니다
-        /// </summary>
-        dynamic Data { get; }
     }
 
     public class DefaultCharaInfo

@@ -24,6 +24,18 @@ namespace Framework
 
         public dynamic Data { get; }
 
+        object IDataBase.this[string name, object index]
+        {
+            get
+            {
+                return Data[name, index];
+            }
+            set
+            {
+                Data[name, index] = value;
+            }
+        }
+
         public override string ToString()
         {
             return Name;

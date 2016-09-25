@@ -50,7 +50,18 @@ namespace Framework
         public int Color { get; set; }
 
         public FrameworkState State { get; private set; }
-
+        
+        object IDataBase.this[string name, object index]
+        {
+            get
+            {
+                return Data[name, index];
+            }
+            set
+            {
+                Data[name, index] = value;
+            }
+        }
 
         public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd,Config config)
         {
@@ -243,6 +254,5 @@ namespace Framework
             if (_characters.ContainsKey(num))
                 _characters.Remove(num);
         }
-        
     }
 }
