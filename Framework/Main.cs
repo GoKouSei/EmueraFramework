@@ -254,5 +254,10 @@ namespace Framework
             if (_characters.ContainsKey(num))
                 _characters.Remove(num);
         }
+
+        public void Wait(WaitType type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -17,6 +17,15 @@ namespace SharedLibrary
         Running,
         Waiting,
     }
+    
+    public enum WaitType
+    {
+        ANYKEY = 0,
+        ENTERKEY = 1,
+        INTEGER = 2,
+        STRING = 3,
+    }
+
     public interface IFramework:IDataBase
     {
         string Name { get; }
@@ -57,6 +66,8 @@ namespace SharedLibrary
         void Print(string str, PrintFlags flag = PrintFlags.NEWLINE);
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
+
+        void Wait(WaitType type);
 
         ICharacter GetChara(long num);
         void AddChara(long num);
