@@ -136,5 +136,7 @@ namespace SharedLibrary.Data
                 return false;
             }
         }
+
+        public long Length => _data.Length;
     }
 }

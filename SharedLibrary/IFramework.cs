@@ -21,9 +21,16 @@ namespace SharedLibrary
     public enum WaitType
     {
         ANYKEY = 0,
-        ENTERKEY = 1,
-        INTEGER = 2,
-        STRING = 3,
+        ENTERKEY,
+        INTEGER,
+        STRING,
+    }
+
+    public enum Alignment
+    {
+        LEFT,
+        CENTER,
+        RIGHT
     }
 
     public interface IFramework:IDataBase
@@ -60,20 +67,37 @@ namespace SharedLibrary
 
         #region IPlatform
         int Color { get; set; }
+        int BackGroundColor { get; set; }
+
+        Alignment Align { get; set; }
+
+
+        void ResetColor();
+        void ResetBGColor();
 
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
+
         void Print(string str, PrintFlags flag = PrintFlags.NEWLINE);
+        void PrintButton(string str, object value, PrintFlags flag = PrintFlags.NEWLINE);
+        void DrawLine();
+        void DrawLine(string str);
+
         void AddCharaCustomVariable(string name, object instance);
         void DeleteCharaCustomVariable(string name);
 
         void Wait(WaitType type);
+        void TWait(long time, long flag);
 
-        ICharacter GetChara(long num);
+        void Save();
+        void Load();
+
+        object Result { get; }
+
+        long GetChara(long num);
         void AddChara(long num);
         void AddVoidChara(long num);
         void DelChara(long num);
-        long[] RegistedCharacters { get; }
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);

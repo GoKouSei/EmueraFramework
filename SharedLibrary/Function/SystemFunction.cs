@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharedLibrary.Function
 {
-    public enum SystemFunctionCode
+    public enum SystemFunctionCode:int
     {
         NULL = 0,
         SHOP = 2,

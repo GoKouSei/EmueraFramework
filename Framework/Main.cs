@@ -20,7 +20,7 @@ namespace Framework
         private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
-        private Dictionary<long, CharacterInfo> _characters = new Dictionary<long, CharacterInfo>();
+        private List<CharacterInfo> _characters = new List<CharacterInfo>();
         private Dictionary<long, CharacterInfo> _defaultCharacters = new Dictionary<long, CharacterInfo>();
 
         private IFrontEnd _frontEnd;
@@ -45,12 +45,44 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public long[] RegistedCharacters => _characters.Keys.ToArray();
-
         public int Color { get; set; }
 
         public FrameworkState State { get; private set; }
-        
+
+        public int BackGroundColor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public object Result
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Alignment Align
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         object IDataBase.this[string name, object index]
         {
             get
@@ -188,6 +220,8 @@ namespace Framework
 
         public void Print(string str, PrintFlags flag = PrintFlags.NEWLINE)
         {
+            if (_frontEnd == null)
+                return;
             if (flag.HasFlag(PrintFlags.WAIT))
             {
                 State = FrameworkState.Waiting;
@@ -210,12 +244,11 @@ namespace Framework
 
         }
 
-        public ICharacter GetChara(long num)
+        public long GetChara(long num)
         {
-            CharacterInfo chara;
-            if(_characters.TryGetValue(num,out chara))
+            if(num<_characters.Count)
             {
-                return chara;
+                return _characters[(int)num].RegistrationNumber;
             }
             else
             {
@@ -228,34 +261,72 @@ namespace Framework
             CharacterInfo defaultChara;
             if (_defaultCharacters.TryGetValue(num, out defaultChara))
             {
-                if (_characters.ContainsKey(num))
-                {
-                    throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
-                }
-                _characters.Add(num, _defaultCharacters[num]);
+                _characters.Add(_defaultCharacters[num]);
             }
             else
             {
-                throw new ArgumentException($"정의되지 않은 캐릭터 번호 [{num}] 입니다", nameof(num));
+                throw new ArgumentException($"정의되지 않은 캐릭터 등록 번호 [{num}] 입니다", nameof(num));
             }
         }
 
         public void AddVoidChara(long num)
         {
-            if (_characters.ContainsKey(num))
+            if (num < _characters.Count)
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _characters.Add(num, new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables, _config.NameDic));
+            _characters.Add(new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables, _config.NameDic));
         }
 
         public void DelChara(long num)
         {
-            if (_characters.ContainsKey(num))
-                _characters.Remove(num);
+            if (num < _characters.Count)
+            {
+                _characters.RemoveAt((int)num);
+            }
         }
 
         public void Wait(WaitType type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetColor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetBGColor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TWait(long time, long flag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PrintButton(string str, object value, PrintFlags flag = PrintFlags.NEWLINE)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DrawLine()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DrawLine(string str)
         {
             throw new NotImplementedException();
         }
