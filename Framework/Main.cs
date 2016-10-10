@@ -130,6 +130,14 @@ namespace Framework
             //    );
         }
 
+        public void Print(string str, PrintFlags flag)
+        {
+            if (!_initialized)
+                _printQueue.Enqueue(Tuple.Create(str, flag));
+            else
+                _emuera.Print(str, flag);
+        }
+
         public void DrawLine() => _emuera.DrawLine();
 
         public void RunRawLine(string rawLine) => _emuera.RunRawLine(rawLine);
@@ -137,12 +145,6 @@ namespace Framework
         public int GetColor() => _emuera.GetColor();
 
         public void SetColor(int color) => _emuera.SetColor(color);
-
-        public void Print(string str, PrintFlags flag)
-        {
-            if (!_initialized) _printQueue.Enqueue(Tuple.Create(str, flag));
-            else _emuera.Print(str, flag);
-        }
 
         public void AddChara(long charaNo) => _emuera.AddChara(charaNo);
 

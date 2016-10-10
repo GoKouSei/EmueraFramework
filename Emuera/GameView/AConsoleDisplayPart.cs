@@ -23,7 +23,7 @@ namespace MinorShift.Emuera.GameView
             protected set
             {
                 str = value;
-                translatedStr = EZTrans.TranslateXP.Translate(value);
+                translatedStr = EmueraPlatform.EzEmueraSwitch ? EZTrans.TranslateXP.Translate(value) : value;
             }
         }
 		public string AltText { get; protected set; }

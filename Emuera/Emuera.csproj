@@ -307,6 +307,11 @@
       <Name>SharedLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if exist "$(TargetDir)DLL\" rd /s /q "$(TargetDir)DLL\"
@@ -319,13 +324,7 @@ if exist "$(TargetDir)*.pdb" move "$(TargetDir)*.pdb" "$(TargetDir)DLL\"
 if exist "$(TargetDir)*.plg" move "$(TargetDir)*.plg" "$(TargetDir)Plugins\"
 if exist "C:\Plugins\*.plg" copy "C:\Plugins\*.plg" "$(TargetDir)Plugins\"
 if exist "C:\Plugins\*.pdb" copy "C:\Plugins\*.pdb" "$(TargetDir)DLL\"
-if exist "C:\Plugins\*.dll" copy "C:\Plugins\*.dll" "$(TargetDir)DLL\"
-
-if exist "$(TargetDir)EraTrans\" rd /s /q "$(TargetDir)EraTrans\"
-md "$(TargetDir)EraTrans\"
-md "$(TargetDir)EraTrans\DLL\"
-copy "C:\에라번역\EraTrans\*.*" "$(TargetDir)EraTrans\"
-copy "C:\에라번역\EraTrans\DLL\*.*" "$(TargetDir)EraTrans\DLL\"</PostBuildEvent>
+if exist "C:\Plugins\*.dll" copy "C:\Plugins\*.dll" "$(TargetDir)DLL\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

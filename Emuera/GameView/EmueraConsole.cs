@@ -196,17 +196,20 @@ namespace MinorShift.Emuera.GameView
 			}
 
             #region Module
-            EmueraPlatform.framework.Print("installed Module : ezEmuera, 에라번역");
+            EmueraPlatform.framework.Print("installed Module : ezEmuera");
             EmueraPlatform.framework.Print("ezEmuera를 초기화 합니다");
-            int result = EZTrans.Helper.TryLoading(Program.ExeDir + "ezTransPath.txt", true);
+            int result = EZTrans.EZTransHelper.TryLoading(Program.ExeDir + "ezTransPath.txt");
             if (result != 0)
             {
-                throw new Exception("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
+                EmueraPlatform.framework.Print("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
             }
+            EZTrans.TranslateCache.Load(Program.ExeDir + "Cache.dat");
+            EZTrans.TranslateXP.LoadDictionary(Program.ExeDir + "UserDic.dat");
+            EmueraPlatform.framework.Print("ezEmuera 로딩 성공!");
             #endregion
 
             EmueraPlatform.framework.Run();
-            EZTrans.TranslateXP.Terminate();
+            EmueraPlatform.framework.Dispose();
             //callEmueraProgram("");
             //RefreshStrings(true);
         }
