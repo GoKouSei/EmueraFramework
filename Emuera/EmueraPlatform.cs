@@ -1,24 +1,24 @@
-﻿using MinorShift.Emuera.GameData.Variable;
-using SharedLibrary;
-using SharedLibrary.Function;
+﻿using MinorShift.Emuera;
+using MinorShift.Emuera.GameData.Expression;
+using MinorShift.Emuera.GameData.Variable;
+using MinorShift.Emuera.GameProc;
+using MinorShift.Emuera.GameProc.Function;
+using YeongHun;
+using YeongHun.Data;
+using YeongHun.Function;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using SharedLibrary.Data;
 using System.Threading.Tasks;
-using MinorShift.Emuera.GameData.Expression;
-using MinorShift.Emuera.GameProc.Function;
-using MinorShift.Emuera.GameProc;
 
-namespace MinorShift.Emuera
+namespace YeongHun.Platforms
 {
     class EmueraPlatform : IEmuera
     {
         internal static IFramework framework;
         internal static Type returnType = typeof(void);
         internal static object input;
-        internal static bool EzEmueraSwitch { get; set; } = true;
+        internal static bool EzEmueraState { get; set; } = false;
         IEnumerable<string> _methodNames;
 
         #region IEmuera
@@ -45,11 +45,11 @@ namespace MinorShift.Emuera
                     {
                         new Method("ezEmueraOFF", () =>
                         {
-                            EzEmueraSwitch = false;
+                            EzEmueraState = false;
                         }),
                         new Method("ezEmueraON", ()=>
                         {
-                           EzEmueraSwitch = true;
+                           EzEmueraState = true;
                         }),
                         new Method("AddDictionary", args =>
                         {
@@ -68,7 +68,7 @@ namespace MinorShift.Emuera
         void IPlatform.Initialize(IFramework framework)
         {
             EmueraPlatform.framework = framework;
-            GlobalStatic.Console.state = GameView.ConsoleState.Running;
+            GlobalStatic.Console.state = MinorShift.Emuera.GameView.ConsoleState.Running;
         }
 
         object IEmuera.GetValue(string name, params object[] indexes)

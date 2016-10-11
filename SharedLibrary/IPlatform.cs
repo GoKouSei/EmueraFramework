@@ -1,9 +1,7 @@
-﻿using SharedLibrary.Function;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using YeongHun.Function;
 
-namespace SharedLibrary
+namespace YeongHun
 {
     public interface IPlatform : IDisposable
     {

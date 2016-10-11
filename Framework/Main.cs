@@ -1,6 +1,6 @@
-﻿using SharedLibrary;
-using SharedLibrary.Data;
-using SharedLibrary.Function;
+﻿using YeongHun;
+using YeongHun.Data;
+using YeongHun.Function;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Framework
+namespace YeongHun.Framework
 {
     public class Main : IFramework
     {
@@ -32,7 +32,7 @@ namespace Framework
         public string Root => _emuera.Root;
         public int Encoding => _emuera.Encoding;
 
-        public void Set(IEmuera emuera)
+        public void SetEmuera(IEmuera emuera)
         {
             _emuera = emuera;
             _systemFunctions = _emuera.systemFunctions.ToDictionary(func => func.Code);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Function
+namespace YeongHun.Function
 {
     [Flags]
     public enum PrintFlags

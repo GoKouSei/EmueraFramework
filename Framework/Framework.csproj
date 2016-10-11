@@ -8,7 +8,7 @@
     <ProjectGuid>{906379A9-F3B0-4E5B-B1D1-62DC7C9D05A5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Framework</RootNamespace>
+    <RootNamespace>YeongHun.Framework</RootNamespace>
     <AssemblyName>Framework</AssemblyName>
     <DefaultLanguage>ko-KR</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

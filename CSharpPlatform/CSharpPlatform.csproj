@@ -7,7 +7,7 @@
     <ProjectGuid>{24781AF8-6DA6-48B2-A0B5-6E1D44A918F0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSharpPlatform</RootNamespace>
+    <RootNamespace>YeongHun.Platforms</RootNamespace>
     <AssemblyName>CSharpPlatform</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

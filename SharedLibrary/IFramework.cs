@@ -1,5 +1,5 @@
-﻿using SharedLibrary.Data;
-using SharedLibrary.Function;
+﻿using YeongHun.Data;
+using YeongHun.Function;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -8,13 +8,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary
+namespace YeongHun
 {
     public interface IFramework:IDisposable
     {
         string Name { get; }
 
-        void Set(IEmuera emuera);
+        void SetEmuera(IEmuera emuera);
         void Initialize(params IPlatform[] platforms);
 
         /// <summary>

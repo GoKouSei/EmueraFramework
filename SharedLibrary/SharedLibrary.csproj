@@ -8,7 +8,7 @@
     <ProjectGuid>{855B38AF-349C-4ABB-A2BC-216189C54886}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharedLibrary</RootNamespace>
+    <RootNamespace>YeongHun</RootNamespace>
     <AssemblyName>SharedLibrary</AssemblyName>
     <DefaultLanguage>ko-KR</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

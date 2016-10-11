@@ -1,30 +1,23 @@
-﻿using System;
+﻿using MinorShift._Library;
+using MinorShift.Emuera.Forms;
+using MinorShift.Emuera.GameData.Expression;
+using MinorShift.Emuera.GameProc;
+using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.Sub;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-using MinorShift._Library;
-using MinorShift.Emuera.Sub;
-using MinorShift.Emuera.GameData;
-using MinorShift.Emuera.GameProc;
-using System.Drawing.Imaging;
-using MinorShift.Emuera.Forms;
-using MinorShift.Emuera.GameData.Expression;
-using MinorShift.Emuera.GameProc.Function;
-using Framework;
-using System.Linq;
-using SharedLibrary;
-using System.Threading.Tasks;
-using System.Threading;
-using SharedLibrary.Function;
+using YeongHun.Platforms;
 
 namespace MinorShift.Emuera.GameView
 {
-	//入出力待ちの状況。
-	//難読化用属性。enum.ToString()やenum.Parse()を行うなら(Exclude=true)にすること。
-	[global::System.Reflection.Obfuscation(Exclude=false)]
+    //入出力待ちの状況。
+    //難読化用属性。enum.ToString()やenum.Parse()を行うなら(Exclude=true)にすること。
+    [global::System.Reflection.Obfuscation(Exclude=false)]
 	internal enum ConsoleState
 	{
 		Initializing = 0,
@@ -208,6 +201,7 @@ namespace MinorShift.Emuera.GameView
             EmueraPlatform.framework.Print("ezEmuera 로딩 성공!");
             #endregion
 
+            EmueraPlatform.EzEmueraState = true;
             EmueraPlatform.framework.Run();
             EmueraPlatform.framework.Dispose();
             //callEmueraProgram("");

@@ -1,12 +1,12 @@
-﻿using SharedLibrary.Data;
-using SharedLibrary.Function;
+﻿using YeongHun.Data;
+using YeongHun.Function;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary
+namespace YeongHun
 {
     public interface IEmuera:IPlatform
     {

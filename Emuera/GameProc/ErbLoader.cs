@@ -7,9 +7,9 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameProc.Function;
 using MinorShift._Library;
-using MinorShift.Emuera.GameData;
-using SharedLibrary;
-using Framework;
+using YeongHun;
+using YeongHun.Framework;
+using YeongHun.Platforms;
 
 namespace MinorShift.Emuera.GameProc
 {
@@ -633,10 +633,10 @@ namespace MinorShift.Emuera.GameProc
 		{
             IEmuera emuera = new EmueraPlatform(GlobalStatic.LabelDictionary.GetAllLabelName());
             IFramework framework = new Main();
-            framework.Set(emuera);
+            framework.SetEmuera(emuera);
             emuera.Initialize(framework);
 
-            IPlatform csharp = new CSharpPlatform.CSharp();
+            IPlatform csharp = new CSharpPlatform();
             csharp.Initialize(framework);
             framework.Initialize(csharp);
 

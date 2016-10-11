@@ -1,9 +1,9 @@
-﻿using SharedLibrary;
-using SharedLibrary.Data;
+﻿using YeongHun;
+using YeongHun.Data;
 using System;
 using System.Collections.Generic;
 
-namespace Framework
+namespace YeongHun.Framework
 {
     class CharacterInfo : ICharacter
     {

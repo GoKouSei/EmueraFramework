@@ -1,9 +1,9 @@
-﻿using SharedLibrary;
+﻿using YeongHun;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Framework
+namespace YeongHun.Framework
 {
     class DataBase : DynamicObject
     {
