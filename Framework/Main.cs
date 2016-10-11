@@ -1,6 +1,6 @@
-﻿using YeongHun;
-using YeongHun.Data;
-using YeongHun.Function;
+﻿using YeongHun.EmueraFramework;
+using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Function;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YeongHun.Framework
+namespace YeongHun.EmueraFramework.Framework
 {
     public class Main : IFramework
     {
@@ -105,7 +105,7 @@ namespace YeongHun.Framework
             }
             catch
             {
-                throw new Exception($"시스템 함수 {sysFunc.ToString()}가 정의되지 않았습니다");
+                throw new Exception($"시스템 함수 {sysFunc}가 정의되지 않았습니다");
             }
         }
 

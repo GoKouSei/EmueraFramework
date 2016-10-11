@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YeongHun.Function
+namespace YeongHun.EmueraFramework.Function
 {
     [Flags]
     public enum PrintFlags

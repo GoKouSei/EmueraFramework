@@ -666,6 +666,7 @@ namespace MinorShift.Emuera
 				if ((Program.DebugMode) && (console.DebugDialog != null) && (console.DebugDialog.Created))
 					console.DebugDialog.Close();
 				console.Dispose();
+                YeongHun.EmueraFramework.Platforms.EmueraPlatform.framework?.Dispose();
 				console = null;
 			}
 		}

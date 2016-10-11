@@ -1,10 +1,5 @@
-﻿using YeongHun;
-using YeongHun;
-using YeongHun.Function;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using YeongHun.EmueraFramework.Framework;
+using YeongHun.EmueraFramework.Function;
 
 namespace TestProgram
 {

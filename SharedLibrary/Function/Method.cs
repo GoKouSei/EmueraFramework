@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace YeongHun.Function
+namespace YeongHun.EmueraFramework.Function
 {
     public class Method
     {

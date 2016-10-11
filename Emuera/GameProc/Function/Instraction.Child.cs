@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MinorShift.Emuera.GameData.Expression;
-using MinorShift.Emuera.Sub;
-using MinorShift.Emuera.GameData.Variable;
+﻿using MinorShift._Library;
 using MinorShift.Emuera.GameData;
-using MinorShift._Library;
+using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Function;
+using MinorShift.Emuera.GameData.Variable;
+using MinorShift.Emuera.Sub;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Text;
+using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera.GameProc.Function
 {
-	internal sealed partial class FunctionIdentifier
+    internal sealed partial class FunctionIdentifier
 	{
 		#region normalFunction
 		private sealed class PRINT_Instruction : AbstractInstruction

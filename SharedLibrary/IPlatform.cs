@@ -1,7 +1,7 @@
 ﻿using System;
-using YeongHun.Function;
+using YeongHun.EmueraFramework.Function;
 
-namespace YeongHun
+namespace YeongHun.EmueraFramework
 {
     public interface IPlatform : IDisposable
     {

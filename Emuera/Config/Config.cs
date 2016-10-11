@@ -5,6 +5,7 @@ using System.IO;
 using System;
 using System.Windows.Forms;
 using MinorShift._Library;
+using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera
 {
@@ -14,8 +15,8 @@ namespace MinorShift.Emuera
 
         #region config
 
-        public static Encoding Encode = Encoding.UTF8;//Encoding.GetEncoding("SHIFT-JIS");
-		public static Encoding SaveEncode = Encoding.GetEncoding("SHIFT-JIS");
+        public static Encoding Encode;//Encoding.GetEncoding("SHIFT-JIS");
+        public static Encoding SaveEncode;
 		private static Dictionary<ConfigCode, string> nameDic = null;
 		public static string GetConfigName(ConfigCode code)
 		{
@@ -24,7 +25,10 @@ namespace MinorShift.Emuera
 
 		public static void SetConfig(ConfigData instance)
 		{
-			nameDic = instance.GetConfigNameDic();
+            EmueraPlatform.ConfigDic.TryGetValue("Encoding", out Encode, Encoding.UTF8, "UTF-8");
+            EmueraPlatform.ConfigDic.TryGetValue("SaveEncoding", out SaveEncode, Encoding.UTF8, "UTF-8");
+
+            nameDic = instance.GetConfigNameDic();
 			IgnoreCase = instance.GetConfigValue<bool>(ConfigCode.IgnoreCase);
 			CompatiFunctionNoignoreCase = instance.GetConfigValue<bool>(ConfigCode.CompatiFunctionNoignoreCase);
 			ICFunction = IgnoreCase && !CompatiFunctionNoignoreCase;

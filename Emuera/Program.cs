@@ -157,6 +157,8 @@ namespace MinorShift.Emuera
 			}
 		}
 
+        public const string ConfigFileName = "Config.txt";
+
 		/// <summary>
 		/// 実行ファイルのディレクトリ。最後に\を付けたstring
 		/// </summary>

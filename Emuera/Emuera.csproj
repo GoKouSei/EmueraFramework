@@ -290,6 +290,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Config\Config.csproj">
+      <Project>{c3925d87-95f1-403b-8a7b-3703cc9ed8ea}</Project>
+      <Name>Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EZTrans\EZTrans\EZTrans.csproj">
       <Project>{3724f839-bcc8-4eff-a177-ac8247660f94}</Project>
       <Name>EZTrans</Name>

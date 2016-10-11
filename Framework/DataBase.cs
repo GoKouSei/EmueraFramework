@@ -1,18 +1,16 @@
-﻿using YeongHun;
+﻿using YeongHun.EmueraFramework;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace YeongHun.Framework
+namespace YeongHun.EmueraFramework.Framework
 {
     class DataBase : DynamicObject
     {
         private Dictionary<string, object> _customVariables;
         private IEmuera _emuera;
 
-        public DataBase(
-            IEmuera emuera,
-            Dictionary<string, object> customVariables)
+        public DataBase(IEmuera emuera, Dictionary<string, object> customVariables)
         {
             _emuera = emuera;
             _customVariables = customVariables;

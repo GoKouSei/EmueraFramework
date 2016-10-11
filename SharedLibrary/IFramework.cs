@@ -1,5 +1,5 @@
-﻿using YeongHun.Data;
-using YeongHun.Function;
+﻿using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Function;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YeongHun
+namespace YeongHun.EmueraFramework
 {
     public interface IFramework:IDisposable
     {

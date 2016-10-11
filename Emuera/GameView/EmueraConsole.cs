@@ -11,7 +11,8 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using YeongHun.Platforms;
+using YeongHun.EmueraFramework.Platforms;
+using YeongHun.EZTrans;
 
 namespace MinorShift.Emuera.GameView
 {
@@ -191,19 +192,32 @@ namespace MinorShift.Emuera.GameView
             #region Module
             EmueraPlatform.framework.Print("installed Module : ezEmuera");
             EmueraPlatform.framework.Print("ezEmuera를 초기화 합니다");
-            int result = EZTrans.EZTransHelper.TryLoading(Program.ExeDir + "ezTransPath.txt");
+            string ezTransPath;
+            if (!EmueraPlatform.ConfigDic.TryGetValue("ezTransXP_Path", out ezTransPath))
+            {
+                using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+                {
+                    dialog.Description = "ezTransXP 폴더를 선택해주세요";
+                    dialog.ShowDialog();
+                    ezTransPath = dialog.SelectedPath;
+                    EmueraPlatform.ConfigDic.SetValue("ezTransXP_Path", ezTransPath);
+                }
+            }
+            int result = TranslateXP.Initialize(ezTransPath);
             if (result != 0)
             {
                 EmueraPlatform.framework.Print("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
             }
-            EZTrans.TranslateCache.Load(Program.ExeDir + "Cache.dat");
-            EZTrans.TranslateXP.LoadDictionary(Program.ExeDir + "UserDic.dat");
-            EmueraPlatform.framework.Print("ezEmuera 로딩 성공!");
+            else
+            {
+                TranslateCache.Load(Program.ExeDir + "Cache.dat");
+                TranslateXP.LoadDictionary(Program.ExeDir + "UserDic.xml");
+                EmueraPlatform.framework.Print("ezEmuera 로딩 성공!");
+            }
             #endregion
 
             EmueraPlatform.EzEmueraState = true;
             EmueraPlatform.framework.Run();
-            EmueraPlatform.framework.Dispose();
             //callEmueraProgram("");
             //RefreshStrings(true);
         }
@@ -1154,14 +1168,14 @@ namespace MinorShift.Emuera.GameView
 				if (!(line is InstructionLine))
 					throw new CodeEE("デバッグコマンドで使用できるのは代入文か命令文だけです");
 				InstructionLine func = (InstructionLine)line;
-				if (func.Function.IsFlowContorol())
-					throw new CodeEE("フロー制御命令は使用できません");
+				//if (func.Function.IsFlowContorol())
+				//	throw new CodeEE("フロー制御命令は使用できません");
 				//__METHOD_SAFE__をみるならいらないかも
 				if (func.Function.IsWaitInput())
 					throw new CodeEE(func.Function.Name + "命令は使用できません");
 				//1750 __METHOD_SAFE__とほぼ条件同じだよねってことで
-				if (!func.Function.IsMethodSafe())
-					throw new CodeEE(func.Function.Name + "命令は使用できません");
+				//if (!func.Function.IsMethodSafe())
+				//	throw new CodeEE(func.Function.Name + "命令は使用できません");
 				//1756 SIFの次に来てはいけないものはここでも不可。
 				if (func.Function.IsPartial())
 					throw new CodeEE(func.Function.Name + "命令は使用できません");

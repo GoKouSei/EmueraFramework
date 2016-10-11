@@ -3,22 +3,46 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameProc;
 using MinorShift.Emuera.GameProc.Function;
-using YeongHun;
-using YeongHun.Data;
-using YeongHun.Function;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using YeongHun;
+using YeongHun.Common.Config;
+using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Function;
 
-namespace YeongHun.Platforms
+namespace YeongHun.EmueraFramework.Platforms
 {
     class EmueraPlatform : IEmuera
     {
+        static EmueraPlatform()
+        {
+            if (File.Exists(Program.ExeDir + Program.ConfigFileName))
+            {
+                using (FileStream fs = new FileStream(Program.ExeDir + Program.ConfigFileName, FileMode.Open))
+                {
+                    ConfigDic.Load(new StreamReader(fs));
+                }
+            }
+            ConfigDic.AddParser(
+                str =>
+            {
+                int codepage;
+                if (int.TryParse(str, out codepage))
+                    return Encoding.GetEncoding(codepage);
+                else
+                    return Encoding.GetEncoding(str);
+            });
+        }
+
         internal static IFramework framework;
         internal static Type returnType = typeof(void);
         internal static object input;
         internal static bool EzEmueraState { get; set; } = false;
+        internal static ConfigDic ConfigDic { get; private set; } = new ConfigDic();
         IEnumerable<string> _methodNames;
 
         #region IEmuera
@@ -43,11 +67,11 @@ namespace YeongHun.Platforms
                     .Concat(
                     new[]
                     {
-                        new Method("ezEmueraOFF", () =>
+                        new Method("AutoTransOFF", () =>
                         {
                             EzEmueraState = false;
                         }),
-                        new Method("ezEmueraON", ()=>
+                        new Method("AutoTransON", ()=>
                         {
                            EzEmueraState = true;
                         }),
@@ -55,12 +79,19 @@ namespace YeongHun.Platforms
                         {
                             string key = (string)args[0];
                             string value = (string)args[1];
-                            EZTrans.TranslateXP.UserDic.AddOrUpdate(key, value);
+                            bool isPre = args.Length == 2 || (long)args[2] == 0L;
+                            EZTrans.TranslateXP.UserDic.AddOrUpdate(key, value, isPre);
                         }),
                         new Method("DeleteDictionary", args =>
                         {
-                            EZTrans.TranslateXP.UserDic.Delete((string)args[0]);
-                        })
+                            string key = (string)args[0];
+                            bool isPre = args.Length == 1 || (long)args[1] == 0L;
+                            EZTrans.TranslateXP.UserDic.Delete(key, (long)args[1] == 0L);
+                        }),
+                        new Method("PrintCurrentScriptPosition", () =>
+                        {
+                            framework.Print(GlobalStatic.Process.getCurrentLine.Position.ToString());
+                        }),
                     }).ToArray();
             }
         }
@@ -463,7 +494,11 @@ namespace YeongHun.Platforms
                 // TODO: 관리되지 않는 리소스(관리되지 않는 개체)를 해제하고 아래의 종료자를 재정의합니다.
                 // TODO: 큰 필드를 null로 설정합니다.
 
-                EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.dat");
+                using (FileStream fs = new FileStream(Program.ExeDir + Program.ConfigFileName, FileMode.Create))
+                {
+                    ConfigDic.Save(new StreamWriter(fs));
+                }
+                EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.xml");
                 EZTrans.TranslateXP.Terminate();
                 EZTrans.TranslateCache.Save(Program.ExeDir + "Cache.dat");
                 _methodNames = null;

@@ -7,9 +7,9 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameProc.Function;
 using MinorShift._Library;
-using YeongHun;
-using YeongHun.Framework;
-using YeongHun.Platforms;
+using YeongHun.EmueraFramework;
+using YeongHun.EmueraFramework.Framework;
+using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera.GameProc
 {

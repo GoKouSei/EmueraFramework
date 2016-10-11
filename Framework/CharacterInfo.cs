@@ -1,9 +1,9 @@
 ﻿using YeongHun;
-using YeongHun.Data;
+using YeongHun.EmueraFramework.Data;
 using System;
 using System.Collections.Generic;
 
-namespace YeongHun.Framework
+namespace YeongHun.EmueraFramework.Framework
 {
     class CharacterInfo : ICharacter
     {

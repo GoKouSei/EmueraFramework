@@ -1,14 +1,11 @@
-﻿using YeongHun;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YeongHun.Function;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using YeongHun.EmueraFramework.Function;
 
-namespace YeongHun.Platforms
+namespace YeongHun.EmueraFramework.Platforms
 {
     public class CSharpPlatform : IPlatform
     {

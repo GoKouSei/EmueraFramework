@@ -10,6 +10,7 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameProc.Function;
 using MinorShift.Emuera.GameData.Function;
+using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera.GameProc
 {
