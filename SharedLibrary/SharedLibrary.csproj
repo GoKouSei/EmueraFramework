@@ -63,8 +63,14 @@
     <Compile Include="IPlatform.cs" />
     <Compile Include="Function\Method.cs" />
     <Compile Include="Function\PrintFlags.cs" />
+    <Compile Include="Modules\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Function\SystemFunction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Config">
+      <HintPath>..\Library\Config.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

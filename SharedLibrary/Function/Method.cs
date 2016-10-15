@@ -36,8 +36,12 @@ namespace YeongHun.EmueraFramework.Function
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class MethodAttribute : Attribute
+    public class ExternMethodAttribute : Attribute
     {
-        public static bool IsMethod(MethodInfo method) => method.GetCustomAttribute(typeof(MethodAttribute)) != null;
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ExternTypeAttribute : Attribute
+    {
     }
 }

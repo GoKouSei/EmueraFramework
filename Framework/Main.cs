@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using YeongHun.Common.Config;
 
 namespace YeongHun.EmueraFramework.Framework
 {
@@ -32,6 +33,8 @@ namespace YeongHun.EmueraFramework.Framework
         public string Root => _emuera.Root;
         public int Encoding => _emuera.Encoding;
 
+        public ConfigDic Config { get; private set; }
+
         public void SetEmuera(IEmuera emuera)
         {
             _emuera = emuera;
@@ -40,8 +43,9 @@ namespace YeongHun.EmueraFramework.Framework
             Framework = this;
         }
 
-        public void Initialize(params IPlatform[] platforms)
+        public void Initialize(ConfigDic config, params IPlatform[] platforms)
         {
+            Config = config;
             while (_printQueue.Count > 0)
             {
                 var str = _printQueue.Dequeue();
@@ -114,20 +118,6 @@ namespace YeongHun.EmueraFramework.Framework
             if (!_initialized)
                 throw new Exception("프레임워크가 초기화되지 않았습니다");
             Begin(SystemFunctionCode.TITLE);
-            //_scriptTast = Task.Factory.StartNew
-            //    (() =>
-            //    {
-            //        try
-            //        {
-            //            Begin(SystemFunctionCode.TITLE);
-            //            return null;
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            return e;
-            //        }
-            //    }, TaskCreationOptions.LongRunning
-            //    );
         }
 
         public void Print(string str, PrintFlags flag)
@@ -141,6 +131,7 @@ namespace YeongHun.EmueraFramework.Framework
         public void DrawLine() => _emuera.DrawLine();
 
         public void RunRawLine(string rawLine) => _emuera.RunRawLine(rawLine);
+        public bool CheckRawLine(string rawLine) => _emuera.CheckRawLine(rawLine);
 
         public int GetColor() => _emuera.GetColor();
 
@@ -182,10 +173,11 @@ namespace YeongHun.EmueraFramework.Framework
         }
 
         // TODO: 위의 Dispose(bool disposing)에 관리되지 않는 리소스를 해제하는 코드가 포함되어 있는 경우에만 종료자를 재정의합니다.
-        // ~Main() {
-        //   // 이 코드를 변경하지 마세요. 위의 Dispose(bool disposing)에 정리 코드를 입력하세요.
-        //   Dispose(false);
-        // }
+        ~Main()
+        {
+            // 이 코드를 변경하지 마세요. 위의 Dispose(bool disposing)에 정리 코드를 입력하세요.
+            Dispose(false);
+        }
 
         // 삭제 가능한 패턴을 올바르게 구현하기 위해 추가된 코드입니다.
         public void Dispose()
@@ -193,7 +185,7 @@ namespace YeongHun.EmueraFramework.Framework
             // 이 코드를 변경하지 마세요. 위의 Dispose(bool disposing)에 정리 코드를 입력하세요.
             Dispose(true);
             // TODO: 위의 종료자가 재정의된 경우 다음 코드 줄의 주석 처리를 제거합니다.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

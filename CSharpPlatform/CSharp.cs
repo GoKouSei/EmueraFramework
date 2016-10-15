@@ -18,14 +18,14 @@ namespace YeongHun.EmueraFramework.Platforms
 
         public void Initialize(IFramework framework)
         {
-            if (!Directory.Exists(framework.Root + "\\Plugins"))
+            if (!Directory.Exists(framework.Root + "Plugins"))
             {
                 Methods = new Method[0];
                 framework.Print("Can't find Plugins folder", PrintFlags.NEWLINE);
                 return;
             }
 
-            var assemblys = Directory.GetFiles(framework.Root + "\\Plugins", "*.plg", SearchOption.TopDirectoryOnly).Select(
+            var assemblys = Directory.GetFiles(framework.Root + "Plugins", "*.plg", SearchOption.TopDirectoryOnly).Select(
                 file =>
                 {
                     try
@@ -38,34 +38,35 @@ namespace YeongHun.EmueraFramework.Platforms
                     }
                 }).Where(asm => asm != null);
 
-
-            var methodGroups = (from assembly in assemblys
-                                from Type type in assembly.GetExportedTypes()
-                                select Tuple.Create(assembly, type, type.GetMethods().Where(method => MethodAttribute.IsMethod(method))));
+            var types = assemblys.SelectMany(asm => asm.GetExportedTypes()).Where(type => type.IsDefined(typeof(ExternTypeAttribute)));
             List<Method> methods = new List<Method>();
-            foreach (var methodGroup in methodGroups)
+            foreach (var type in types)
             {
-                var type = methodGroup.Item2;
                 if (type == typeof(object))
                     continue;
+                ConstructorInfo ctor = type.GetConstructor(new[] { typeof(IFramework) });
+                if (ctor == null)
+                    continue;
                 object instance = null;
+
                 try
                 {
-                    instance = Activator.CreateInstance(type, framework);
+                    instance = ctor.Invoke(new object[] { framework });
                 }
                 catch
                 {
                     continue;
                 }
-                if(instance is IDisposable)
+
+                if (instance is IDisposable)
                 {
                     disposList.Add((IDisposable)instance);
                 }
-                foreach (var method in methodGroup.Item3)
+
+                var externMethods = type.GetMethods().Where(method => method.IsDefined(typeof(ExternMethodAttribute)));
+
+                foreach (var method in externMethods)
                 {
-                    framework.Print("");
-                    framework.Print($"Plugin {methodGroup.Item1.ManifestModule.ToString()}->{method.Name} installed");
-                    framework.Print("");
                     var paramaters = method.GetParameters();
                     switch (method.GetParameters().Length)
                     {

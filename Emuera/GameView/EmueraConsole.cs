@@ -9,8 +9,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using YeongHun.EmueraFramework.Function;
+using YeongHun.EmueraFramework.Modules;
 using YeongHun.EmueraFramework.Platforms;
 using YeongHun.EZTrans;
 
@@ -169,6 +173,8 @@ namespace MinorShift.Emuera.GameView
 
 		public void Initialize()
 		{
+
+
 			GlobalStatic.Console = this;
 			GlobalStatic.MainWindow = window;
             emuera = new GameProc.Process(this);
@@ -190,29 +196,33 @@ namespace MinorShift.Emuera.GameView
 			}
 
             #region Module
-            EmueraPlatform.framework.Print("installed Module : ezEmuera");
-            EmueraPlatform.framework.Print("ezEmuera를 초기화 합니다");
-            string ezTransPath;
-            if (!EmueraPlatform.ConfigDic.TryGetValue("ezTransXP_Path", out ezTransPath))
             {
-                using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+                ModuleInitializer[] initializers =
+                    Directory.GetFiles(Program.ExeDir + "Plugins","*.mle")
+                    .Select(file => Assembly.Load(File.ReadAllBytes(file)))
+                    .Where(asm => asm != null)
+                    .SelectMany(asm => asm.GetExportedTypes())
+                    .Where(type => type.IsDefined(typeof(ExternTypeAttribute)))
+                    .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+                    .Select(method => method.CreateDelegate(typeof(ModuleInitializer)) as ModuleInitializer)
+                    .Where(initializer => initializer != null)
+                    .ToArray();
+
+                foreach (var initializer in initializers)
                 {
-                    dialog.Description = "ezTransXP 폴더를 선택해주세요";
-                    dialog.ShowDialog();
-                    ezTransPath = dialog.SelectedPath;
-                    EmueraPlatform.ConfigDic.SetValue("ezTransXP_Path", ezTransPath);
+                    try
+                    {
+                        initializer(EmueraPlatform.framework);
+                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} installed");
+                    }
+                    catch(Exception e)
+                    {
+                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} has Error {e.Message}");
+                        continue;
+                    }
                 }
-            }
-            int result = TranslateXP.Initialize(ezTransPath);
-            if (result != 0)
-            {
-                EmueraPlatform.framework.Print("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
-            }
-            else
-            {
-                TranslateCache.Load(Program.ExeDir + "Cache.dat");
-                TranslateXP.LoadDictionary(Program.ExeDir + "UserDic.xml");
-                EmueraPlatform.framework.Print("ezEmuera 로딩 성공!");
+
+                initializers = null;
             }
             #endregion
 

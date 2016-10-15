@@ -17,6 +17,7 @@ namespace YeongHun.EmueraFramework
         void SetColor(int color);
         void Print(string str, PrintFlags flag);
         void DrawLine();
+        bool CheckRawLine(string rawLine);
         void RunRawLine(string rawLine);
         object GetValue(string name, params object[] indexes);
         void SetValue(string name, object value, params object[] indexes);

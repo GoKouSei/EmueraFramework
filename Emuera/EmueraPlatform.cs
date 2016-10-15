@@ -355,17 +355,24 @@ namespace YeongHun.EmueraFramework.Platforms
 
         private static InstructionLine ParseLine(string rawLine)
         {
-            var func = LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
-            if (func != null)
+            try
             {
-                if (func.Argument == null)
+                var func = LogicalLineParser.ParseLine(rawLine, GlobalStatic.Console) as InstructionLine;
+                if (func != null)
                 {
-                    ArgumentParser.SetArgumentTo(func);
-                    if (func.IsError)
-                        return null;
+                    if (func.Argument == null)
+                    {
+                        ArgumentParser.SetArgumentTo(func);
+                        if (func.IsError)
+                            return null;
+                    }
                 }
+                return func;
             }
-            return func;
+            catch
+            {
+                return null;
+            }
         }
 
         Task<object> IEmuera.GetInputAsync(ConsoleInputType type)
@@ -411,6 +418,11 @@ namespace YeongHun.EmueraFramework.Platforms
                 return;
             GlobalStatic.Process.DoDebugNormalFunction(func, false);
             GlobalStatic.Console.RefreshStrings(true);
+        }
+
+        bool IEmuera.CheckRawLine(string rawLine)
+        {
+            return ParseLine(rawLine) != null;
         }
 
         long[] IEmuera.RegistedCharacters => GlobalStatic.VariableData.CharacterList.Select(chara => chara.NO).ToArray();
@@ -500,7 +512,7 @@ namespace YeongHun.EmueraFramework.Platforms
                 }
                 EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.xml");
                 EZTrans.TranslateXP.Terminate();
-                EZTrans.TranslateCache.Save(Program.ExeDir + "Cache.dat");
+                EZTrans.TranslateXP.SaveCache();
                 _methodNames = null;
                 disposedValue = true;
             }

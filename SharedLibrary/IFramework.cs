@@ -7,15 +7,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using YeongHun.Common.Config;
 
 namespace YeongHun.EmueraFramework
 {
     public interface IFramework:IDisposable
     {
+        ConfigDic Config { get; }
         string Name { get; }
 
         void SetEmuera(IEmuera emuera);
-        void Initialize(params IPlatform[] platforms);
+        void Initialize(ConfigDic config, params IPlatform[] platforms);
 
         /// <summary>
         /// Start Script
@@ -23,7 +25,9 @@ namespace YeongHun.EmueraFramework
         void Run();
 
         #region IPlatform
-
+        /// <summary>
+        /// Contain DirectorySeparatorChar Last
+        /// </summary>
         string Root { get; }
         int Encoding { get; }
 
@@ -33,6 +37,7 @@ namespace YeongHun.EmueraFramework
         void Print(string str, PrintFlags flag = PrintFlags.NEWLINE);
         void DrawLine();
         void RunRawLine(string rawLine);
+        bool CheckRawLine(string rawLine);
 
         void SetColor(int color);
         int GetColor();

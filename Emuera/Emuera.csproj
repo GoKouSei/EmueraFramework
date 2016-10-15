@@ -74,6 +74,12 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Config">
+      <HintPath>..\Library\Config.dll</HintPath>
+    </Reference>
+    <Reference Include="EZTrans">
+      <HintPath>..\Library\EZTrans.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
@@ -290,14 +296,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Config\Config.csproj">
-      <Project>{884d6493-fd91-4845-9d14-aa571c25e833}</Project>
-      <Name>Config</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EZTrans\EZTrans\EZTrans.csproj">
-      <Project>{3724f839-bcc8-4eff-a177-ac8247660f94}</Project>
-      <Name>EZTrans</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CSharpPlatform\CSharpPlatform.csproj">
       <Project>{24781af8-6da6-48b2-a0b5-6e1d44a918f0}</Project>
       <Name>CSharpPlatform</Name>
@@ -327,6 +325,7 @@ if exist "$(TargetDir)*.dll" move "$(TargetDir)*.dll" "$(TargetDir)DLL\"
 if exist "$(TargetDir)*.pdb" move "$(TargetDir)*.pdb" "$(TargetDir)DLL\"
 if exist "$(TargetDir)*.plg" move "$(TargetDir)*.plg" "$(TargetDir)Plugins\"
 if exist "C:\Plugins\*.plg" copy "C:\Plugins\*.plg" "$(TargetDir)Plugins\"
+if exist "C:\Plugins\*.mle" copy "C:\Plugins\*.mle" "$(TargetDir)Plugins\"
 if exist "C:\Plugins\*.pdb" copy "C:\Plugins\*.pdb" "$(TargetDir)DLL\"
 if exist "C:\Plugins\*.dll" copy "C:\Plugins\*.dll" "$(TargetDir)DLL\"</PostBuildEvent>
   </PropertyGroup>

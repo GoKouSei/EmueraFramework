@@ -638,7 +638,7 @@ namespace MinorShift.Emuera.GameProc
 
             IPlatform csharp = new CSharpPlatform();
             csharp.Initialize(framework);
-            framework.Initialize(csharp);
+            framework.Initialize(EmueraPlatform.ConfigDic, csharp);
 
             int usedLabelCount = 0;
 			int labelDepth = -1;
