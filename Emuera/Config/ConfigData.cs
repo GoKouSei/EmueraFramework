@@ -7,6 +7,7 @@ using System.Drawing;
 using MinorShift.Emuera.Sub;
 using System.Text.RegularExpressions;
 using MinorShift.Emuera.GameData.Expression;
+using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera
 {
@@ -76,7 +77,7 @@ namespace MinorShift.Emuera
 			//configArray[i++] = new ConfigItem<List<string>>(ConfigCode.IgnoreWarningFiles, "指定したファイル中の警告を無視する", new List<string>());
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.ChangeMasterNameIfDebug, "デバッグコマンドを使用した時にMASTERの名前を変更する", false);
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.ButtonWrap, "ボタンの途中で行を折りかえさない", false);
-			configArray[i++] = new ConfigItem<bool>(ConfigCode.SearchSubdirectory, "サブディレクトリを検索する", false);
+			configArray[i++] = new ConfigItem<bool>(ConfigCode.SearchSubdirectory, "サブディレクトリを検索する", true);
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.SortWithFilename, "読み込み順をファイル名順にソートする", false);
 			configArray[i++] = new ConfigItem<long>(ConfigCode.LastKey, "最終更新コード", 0);
 			configArray[i++] = new ConfigItem<int>(ConfigCode.SaveDataNos, "表示するセーブデータ数", 20);
@@ -103,7 +104,7 @@ namespace MinorShift.Emuera
 			
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.SystemSaveInBinary, "セーブデータをバイナリ形式で保存する", false);
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.CompatiFuncArgOptional, "ユーザー関数の全ての引数の省略を許可する", false);
-			configArray[i++] = new ConfigItem<bool>(ConfigCode.CompatiFuncArgAutoConvert, "ユーザー関数の引数に自動的にTOSTRを補完する", false);
+			configArray[i++] = new ConfigItem<bool>(ConfigCode.CompatiFuncArgAutoConvert, "ユーザー関数の引数に自動的にTOSTRを補完する", true);
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.SystemIgnoreTripleSymbol, "FORM中の三連記号を展開しない", false);
             configArray[i++] = new ConfigItem<bool>(ConfigCode.TimesNotRigorousCalculation, "TIMESの計算をeramakerにあわせる", false);
             //一文字変数の禁止オプションを考えた名残
@@ -399,7 +400,9 @@ namespace MinorShift.Emuera
 		public bool LoadConfig()
 		{
 			Config.ClearFont();
-			string defaultConfigPath = Program.CsvDir + "_default.config";
+            EmueraPlatform.ConfigDic.TryGetValue("Encoding", out Config.Encode, Encoding.UTF8, "UTF-8");
+            EmueraPlatform.ConfigDic.TryGetValue("SaveEncoding", out Config.SaveEncode, Encoding.UTF8, "UTF-8");
+            string defaultConfigPath = Program.CsvDir + "_default.config";
 			string fixedConfigPath = Program.CsvDir + "_fixed.config";
 			if(!File.Exists(defaultConfigPath))
 				defaultConfigPath = Program.CsvDir + "default.config";

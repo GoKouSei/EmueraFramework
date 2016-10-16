@@ -25,9 +25,6 @@ namespace MinorShift.Emuera
 
 		public static void SetConfig(ConfigData instance)
 		{
-            EmueraPlatform.ConfigDic.TryGetValue("Encoding", out Encode, Encoding.UTF8, "UTF-8");
-            EmueraPlatform.ConfigDic.TryGetValue("SaveEncoding", out SaveEncode, Encoding.UTF8, "UTF-8");
-
             nameDic = instance.GetConfigNameDic();
 			IgnoreCase = instance.GetConfigValue<bool>(ConfigCode.IgnoreCase);
 			CompatiFunctionNoignoreCase = instance.GetConfigValue<bool>(ConfigCode.CompatiFunctionNoignoreCase);
@@ -112,9 +109,9 @@ namespace MinorShift.Emuera
 			//CompatiDRAWLINE = instance.GetConfigValue<bool>(ConfigCode.CompatiDRAWLINE);
 			CompatiLinefeedAs1739 = instance.GetConfigValue<bool>(ConfigCode.CompatiLinefeedAs1739);
 			SystemAllowFullSpace = instance.GetConfigValue<bool>(ConfigCode.SystemAllowFullSpace);
-			SystemSaveInUTF8 = instance.GetConfigValue<bool>(ConfigCode.SystemSaveInUTF8);
-			if (SystemSaveInUTF8)
-				SaveEncode = Encoding.GetEncoding("UTF-8");
+			//SystemSaveInUTF8 = instance.GetConfigValue<bool>(ConfigCode.SystemSaveInUTF8);
+			//if (SystemSaveInUTF8)
+			//	SaveEncode = Encoding.GetEncoding("UTF-8");
 			SystemSaveInBinary = instance.GetConfigValue<bool>(ConfigCode.SystemSaveInBinary);
 			SystemIgnoreTripleSymbol = instance.GetConfigValue<bool>(ConfigCode.SystemIgnoreTripleSymbol);
 			

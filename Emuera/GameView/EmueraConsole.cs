@@ -217,7 +217,7 @@ namespace MinorShift.Emuera.GameView
                     }
                     catch(Exception e)
                     {
-                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} has Error {e.Message}");
+                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} has Error [{e.Message}]");
                         continue;
                     }
                 }
