@@ -38,6 +38,7 @@ namespace YeongHun.EmueraFramework.Function
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ExternMethodAttribute : Attribute
     {
+        public bool FirstRun { get; set; } = false;
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]

@@ -506,13 +506,8 @@ namespace YeongHun.EmueraFramework.Platforms
                 // TODO: 관리되지 않는 리소스(관리되지 않는 개체)를 해제하고 아래의 종료자를 재정의합니다.
                 // TODO: 큰 필드를 null로 설정합니다.
 
-                using (FileStream fs = new FileStream(Program.ExeDir + Program.ConfigFileName, FileMode.Create))
-                {
-                    ConfigDic.Save(new StreamWriter(fs));
-                }
-                EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.xml");
+                ConfigDic.Save(new StreamWriter(Program.ExeDir + Program.ConfigFileName));
                 EZTrans.TranslateXP.Terminate();
-                EZTrans.TranslateXP.SaveCache();
                 _methodNames = null;
                 disposedValue = true;
             }

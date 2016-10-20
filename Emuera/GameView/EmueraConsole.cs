@@ -171,62 +171,61 @@ namespace MinorShift.Emuera.GameView
 			}
 		}
 
-		public void Initialize()
-		{
+        public void Initialize()
+        {
 
 
-			GlobalStatic.Console = this;
-			GlobalStatic.MainWindow = window;
+            GlobalStatic.Console = this;
+            GlobalStatic.MainWindow = window;
             emuera = new GameProc.Process(this);
-			GlobalStatic.Process = emuera;
-			if (Program.DebugMode && Config.DebugShowWindow)
-			{
-				OpenDebugDialog();
-				window.Focus();
-			}
-			ClearDisplay();
-            Print("Encoding : " + Config.Encode.WebName);
-			if (!emuera.Initialize())
-			{
-				state = ConsoleState.Error;
-				OutputLog(null);
-				PrintFlush(false);
-				RefreshStrings(true);
-				return;
-			}
-
-            #region Module
+            GlobalStatic.Process = emuera;
+            if (Program.DebugMode && Config.DebugShowWindow)
             {
-                ModuleInitializer[] initializers =
-                    Directory.GetFiles(Program.ExeDir + "Plugins","*.mle")
-                    .Select(file => Assembly.Load(File.ReadAllBytes(file)))
-                    .Where(asm => asm != null)
-                    .SelectMany(asm => asm.GetExportedTypes())
-                    .Where(type => type.IsDefined(typeof(ExternTypeAttribute)))
-                    .SelectMany(type => type.GetMethods(BindingFlags.Public | BindingFlags.Static))
-                    .Select(method => method.CreateDelegate(typeof(ModuleInitializer)) as ModuleInitializer)
-                    .Where(initializer => initializer != null)
-                    .ToArray();
+                OpenDebugDialog();
+                window.Focus();
+            }
+            ClearDisplay();
+            Print("Encoding : " + Config.Encode.WebName);
+            if (!emuera.Initialize())
+            {
+                state = ConsoleState.Error;
+                OutputLog(null);
+                PrintFlush(false);
+                RefreshStrings(true);
+                return;
+            }
 
-                foreach (var initializer in initializers)
+            bool ezEmuera;
+            EmueraPlatform.ConfigDic.TryGetValue("AutoTranslate", out ezEmuera, false, "False");
+
+            if (ezEmuera)
+            {
+                EmueraPlatform.framework.Print("ezEmuera를 초기화 합니다");
+                string ezTransPath;
+                if (!EmueraPlatform.framework.Config.TryGetValue("ezTransXP_Path", out ezTransPath))
                 {
-                    try
+                    using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                     {
-                        initializer(EmueraPlatform.framework);
-                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} installed");
-                    }
-                    catch(Exception e)
-                    {
-                        EmueraPlatform.framework.Print($"Module {initializer.Method.Name} has Error [{e.Message}]");
-                        continue;
+                        dialog.Description = "ezTransXP 폴더를 선택해주세요";
+                        dialog.ShowDialog();
+                        ezTransPath = dialog.SelectedPath;
+                        EmueraPlatform.framework.Config.SetValue("ezTransXP_Path", ezTransPath);
                     }
                 }
-
-                initializers = null;
+                int result = TranslateXP.Initialize(ezTransPath);
+                if (result != 0)
+                {
+                    EmueraPlatform.framework.Print("ezEmuera 초기화에 실패했습니다 에러코드 " + result);
+                }
+                else
+                {
+                    TranslateXP.LoadCache(EmueraPlatform.framework.Root + "Cache.dat");
+                    TranslateXP.LoadDictionary(EmueraPlatform.framework.Root + "UserDic.xml");
+                    EmueraPlatform.framework.Print("ezEmuera 로딩 성공");
+                    EmueraPlatform.EzEmueraState = true;
+                }
             }
-            #endregion
 
-            EmueraPlatform.EzEmueraState = true;
             EmueraPlatform.framework.Run();
             //callEmueraProgram("");
             //RefreshStrings(true);
@@ -256,7 +255,7 @@ namespace MinorShift.Emuera.GameView
         public bool byError = false;
         //public ScriptPosition ErrPos = null;
 
-		#region button関連
+#region button関連
 		bool lastButtonIsInput = true;
         public bool updatedGeneration = false;
 		int lastButtonGeneration = 0;//最後に追加された選択肢の世代。これと世代が一致しない選択肢は選択できない。
@@ -317,9 +316,9 @@ namespace MinorShift.Emuera.GameView
 		/// </summary>
 		ConsoleButtonString pointingString = null;
 		ConsoleButtonString lastPointingString = null;
-		#endregion
+#endregion
 
-		#region Input & Timer系
+#region Input & Timer系
 
 		//bool hasDefValue = false;
 		//Int64 defNum;
@@ -457,9 +456,9 @@ namespace MinorShift.Emuera.GameView
                 timer.Enabled = false;
             }
         }
-		#endregion
+#endregion
 
-		#region Call系
+#region Call系
 		/// <summary>
 		/// スクリプト実行。RefreshStringsはしないので呼び出し側がすること
 		/// </summary>
@@ -521,9 +520,9 @@ namespace MinorShift.Emuera.GameView
 			PrintFlush(false);
 			return true;
 		}
-		#endregion
+#endregion
 
-		#region 入力系
+#region 入力系
 		readonly string[] spliter = new string[] { "\\n", "\r\n", "\n", "\r" };//本物の改行コードが来ることは無いはずだけど一応
 
 		public bool MesSkip = false;
@@ -835,9 +834,9 @@ namespace MinorShift.Emuera.GameView
 			}
 			RefreshStrings(true);
 		}
-		#endregion
+#endregion
 
-		#region 描画系
+#region 描画系
 		uint lastUpdate = 0;
 		uint msPerFrame = 1000 / 60;//60FPS
 		ConsoleRedraw redraw = ConsoleRedraw.Normal;
@@ -1037,9 +1036,9 @@ namespace MinorShift.Emuera.GameView
 		//		return window.MainPicBox.CreateGraphics();
 		//}
 
-		#endregion
+#endregion
 
-		#region DebugMode系
+#region DebugMode系
 		DebugDialog dd = null;
 		public DebugDialog DebugDialog { get { return dd; } }
 		StringBuilder dConsoleLog = new StringBuilder("");
@@ -1228,9 +1227,9 @@ namespace MinorShift.Emuera.GameView
 				state = temp_state;
 			}
 		}
-		#endregion
+#endregion
 
-		#region Window.Form系
+#region Window.Form系
 		/// <summary>
 		/// マウス位置をボタンの選択状態に反映させる
 		/// </summary>
@@ -1359,7 +1358,7 @@ namespace MinorShift.Emuera.GameView
 			}
 			window.ScrollBar.Enabled = max > 0;
 		}
-		#endregion
+#endregion
 
 
 
