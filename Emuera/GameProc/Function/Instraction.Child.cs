@@ -2141,8 +2141,21 @@ namespace MinorShift.Emuera.GameProc.Function
 				state.ReturnF(ret);
 			}
 		}
+        
+        private class EXCALL_Instruction : AbstractInstruction
+        {
+            public EXCALL_Instruction()
+            {
+                ArgBuilder = ArgumentParser.GetArgumentBuilder(FunctionArgType.SP_CALL);
+            }
+            public override void DoInstruction(ExpressionMediator exm, InstructionLine func, ProcessState state)
+            {
+                SpCallArgment arg = func.Argument as SpCallArgment;
+                EmueraPlatform.EmueraCall(arg.ConstStr, arg.RowArgs);
+            }
+        }
 
-		private sealed class CALL_Instruction : AbstractInstruction
+        private sealed class CALL_Instruction : AbstractInstruction
 		{
 			public CALL_Instruction(bool form, bool isJump, bool isTry, bool isTryCatch)
 			{
@@ -2162,7 +2175,6 @@ namespace MinorShift.Emuera.GameProc.Function
 			}
 			readonly bool isJump;
 			readonly bool isTry;
-            private string originalName;
 
 			public override void SetJumpTo(ref bool useCallForm, InstructionLine func, int currentDepth, ref string FunctionoNotFoundName)
 			{
@@ -2173,11 +2185,10 @@ namespace MinorShift.Emuera.GameProc.Function
 				}
 				SpCallArgment callArg = (SpCallArgment)func.Argument;
 				string labelName = callArg.ConstStr;
-                originalName = labelName;
 				if (Config.ICFunction)
 					labelName = labelName.ToUpper();
 				CalledFunction call = CalledFunction.CallFunction(GlobalStatic.Process, labelName, func);
-                if ((call == null) && !(EmueraPlatform.framework.HasMethod(originalName) && (!func.Function.IsTry())))
+                if ((call == null) && (!func.Function.IsTry()))
 
                 {
                     FunctionoNotFoundName = labelName;
@@ -2215,24 +2226,17 @@ namespace MinorShift.Emuera.GameProc.Function
 				{
 					call = spCallArg.CallFunc;
                     labelName = spCallArg.ConstStr;
-                    originalName = labelName;
                     arg = spCallArg.UDFArgument;
 				}
 				else
 				{
 					labelName = spCallArg.FuncnameTerm.GetStrValue(exm);
-                    originalName = labelName;
                     if (Config.ICFunction)
 						labelName = labelName.ToUpper();
 					call = CalledFunction.CallFunction(GlobalStatic.Process, labelName, func);
                 }
                 if (call == null)
 				{
-                    if (EmueraPlatform.framework.HasMethod(originalName))
-                    {
-                        EmueraPlatform.EmueraCall(originalName, spCallArg.RowArgs);
-                        return;
-                    }
 					if (!isTry)
 						throw new CodeEE("関数\"@" + labelName + "\"が見つかりません");
 					if (func.JumpToEndCatch != null)

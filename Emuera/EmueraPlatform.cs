@@ -36,10 +36,15 @@ namespace YeongHun.EmueraFramework.Platforms
                 else
                     return Encoding.GetEncoding(str);
             });
+
+            ConfigDic.AddParser(
+                str =>
+                {
+                    return bool.Parse(str);
+                });
         }
 
         internal static IFramework framework;
-        internal static Type returnType = typeof(void);
         internal static object input;
         internal static bool EzEmueraState { get; set; } = false;
         internal static ConfigDic ConfigDic { get; private set; } = new ConfigDic();
@@ -439,7 +444,9 @@ namespace YeongHun.EmueraFramework.Platforms
 
         internal static void EmueraCall(string labelName, IOperandTerm[] args)
         {
-            var result = framework.Call(labelName, args.Select<IOperandTerm, object>(arg =>
+            var result = framework.Call(labelName,
+                args.Select<IOperandTerm, object>
+                (arg =>
               {
                   if (arg.IsInteger)
                       return arg.GetIntValue(GlobalStatic.EMediator);
@@ -474,12 +481,16 @@ namespace YeongHun.EmueraFramework.Platforms
             if (func == null)
                 throw new ArgumentException($"Method [{name}] is undefined");
 
+            var returnType = func.TopLabel.MethodType;
+
             GlobalStatic.Process.getCurrentState.IntoFunction(func, null, GlobalStatic.EMediator);
             GlobalStatic.Console.callEmueraProgram("");
             GlobalStatic.Console.RefreshStrings(true);
 
             if (returnType == typeof(long))
                 return ((IEmuera)this).GetValue("RESULT", 0);
+            else if (returnType == typeof(string))
+                return ((IEmuera)this).GetValue("RESULTS", 0);
             else
                 return null;
         }

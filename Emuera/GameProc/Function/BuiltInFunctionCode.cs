@@ -351,6 +351,6 @@ namespace MinorShift.Emuera.GameProc.Function
 		PRINT_IMG,
 		PRINT_RECT,
 		PRINT_SPACE,
-
-	}
+        EXCALL,
+    }
 }

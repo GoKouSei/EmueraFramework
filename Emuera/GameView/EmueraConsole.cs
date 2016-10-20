@@ -196,6 +196,7 @@ namespace MinorShift.Emuera.GameView
             }
 
             bool ezEmuera;
+            
             EmueraPlatform.ConfigDic.TryGetValue("AutoTranslate", out ezEmuera, false, bool.FalseString);
 
             if (ezEmuera)
@@ -225,6 +226,8 @@ namespace MinorShift.Emuera.GameView
                     EmueraPlatform.EzEmueraState = true;
                 }
             }
+
+            EmueraPlatform.ConfigDic.Save(Program.ExeDir + Program.ConfigFileName);
 
             EmueraPlatform.framework.Run();
             //callEmueraProgram("");

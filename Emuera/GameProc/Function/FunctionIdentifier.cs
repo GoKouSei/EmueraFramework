@@ -321,6 +321,8 @@ namespace MinorShift.Emuera.GameProc.Function
 			addFunction(FunctionCode.ARRAYSORT, argb[FunctionArgType.SP_SORTARRAY], METHOD_SAFE | EXTENDED);
 			addFunction(FunctionCode.ARRAYCOPY, argb[FunctionArgType.SP_COPY_ARRAY], METHOD_SAFE | EXTENDED);
 
+            addFunction(FunctionCode.EXCALL, new EXCALL_Instruction(), METHOD_SAFE | EXTENDED);
+
 			addFunction(FunctionCode.JUMP, new CALL_Instruction(false, true, false, false));//関数に移動
 			addFunction(FunctionCode.CALL, new CALL_Instruction(false, false, false, false));//関数に移動。移動元を記憶し、RETURNで帰る。
 			addFunction(FunctionCode.TRYJUMP, new CALL_Instruction(false, true, true, false), EXTENDED);
