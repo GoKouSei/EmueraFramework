@@ -9,12 +9,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using YeongHun.EmueraFramework.Function;
-using YeongHun.EmueraFramework.Modules;
 using YeongHun.EmueraFramework.Platforms;
 using YeongHun.EZTrans;
 
@@ -1180,14 +1176,14 @@ namespace MinorShift.Emuera.GameView
 				if (!(line is InstructionLine))
 					throw new CodeEE("デバッグコマンドで使用できるのは代入文か命令文だけです");
 				InstructionLine func = (InstructionLine)line;
-				//if (func.Function.IsFlowContorol())
-				//	throw new CodeEE("フロー制御命令は使用できません");
+				if (func.Function.IsFlowContorol())
+					throw new CodeEE("フロー制御命令は使用できません");
 				//__METHOD_SAFE__をみるならいらないかも
 				if (func.Function.IsWaitInput())
 					throw new CodeEE(func.Function.Name + "命令は使用できません");
 				//1750 __METHOD_SAFE__とほぼ条件同じだよねってことで
-				//if (!func.Function.IsMethodSafe())
-				//	throw new CodeEE(func.Function.Name + "命令は使用できません");
+				if (!func.Function.IsMethodSafe())
+					throw new CodeEE(func.Function.Name + "命令は使用できません");
 				//1756 SIFの次に来てはいけないものはここでも不可。
 				if (func.Function.IsPartial())
 					throw new CodeEE(func.Function.Name + "命令は使用できません");

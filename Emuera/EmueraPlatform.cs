@@ -3,6 +3,7 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameProc;
 using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.GameView;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -384,13 +385,15 @@ namespace YeongHun.EmueraFramework.Platforms
         {
             var req = new InputRequest();
             req.InputType = (InputType)(Enum.Parse(typeof(InputType), ((int)type).ToString()));
+            input = null;
             GlobalStatic.Console.WaitInput(req);
             return Task.Run(() =>
             {
-                while (!GlobalStatic.Console.IsRunning)
+                while (input == null)
                 {
                     Task.Delay(100).Wait();
                 }
+                GlobalStatic.Console.state = ConsoleState.Running;
                 return input;
             });
         }
@@ -518,6 +521,7 @@ namespace YeongHun.EmueraFramework.Platforms
                 // TODO: 큰 필드를 null로 설정합니다.
 
                 ConfigDic.Save(new StreamWriter(Program.ExeDir + Program.ConfigFileName));
+                EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.xml");
                 EZTrans.TranslateXP.Terminate();
                 _methodNames = null;
                 disposedValue = true;

@@ -1,15 +1,29 @@
-﻿using YeongHun.EmueraFramework.Framework;
+﻿using YeongHun.EmueraFramework;
 using YeongHun.EmueraFramework.Function;
 
 namespace TestProgram
 {
+    [ExternType]
     public class Test
     {
-        public void SETFLAG(long arg)
+        private IFramework _framework;
+
+        public Test(IFramework framework)
         {
-            Main.Framework.Data["FLAG"] = arg;
-            long flag = Main.Framework.Data["FLAG"];
-            Main.Framework.Print(Main.Framework.Data["FLAG"].ToString(), PrintFlags.NEWLINE);
+            _framework = framework;
+        }
+
+        [ExternMethod]
+        public async void InputTest()
+        {
+            long input = (long)await _framework.GetInputAsync(YeongHun.EmueraFramework.Data.ConsoleInputType.IntValue);
+            _framework.Print("GetInput:" + input.ToString());
+        }
+
+        [ExternMethod]
+        public void SYSTEM_TITLE()
+        {
+            InputTest();
         }
     }
 }

@@ -34,16 +34,16 @@ namespace YeongHun.EmueraFramework.Function
                 str += "FORM";
             else if (flag.HasFlag(PrintFlags.FORMS))
                 str += "FORMS";
-            if (flag.HasFlag(PrintFlags.RIGHT_ALIGN))
+            if (flag.HasFlag(PrintFlags.WAIT))
+                str += "W";
+            else if (flag.HasFlag(PrintFlags.NEWLINE))
+                str += "L";
+            else if (flag.HasFlag(PrintFlags.RIGHT_ALIGN))
                 str += "C";
             else if (flag.HasFlag(PrintFlags.LEFT_ALIGN))
                 str += "LC";
             if (flag.HasFlag(PrintFlags.IGNORE_COLOR))
                 str += "D";
-            if (flag.HasFlag(PrintFlags.WAIT))
-                str += "W";
-            else if (flag.HasFlag(PrintFlags.NEWLINE))
-                str += "L";
             return str;
         }
     }

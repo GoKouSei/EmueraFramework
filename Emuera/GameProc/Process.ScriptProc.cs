@@ -93,8 +93,8 @@ namespace MinorShift.Emuera.GameProc
 				func.Function.Instruction.DoInstruction(exm, func, state);
 			else
 				doNormalFunction(func);
-			if (munchkin)
-				vEvaluator.IamaMunchkin();
+            if (func.FunctionCode != FunctionCode.EXCALL && munchkin)
+                vEvaluator.IamaMunchkin();
 		}
 
 		#region normal
