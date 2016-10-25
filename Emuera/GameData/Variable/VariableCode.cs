@@ -59,7 +59,7 @@ namespace MinorShift.Emuera.GameData.Variable
 		NEXTCOM = 0x19 | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,//調教している人間のキャラの登録番号。通常はMASTERかASSI
 		PBAND = 0x1A | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,//ペニスバンドのアイテム番号
 		BOUGHT = 0x1B | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,//直前に購入したアイテム番号
-		NOTUSE_1C = 0x1C | __INTEGER__ | __ARRAY_1D__,//未使用領域
+		EXRESULT = 0x1C | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,//未使用領域
 		NOTUSE_1D = 0x1D | __INTEGER__ | __ARRAY_1D__,//未使用領域
 		A = 0x1E | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,//汎用変数
         B = 0x1F | __INTEGER__ | __ARRAY_1D__ | __CAN_FORBID__,
@@ -112,8 +112,9 @@ namespace MinorShift.Emuera.GameData.Variable
 		ARGS = 0x04 | __STRING__ | __ARRAY_1D__ | __LOCAL__ | __EXTENDED__ | __CAN_FORBID__,//関数の引数用
 		GLOBALS = 0x05 | __STRING__ | __ARRAY_1D__ | __GLOBAL__ | __EXTENDED__ | __CAN_FORBID__, //グローバル文字列変数
 		TSTR = 0x06 | __STRING__ | __ARRAY_1D__ | __SAVE_EXTENDED__ | __EXTENDED__ | __CAN_FORBID__,
+        EXRESULTS = 0x07 | __STRING__ | __ARRAY_1D__ | __SAVE_EXTENDED__ | __EXTENDED__ | __CAN_FORBID__,
 
-		__COUNT_STRING_ARRAY__ = 0x07,
+        __COUNT_STRING_ARRAY__ = 0x08,
 
 
 

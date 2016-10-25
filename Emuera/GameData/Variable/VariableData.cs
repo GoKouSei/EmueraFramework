@@ -140,6 +140,9 @@ namespace MinorShift.Emuera.GameData.Variable
 
 			SetDefaultValue(constant);
 
+            varTokenDic.Add("EXRESULT", new Int1DVariableToken(VariableCode.EXRESULT, this));
+            varTokenDic.Add("EXRESULTS", new Str1DVariableToken(VariableCode.EXRESULTS, this));
+
 			varTokenDic.Add("DAY", new Int1DVariableToken(VariableCode.DAY, this));
 			varTokenDic.Add("MONEY", new Int1DVariableToken(VariableCode.MONEY, this));
 			varTokenDic.Add("ITEM", new Int1DVariableToken(VariableCode.ITEM, this));

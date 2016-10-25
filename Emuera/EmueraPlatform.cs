@@ -458,11 +458,11 @@ namespace YeongHun.EmueraFramework.Platforms
               }).ToArray());
 
             if (result is int)
-                GlobalStatic.VEvaluator.RESULT = (int)result;
+                GlobalStatic.VariableData.DataIntegerArray[(int)(VariableCode.EXRESULT & VariableCode.__LOWERCASE__)][0] = (int)result;
             else if (result is long)
-                GlobalStatic.VEvaluator.RESULT = (long)result;
+                GlobalStatic.VariableData.DataIntegerArray[(int)(VariableCode.EXRESULT & VariableCode.__LOWERCASE__)][0] = (long)result;
             else if (result is string)
-                GlobalStatic.VEvaluator.RESULTS = (string)result;
+                GlobalStatic.VariableData.DataStringArray[(int)(VariableCode.EXRESULTS & VariableCode.__LOWERCASE__)][0] = (string)result;
         }
 
         object Call(string name, object[] args)
