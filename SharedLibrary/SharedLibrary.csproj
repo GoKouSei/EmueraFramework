@@ -46,7 +46,7 @@
     <Compile Include="Draw\ConsoleStringPart.cs" />
     <Compile Include="Draw\Point.cs" />
     <Compile Include="Data\ICharacter.cs" />
-    <Compile Include="Data\IDataBase.cs" />
+    <Compile Include="Data\DataBase.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IFrontEnd.cs" />
     <Compile Include="IPlatform.cs" />

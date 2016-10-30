@@ -21,41 +21,11 @@ namespace SharedLibrary.Data
         private Dictionary<string, int> _nameDic;
         private T[] _data;
 
-        public Variable(string name, int capacity, Dictionary<string, int> dic = null, Tuple<object, object>[] defaultValue = null)
+        public Variable(string name, int capacity, Dictionary<string, int> dic = null)
         {
             Name = name;
             _data = new T[capacity];
             _nameDic = dic ?? new Dictionary<string, int>();
-
-            if (defaultValue != null)
-            {
-                foreach (var value in defaultValue)
-                {
-                    if (!(value.Item2 is T))
-                        continue;
-
-                    int index = -1;
-
-                    if (value.Item1 is int)
-                    {
-                        index = (int)value.Item1;
-                    }
-                    else if (value.Item1 is string)
-                    {
-                        if (!_nameDic.TryGetValue((string)value.Item1, out index))
-                            continue;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    if (index >= 0 && index < capacity)
-                    {
-                        _data[index] = (T)value.Item2;
-                    }
-                }
-            }
         }
 
         public T this[long index]
