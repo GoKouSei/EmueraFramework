@@ -49,18 +49,7 @@ namespace Framework
 
         public FrameworkState State { get; private set; }
 
-        public int BackGroundColor
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public int BackGroundColor { get; set; }
 
         public object Result
         {
@@ -70,18 +59,7 @@ namespace Framework
             }
         }
 
-        public Alignment Align
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Alignment Align { get; set; }
 
         object IDataBase.this[string name, object index]
         {

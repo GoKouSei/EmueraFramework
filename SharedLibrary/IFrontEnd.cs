@@ -13,6 +13,8 @@ namespace SharedLibrary
         ConsoleLine LastLine { get; set; }
 
         void Initialize(IFramework framework);
+
+        void Draw();
         void Exit();
     }
 }
