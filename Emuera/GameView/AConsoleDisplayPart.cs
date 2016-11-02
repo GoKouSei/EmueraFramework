@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading.Tasks;
 using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera.GameView
@@ -19,12 +20,21 @@ namespace MinorShift.Emuera.GameView
         {
             get
             {
-                return translatedStr;
+                return translatedStr ?? str;
             }
             protected set
             {
                 str = value;
-                translatedStr = EmueraPlatform.EzEmueraState ? YeongHun.EZTrans.TranslateXP.Translate(value) : value;
+                if (EmueraPlatform.EzEmueraState)
+                    if (EmueraPlatform.WaitForCompleteTranslate)
+                        translatedStr = YeongHun.EZTrans.TranslateXP.Translate(str);
+                    else
+                        Task.Run(() =>
+                            {
+                                translatedStr = YeongHun.EZTrans.TranslateXP.Translate(str);
+                            });
+                else
+                    translatedStr = str;
             }
         }
 		public string AltText { get; protected set; }

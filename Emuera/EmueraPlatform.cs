@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using YeongHun;
 using YeongHun.Common.Config;
 using YeongHun.EmueraFramework.Data;
 using YeongHun.EmueraFramework.Function;
@@ -43,11 +42,16 @@ namespace YeongHun.EmueraFramework.Platforms
                 {
                     return bool.Parse(str);
                 });
+
+            bool temp;
+            ConfigDic.TryGetValue(nameof(WaitForCompleteTranslate), out temp, true, bool.TrueString);
+            WaitForCompleteTranslate = temp;
         }
 
         internal static IFramework framework;
         internal static object input;
         internal static bool EzEmueraState { get; set; } = false;
+        internal static bool WaitForCompleteTranslate { get; }
         internal static ConfigDic ConfigDic { get; private set; } = new ConfigDic();
         IEnumerable<string> _methodNames;
 
@@ -521,6 +525,7 @@ namespace YeongHun.EmueraFramework.Platforms
                 // TODO: 큰 필드를 null로 설정합니다.
 
                 ConfigDic.Save(new StreamWriter(Program.ExeDir + Program.ConfigFileName));
+                EZTrans.TranslateXP.SaveCache();
                 EZTrans.TranslateXP.SaveDictionary(Program.ExeDir + "UserDic.xml");
                 EZTrans.TranslateXP.Terminate();
                 _methodNames = null;
