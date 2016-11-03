@@ -47,12 +47,11 @@ namespace MinorShift.Emuera.GameProc.Function
 			}
 			line.Argument = arg;
 			if (arg == null)
-				line.IsError = true;
+				line.ErrMes = "";
 			return true;
 		error:
 			System.Media.SystemSounds.Hand.Play();
-
-			line.IsError = true;
+            
 			line.ErrMes = errmes;
 			ParserMediator.Warn(errmes, line, 2, true, false);
 			return false;

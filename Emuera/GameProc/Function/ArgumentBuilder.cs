@@ -17,7 +17,6 @@ namespace MinorShift.Emuera.GameProc.Function
 			bool isError = level >= 2;
 			if (isError)
 			{
-				line.IsError = true;
 				line.ErrMes = mes;
 			}
 			ParserMediator.Warn(mes, line, level, isError, isBackComp);
@@ -28,7 +27,6 @@ namespace MinorShift.Emuera.GameProc.Function
 			bool isError = level >= 2;
 			if (isError)
 			{
-				line.IsError = true;
 				line.ErrMes = mes;
 			}
 			ParserMediator.Warn(mes, line, level, isError, isBackComp);
@@ -629,7 +627,7 @@ namespace MinorShift.Emuera.GameProc.Function
 		{
 			public override Argument CreateArgument(InstructionLine line, ExpressionMediator exm) 
 			{
-				WordCollection destWc = line.PopAssignmentDestStr();
+				WordCollection destWc = ((SetInstructionLine)line).PopAssignmentDestStr();
 				IOperandTerm[] destTerms = ExpressionParser.ReduceArguments(destWc, ArgsEndWith.EoL, false);
 				SpSetArgument ret = null;
 				if ((destTerms.Length == 0) || (destTerms[0] == null))
@@ -651,7 +649,7 @@ namespace MinorShift.Emuera.GameProc.Function
 				StringStream st = line.PopArgumentPrimitive();
                 if (st == null)
                     st = new StringStream("");
-                OperatorCode op = line.AssignOperator;
+                OperatorCode op = ((SetInstructionLine)line).AssignOperator;
 				IOperandTerm src = null;
 				if(varTerm.IsInteger)
 				{

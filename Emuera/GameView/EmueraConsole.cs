@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime;
 using System.Text;
 using System.Windows.Forms;
 using YeongHun.EmueraFramework.Platforms;
@@ -169,8 +170,6 @@ namespace MinorShift.Emuera.GameView
 
         public void Initialize()
         {
-
-
             GlobalStatic.Console = this;
             GlobalStatic.MainWindow = window;
             emuera = new GameProc.Process(this);

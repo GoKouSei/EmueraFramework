@@ -248,7 +248,9 @@
     </Compile>
     <Compile Include="GameProc\Function\Argument.cs" />
     <Compile Include="GameProc\Process.CalledFunction.cs" />
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

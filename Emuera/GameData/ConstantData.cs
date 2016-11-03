@@ -199,10 +199,10 @@ namespace MinorShift.Emuera.GameData
 				StringStream st = null;
 				while ((st = eReader.ReadEnabledLine()) != null)
 				{
-					position = new ScriptPosition(eReader.Filename, eReader.LineNo, st.RowString);
+					position = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					changeVariableSizeData(st.Substring(), position);
 				}
-				position = new ScriptPosition(eReader.Filename, -1, null);
+				position = new ScriptPosition(eReader.Filename, -1);
 			}
 			catch
 			{
@@ -1004,7 +1004,7 @@ check1break:
 				StringStream st = null;
 				while ((st = eReader.ReadEnabledLine()) != null)
 				{
-					position = new ScriptPosition(eReader.Filename, eReader.LineNo, st.RowString);
+					position = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					string[] tokens = st.Substring().Split(',');
 					if (tokens.Length < 2)
 					{
@@ -1301,7 +1301,7 @@ check1break:
 				StringStream st = null;
 				while ((st = eReader.ReadEnabledLine()) != null)
 				{
-					position = new ScriptPosition(eReader.Filename, eReader.LineNo, st.RowString);
+					position = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					string[] tokens = st.Substring().Split(',');
 					if (tokens.Length < 2)
 					{

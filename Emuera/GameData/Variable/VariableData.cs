@@ -248,9 +248,6 @@ namespace MinorShift.Emuera.GameData.Variable
 			varTokenDic.Add("DD", new Int2DVariableToken(VariableCode.DD, this));
 			varTokenDic.Add("DE", new Int2DVariableToken(VariableCode.DE, this));
 
-			varTokenDic.Add("TA", new Int3DVariableToken(VariableCode.TA, this));
-			varTokenDic.Add("TB", new Int3DVariableToken(VariableCode.TB, this));
-
 
 			varTokenDic.Add("ITEMPRICE", new Int1DConstantToken(VariableCode.ITEMPRICE, this, constant.ItemPrice));
 			varTokenDic.Add("ABLNAME", new Str1DConstantToken(VariableCode.ABLNAME, this));

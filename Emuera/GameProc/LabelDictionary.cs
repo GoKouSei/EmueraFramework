@@ -209,17 +209,17 @@ namespace MinorShift.Emuera.GameProc
 			}
 		}
 
-		public bool AddLabelDollar(GotoLabelLine point)
-		{
-			string id = point.LabelName;
-			foreach (GotoLabelLine label in labelDollarList)
-			{
-				if (label.LabelName == id && label.ParentLabelLine == point.ParentLabelLine)
-					return false;
-			}
-			labelDollarList.Add(point);
-			return true;
-		}
+        public bool AddLabelDollar(GotoLabelLine point)
+        {
+            string id = point.LabelName;
+            foreach (GotoLabelLine label in labelDollarList)
+            {
+                if (label.LabelName == id && label.ParentLabelLine == point.ParentLabelLine)
+                    return false;
+            }
+            labelDollarList.Add(point);
+            return true;
+        }
 
 		#endregion
 

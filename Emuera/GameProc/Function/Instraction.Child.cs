@@ -2201,7 +2201,6 @@ namespace MinorShift.Emuera.GameProc.Function
 						call.TopLabel.Depth = currentDepth + 1;
 					if (call.TopLabel.IsError)
 					{
-						func.IsError = true;
 						func.ErrMes = call.TopLabel.ErrMes;
 						return;
 					}

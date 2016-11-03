@@ -146,7 +146,6 @@ namespace MinorShift.Emuera.GameProc
 						if (!string.IsNullOrEmpty(label.LabelName) && char.IsDigit(label.LabelName[0]))
 						{
 							ParserMediator.Warn("#" + token + "属性は関数名が数字で始まる関数には指定できません", position, 1);
-							label.IsError = true;
 							label.ErrMes = "関数名が数字で始まっています";
 							break;
 						}
@@ -281,7 +280,7 @@ namespace MinorShift.Emuera.GameProc
 		
 		public static LogicalLine ParseLine(string str, EmueraConsole console)
 		{
-			ScriptPosition position = new ScriptPosition(str);
+			ScriptPosition position = new ScriptPosition();
 			StringStream stream = new StringStream(str);
 			return ParseLine(stream, position, console);
 		}
@@ -414,7 +413,7 @@ namespace MinorShift.Emuera.GameProc
 					//token変更不可能
 					//if (wc != EOS)
 					//
-					return new InstructionLine(position, FunctionIdentifier.SETFunction, opWT.Code, wc, null);
+					return new SetInstructionLine(position, FunctionIdentifier.SETFunction, opWT.Code, wc, null);
 				}
 				#endregion
 				IdentifierWord idWT = LexicalAnalyzer.ReadFirstIdentifierWord(stream);
@@ -476,7 +475,7 @@ namespace MinorShift.Emuera.GameProc
 					//"=="を代入文に使うのは本当はおかしいが結構使われているので仕様にする
 					assignOP = OperatorCode.Assignment;
 				}
-				return new InstructionLine(position, FunctionIdentifier.SETFunction, assignOP, wc1, stream);
+				return new SetInstructionLine(position, FunctionIdentifier.SETFunction, assignOP, wc1, stream);
 			err:
 				return new InvalidLine(position, errMes);
 			}

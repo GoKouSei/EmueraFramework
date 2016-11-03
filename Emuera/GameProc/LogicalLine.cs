@@ -33,22 +33,17 @@ namespace MinorShift.Emuera.GameProc
 		{
 			if (position == null)
 				return base.ToString();
-			return string.Format("{0}:{1}:{2}", position.Filename, position.LineNo, position.RowLine);
+			return string.Format("{0}:{1}", position.Filename, position.LineNo);
 		}
-
-		protected bool isError;
-		protected string errMes = "";
+        
+		protected string errMes = null;
 
 		public virtual string ErrMes
 		{
 			get { return errMes; }
 			set { errMes = value; }
 		}
-		public virtual bool IsError
-		{
-			get { return isError; }
-			set { isError = value; }
-		}
+        public bool IsError => errMes != null;
 	}
 
 	///// <summary>
@@ -78,16 +73,29 @@ namespace MinorShift.Emuera.GameProc
 			base.position = thePosition;
 			errMes = err;
 		}
-		public override bool IsError
-		{
-			get { return true; }
-		}
 	}
+
+    internal sealed class SetInstructionLine : InstructionLine
+    {
+        public SetInstructionLine(ScriptPosition thePosition, FunctionIdentifier functionIdentifier, OperatorCode assignOP, WordCollection dest, StringStream theArgPrimitive):base(thePosition,functionIdentifier,theArgPrimitive)
+        {
+            AssignOperator = assignOP;
+            assigndest = dest;
+        }
+        WordCollection assigndest;
+        public OperatorCode AssignOperator { get; private set; }
+        public WordCollection PopAssignmentDestStr()
+        {
+            WordCollection ret = assigndest;
+            assigndest = null;
+            return ret;
+        }
+    }
 
 	/// <summary>
 	/// 命令文
 	/// </summary>
-	internal sealed class InstructionLine : LogicalLine
+	internal class InstructionLine : LogicalLine
 	{
 		public InstructionLine(ScriptPosition thePosition, FunctionIdentifier theFunc, StringStream theArgPrimitive)
 		{
@@ -95,20 +103,9 @@ namespace MinorShift.Emuera.GameProc
 			this.func = theFunc;
 			this.argprimitive = theArgPrimitive;
 		}
-
-		public InstructionLine(ScriptPosition thePosition, FunctionIdentifier functionIdentifier, OperatorCode assignOP, WordCollection dest, StringStream theArgPrimitive)
-		{
-			base.position = thePosition;
-			func = functionIdentifier;
-			AssignOperator = assignOP;
-			assigndest = dest;
-			this.argprimitive = theArgPrimitive;
-		}
 		readonly FunctionIdentifier func;
 		StringStream argprimitive;
 
-		WordCollection assigndest;
-		public OperatorCode AssignOperator { get; private set; }
 		Int64 subData = 0;
 		public FunctionCode FunctionCode
 		{
@@ -123,12 +120,6 @@ namespace MinorShift.Emuera.GameProc
 		{
 			StringStream ret = argprimitive;
 			argprimitive = null;
-			return ret;
-		}
-		public WordCollection PopAssignmentDestStr()
-		{
-			WordCollection ret = assigndest;
-			assigndest = null;
 			return ret;
 		}
 
@@ -204,10 +195,6 @@ namespace MinorShift.Emuera.GameProc
 			Depth = -1;
 			IsMethod = false;
 			MethodType = typeof(void);
-		}
-		public override bool IsError
-		{
-			get { return true; }
 		}
 	}
 

@@ -440,15 +440,11 @@ namespace MinorShift.Emuera.GameProc
                     if (procline != null && procline.FunctionCode == FunctionCode.THROW)
                     {
                         console.PrintErrorButton(posString + "THROWが発生しました", position);
-                        if (position.RowLine != null)
-                            console.PrintError(position.RowLine);
                         console.PrintError("THROW内容：" + exc.Message);
                     }
                     else
                     {
 						console.PrintErrorButton(posString + "エラーが発生しました:" + Program.ExeName, position);
-                        if (position.RowLine != null)
-                            console.PrintError(position.RowLine);
                         console.PrintError("エラー内容：" + exc.Message);
                     }
                     console.PrintError("現在の関数：@" + current.ParentLabelLine.LabelName + "（" + current.ParentLabelLine.Position.Filename + "の" + current.ParentLabelLine.Position.LineNo.ToString() + "行目）");

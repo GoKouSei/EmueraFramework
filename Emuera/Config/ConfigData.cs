@@ -67,7 +67,7 @@ namespace MinorShift.Emuera
 			configArray[i++] = new ConfigItem<int>(ConfigCode.SkipFrame, "最大スキップフレーム数", 3);
 			configArray[i++] = new ConfigItem<int>(ConfigCode.ScrollHeight, "スクロール行数", 1);
 			configArray[i++] = new ConfigItem<int>(ConfigCode.InfiniteLoopAlertTime, "無限ループ警告までのミリ秒数", 5000);
-			configArray[i++] = new ConfigItem<int>(ConfigCode.DisplayWarningLevel, "表示する最低警告レベル", 1);
+			configArray[i++] = new ConfigItem<int>(ConfigCode.DisplayWarningLevel, "表示する最低警告レベル", 2);
 			configArray[i++] = new ConfigItem<bool>(ConfigCode.DisplayReport, "ロード時にレポートを表示する", false);
 			configArray[i++] = new ConfigItem<ReduceArgumentOnLoadFlag>(ConfigCode.ReduceArgumentOnLoad, "ロード時に引数を解析する", ReduceArgumentOnLoadFlag.NO);
 			//configArray[i++] = new ConfigItem<bool>(ConfigCode.ReduceFormattedStringOnLoad, "ロード時にFORM文字列を解析する", true);
@@ -443,7 +443,7 @@ namespace MinorShift.Emuera
 				{
 					if ((line.Length == 0) || (line[0] == ';'))
 						continue;
-					pos = new ScriptPosition(eReader.Filename, eReader.LineNo, line);
+					pos = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					string[] tokens = line.Split(new char[] { ':' });
 					if (tokens.Length < 2)
 						continue;
@@ -522,7 +522,7 @@ namespace MinorShift.Emuera
 				{
 					if ((line.Length == 0) || (line[0] == ';'))
 						continue;
-					pos = new ScriptPosition(eReader.Filename, eReader.LineNo, line);
+					pos = new ScriptPosition(eReader.Filename, eReader.LineNo);
                     string[] tokens = line.Split(new char[] { ',', ':' });
 					if (tokens.Length < 2)
 						continue;
@@ -592,7 +592,7 @@ namespace MinorShift.Emuera
 				{
 					if ((line.Length == 0) || (line[0] == ';'))
 						continue;
-					pos = new ScriptPosition(eReader.Filename, eReader.LineNo, line);
+					pos = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					string[] tokens = line.Split(new char[] { ':' });
 					if (tokens.Length < 2)
 						continue;

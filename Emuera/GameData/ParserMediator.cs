@@ -67,7 +67,7 @@ namespace MinorShift.Emuera
 					string[] tokens = new string[2];
 					tokens[0] = string.Join(",", baseTokens);
 					tokens[1] = last[1];
-					pos = new ScriptPosition(eReader.Filename, eReader.LineNo, line);
+					pos = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					//右がERB中の表記、左が変換先になる。
 					string value = tokens[0].Trim();
 					string key = string.Format("[[{0}]]", tokens[1].Trim());
@@ -119,7 +119,6 @@ namespace MinorShift.Emuera
         {
             if (isError)
             {
-                line.IsError = true;
                 line.ErrMes = str;
             }
             if (level < Config.DisplayWarningLevel && !Program.AnalysisMode)

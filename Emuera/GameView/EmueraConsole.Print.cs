@@ -217,8 +217,6 @@ namespace MinorShift.Emuera.GameView
 				if (position.LineNo >= 0)
 				{
 					PrintErrorButton(string.Format("警告Lv{0}:{1}:{2}行目:{3}", level, position.Filename, position.LineNo, str), position);
-					if (position.RowLine != null)
-						PrintError(position.RowLine);
 				}
 				else
 					PrintErrorButton(string.Format("警告Lv{0}:{1}:{2}", level, position.Filename, str), position);
