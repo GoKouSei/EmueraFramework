@@ -402,6 +402,7 @@ namespace MinorShift.Emuera
 			Config.ClearFont();
             EmueraPlatform.ConfigDic.TryGetValue("Encoding", out Config.Encode, Encoding.UTF8, "UTF-8");
             EmueraPlatform.ConfigDic.TryGetValue("SaveEncoding", out Config.SaveEncode, Encoding.UTF8, "UTF-8");
+            EmueraPlatform.ConfigDic.Save(Program.ExeDir + Program.ConfigFileName);
             string defaultConfigPath = Program.CsvDir + "_default.config";
 			string fixedConfigPath = Program.CsvDir + "_fixed.config";
 			if(!File.Exists(defaultConfigPath))
