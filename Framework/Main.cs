@@ -1,18 +1,19 @@
-﻿using SharedLibrary;
-using SharedLibrary.Data;
-using SharedLibrary.Draw;
-using SharedLibrary.Function;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using YeongHun.EmueraFramework;
+using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Draw;
+using YeongHun.EmueraFramework.Function;
 
 namespace Framework
 {
     public class Main : IFramework
     {
+        public string Root => _frontEnd.Root;
         public dynamic Data { get; internal set; }
 
         private Config _config = null;
@@ -61,7 +62,7 @@ namespace Framework
 
         public Alignment Align { get; set; }
 
-        object IDataBase.this[string name, object index]
+        public object this[string name, object index]
         {
             get
             {
@@ -86,9 +87,9 @@ namespace Framework
                 _methods = platforms.Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
                 _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
-                Data = new DataBase(_customVariables, config.VariableInfo, config.NameDic);
+                Data = new DataBase(_customVariables, config.VariableInfo);
 
-                _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, _customCharaVariables, config.NameDic, def.Info)).ToDictionary(info => info.RegistrationNumber);
+                _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, _customCharaVariables, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
             catch (Exception e)
             {
@@ -253,7 +254,7 @@ namespace Framework
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _characters.Add(new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables, _config.NameDic));
+            _characters.Add(new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables));
         }
 
         public void DelChara(long num)

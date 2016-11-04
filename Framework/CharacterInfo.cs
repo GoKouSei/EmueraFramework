@@ -1,6 +1,6 @@
-﻿using SharedLibrary.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using YeongHun.EmueraFramework.Data;
 
 namespace Framework
 {
@@ -8,14 +8,13 @@ namespace Framework
     {
         internal CharacterInfo(
             long registrationNumber,
-            Tuple<string, Type, int>[] variableInfo,
+            VariableInfo variableInfo,
             Dictionary<string, object> customVariables,
-            NameDictionary nameDic,
             Dictionary<string, Tuple<object, object>[]> defaultInfo=null
             )
         {
             RegistrationNumber = registrationNumber;
-            Data = new DataBase(customVariables, variableInfo, nameDic, defaultInfo);
+            Data = new DataBase(customVariables, variableInfo, defaultInfo);
         }
 
         public string CallName => Data.CALLNAME;
@@ -24,7 +23,7 @@ namespace Framework
 
         public dynamic Data { get; }
 
-        object IDataBase.this[string name, object index]
+        public object this[string name, object index]
         {
             get
             {

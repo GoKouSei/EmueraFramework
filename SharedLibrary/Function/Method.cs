@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SharedLibrary.Function
+namespace YeongHun.EmueraFramework.Function
 {
     public class Method
     {
@@ -40,8 +36,12 @@ namespace SharedLibrary.Function
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class MethodAttribute : Attribute
+    public class ExternMethodAttribute : Attribute
     {
-        public static bool IsMethod(MethodInfo method) => method.GetCustomAttribute(typeof(MethodAttribute)) != null;
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ExternTypeAttribute : Attribute
+    {
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Data
+namespace YeongHun.EmueraFramework.Data
 {
     public sealed class VariableInfo
     {
@@ -27,14 +27,12 @@ namespace SharedLibrary.Data
         public VariableInfo VariableInfo { get; private set; }
         public VariableInfo CharaVariableInfo { get; private set; }
         public DefaultCharaInfo[] DefaultCharas { get; private set; }
-        public NameDictionary NameDic { get; private set; }
 
-        public Config(VariableInfo varInfo, VariableInfo charaVarInfo, NameDictionary nameDic, DefaultCharaInfo[] defaultCharas)
+        public Config(VariableInfo varInfo, VariableInfo charaVarInfo, DefaultCharaInfo[] defaultCharas)
         {
             VariableInfo = varInfo;
             CharaVariableInfo = charaVarInfo;
             DefaultCharas = defaultCharas;
-            NameDic = nameDic;
         }
     }
 }

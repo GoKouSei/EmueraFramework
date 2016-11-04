@@ -1,8 +1,8 @@
-﻿using SharedLibrary.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using YeongHun.EmueraFramework.Data;
 
 namespace Framework
 {
@@ -14,13 +14,14 @@ namespace Framework
 
         public DataBase(
             Dictionary<string, object> customVariables,
-            Tuple<string, Type, int>[] variableInfo = null,
-            NameDictionary nameDic = null,
+            VariableInfo variableInfo = null,
             Dictionary<string, Tuple<object, object>[]> defaultValues = null)
         {
+            var nameDic = variableInfo?.NameDic ?? new NameDictionary();
             if (variableInfo != null)
             {
-                foreach (var varInfo in variableInfo)
+                var info = variableInfo.Info;
+                foreach (var varInfo in info)
                 {
                     Dictionary<string, int> dic = null;
                     Tuple<object, object>[] infos = null;

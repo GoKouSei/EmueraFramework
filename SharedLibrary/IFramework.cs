@@ -1,14 +1,14 @@
-﻿using SharedLibrary.Data;
-using SharedLibrary.Function;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Function;
 
-namespace SharedLibrary
+namespace YeongHun.EmueraFramework
 {
     public enum FrameworkState
     {
@@ -33,12 +33,16 @@ namespace SharedLibrary
         RIGHT
     }
 
-    public interface IFramework:IDataBase
+    public interface IFramework
     {
+        string Root { get; }
         string Name { get; }
         FrameworkState State { get; }
 
         void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config);
+
+        dynamic Data { get; }
+        object this[string name, object index] { get; set; }
 
         /// <summary>
         /// Start Script

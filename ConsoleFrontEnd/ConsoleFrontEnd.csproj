@@ -7,7 +7,7 @@
     <ProjectGuid>{BD450DB0-C1D5-4BAC-BBA9-95B0DCE6B3CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleFrontEnd</RootNamespace>
+    <RootNamespace>YeongHun.EmueraFramework.FrontEnds</RootNamespace>
     <AssemblyName>ConsoleFrontEnd</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FrontEnd.cs" />
+    <Compile Include="ConsoleFrontEnd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Draw
+namespace YeongHun.EmueraFramework.Draw
 {
     public class ConsoleButtonPart : ConsoleLinePart
     {

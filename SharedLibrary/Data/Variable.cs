@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace SharedLibrary.Data
+namespace YeongHun.EmueraFramework.Data
 {
 
     public delegate void VariableChangedHandler<T>(string varName, T oldValue, ref T newValue);

@@ -1,15 +1,14 @@
 ﻿using MinorShift.Emuera.GameData.Variable;
-using SharedLibrary;
-using SharedLibrary.Function;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SharedLibrary.Data;
 using System.Threading.Tasks;
 using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameProc.Function;
 using MinorShift.Emuera.GameProc;
+using YeongHun.EmueraFramework;
+using YeongHun.EmueraFramework.Function;
 
 namespace MinorShift.Emuera
 {
@@ -32,7 +31,7 @@ namespace MinorShift.Emuera
             }
         }
 
-        void IPlatform.Initialize(List<Tuple<string, Stream>> source, IFramework framework)
+        void IPlatform.Initialize(IFramework framework)
         {
             EmueraPlatform.framework = framework;
             GlobalStatic.Console.state = GameView.ConsoleState.Running;

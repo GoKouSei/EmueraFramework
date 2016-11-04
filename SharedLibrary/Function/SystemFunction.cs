@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Function
+namespace YeongHun.EmueraFramework.Function
 {
     public enum SystemFunctionCode:int
     {

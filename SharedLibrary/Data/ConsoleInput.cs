@@ -1,6 +1,4 @@
-﻿using SharedLibrary.Draw;
-
-namespace SharedLibrary.Data
+﻿namespace YeongHun.EmueraFramework.Data
 {
     public class ConsoleInput
     {

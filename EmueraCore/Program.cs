@@ -33,7 +33,7 @@ namespace MinorShift.Emuera
 		TODO: 1819 MainWindow & Consoleの入力・表示組とProcess&Dataのデータ処理組だけでも分離したい
 
 		*/
-		public static SharedLibrary.IPlatform Main(string root)
+		public static YeongHun.EmueraFramework.IPlatform Main(string root)
 		{
 
             ExeDir = root;

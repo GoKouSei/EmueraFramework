@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Data
+namespace YeongHun.EmueraFramework.Data
 {
     public class NameDictionary : Dictionary<string, Dictionary<string, int>>
     {

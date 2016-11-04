@@ -1,16 +1,18 @@
-﻿using SharedLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SharedLibrary.Draw;
+using YeongHun.EmueraFramework;
+using YeongHun.EmueraFramework.Draw;
 
-namespace ConsoleFrontEnd
+namespace YeongHun.EmueraFramework.FrontEnds
 {
-    public class FrontEnd : IFrontEnd
+    public class ConsoleFrontEnd : IFrontEnd
     {
         private IFramework _framework;
+
+        public string Root => AppDomain.CurrentDomain.BaseDirectory;
 
         public ConsoleLine LastLine
         {
@@ -53,7 +55,7 @@ namespace ConsoleFrontEnd
 
         public void Exit()
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
         public void Initialize(IFramework framework)

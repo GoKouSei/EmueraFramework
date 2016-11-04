@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedLibrary.Data
+namespace YeongHun.EmueraFramework.Data
 {
-    public interface ICharacter:IDataBase
+    public interface ICharacter
     {
         long RegistrationNumber { get; }
         string Name { get; }
         string CallName { get; }
+        object this[string name, object index] { get; set; }
     }
 
     public class DefaultCharaInfo
