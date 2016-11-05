@@ -32,18 +32,25 @@ namespace YeongHun.EmueraFramework.Data
         {
             get
             {
-                lock (this)
-                {
-                    return _data[index];
-                }
+                return _data[index];
             }
             set
             {
-                lock (this)
-                {
-                    VariableChanged?.Invoke(Name, _data[index], ref value);
-                    _data[index] = value;
-                }
+                VariableChanged?.Invoke(Name, _data[index], ref value);
+                _data[index] = value;
+            }
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                return _data[index];
+            }
+            set
+            {
+                VariableChanged?.Invoke(Name, _data[index], ref value);
+                _data[index] = value;
             }
         }
 
@@ -94,7 +101,7 @@ namespace YeongHun.EmueraFramework.Data
             return var[0];
         }
 
-        public bool IsCompatible<K>(K value,ref T result)
+        public bool IsCompatible<K>(K value, ref T result)
         {
             try
             {

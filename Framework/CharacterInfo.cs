@@ -9,12 +9,10 @@ namespace Framework
         internal CharacterInfo(
             long registrationNumber,
             VariableInfo variableInfo,
-            Dictionary<string, object> customVariables,
             Dictionary<string, Tuple<object, object>[]> defaultInfo=null
             )
         {
             RegistrationNumber = registrationNumber;
-            Data = new DataBase(customVariables, variableInfo, defaultInfo);
         }
 
         public string CallName => Data.CALLNAME;

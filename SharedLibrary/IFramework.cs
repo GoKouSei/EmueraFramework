@@ -79,6 +79,7 @@ namespace YeongHun.EmueraFramework
         void ResetColor();
         void ResetBGColor();
 
+        void ErbCall(string methodName, params object[] args);
         object Call(string methodName, params object[] args);
         void Begin(SystemFunctionCode sysFunc);
 

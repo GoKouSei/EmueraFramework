@@ -14,11 +14,8 @@ namespace Framework
     public class Main : IFramework
     {
         public string Root => _frontEnd.Root;
-        public dynamic Data { get; internal set; }
 
         private Config _config = null;
-        private Dictionary<string, object> _customCharaVariables = new Dictionary<string, object>();
-        private Dictionary<string, object> _customVariables = new Dictionary<string, object>();
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
         private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
         private List<CharacterInfo> _characters = new List<CharacterInfo>();
@@ -52,13 +49,7 @@ namespace Framework
 
         public int BackGroundColor { get; set; }
 
-        public object Result
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public object Result { get; private set; }
 
         public Alignment Align { get; set; }
 
@@ -66,12 +57,57 @@ namespace Framework
         {
             get
             {
-                return Data[name, index];
+                if (_intVariables.ContainsKey(name))
+                    return _intVariables[name][index];
+                else
+                    return _strVariables[name][index];
             }
             set
             {
-                Data[name, index] = value;
+                if (_intVariables.ContainsKey(name))
+                    _intVariables[name][index] = (long)value;
+                else
+                    _strVariables[name][index] = (string)value;
             }
+        }
+
+        private Dictionary<string, Variable<long>> _intVariables;
+        private Dictionary<string, Variable<string>> _strVariables;
+
+        public long GetIntValue(string name, int index)
+        {
+            return _intVariables[name][index];
+        }
+        public long GetIntValue(string name, string index)
+        {
+            return _intVariables[name][index];
+        }
+
+        public void SetIntValue(string name, int index, long value)
+        {
+            _intVariables[name][index] = value;
+        }
+        public void SetIntValue(string name, string index, long value)
+        {
+            _intVariables[name][index] = value;
+        }
+
+        public string GetStrValue(string name, int index)
+        {
+            return _strVariables[name][index];
+        }
+        public string GetStrValue(string name, string index)
+        {
+            return _strVariables[name][index];
+        }
+
+        public void SetstrValue(string name, int index, string value)
+        {
+            _strVariables[name][index] = value;
+        }
+        public void SetstrValue(string name, string index, string value)
+        {
+            _strVariables[name][index] = value;
         }
 
         public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd,Config config)
@@ -87,9 +123,22 @@ namespace Framework
                 _methods = platforms.Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
                 _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
 
-                Data = new DataBase(_customVariables, config.VariableInfo);
+                _intVariables = new Dictionary<string, Variable<long>>();
+                _strVariables = new Dictionary<string, Variable<string>>();
 
-                _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, _customCharaVariables, def.Info)).ToDictionary(info => info.RegistrationNumber);
+                foreach(var info in config.VariableInfo.Info)
+                {
+                    if (info.Item2 == typeof(string))
+                    {
+                        _strVariables.Add(info.Item1, new Variable<string>(info.Item1, info.Item3, config.VariableInfo.NameDic[info.Item1]));
+                    }
+                    else if (info.Item2 == typeof(long))
+                    {
+                        _intVariables.Add(info.Item1, new Variable<long>(info.Item1, info.Item3, config.VariableInfo.NameDic[info.Item1]));
+                    }
+                }
+
+                _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
             catch (Exception e)
             {
@@ -112,6 +161,17 @@ namespace Framework
                 throw new ArgumentException($"이미 정의된 변수이름 {name}입니다");
             else
                 _customCharaVariables.Add(name, instance);
+        }
+
+        public void ErbCall(string methodName, params object[] args)
+        {
+            var result = Call(methodName, args);
+            if (result is int)
+                Data["RESULT"] = (int)result;
+            else if (result is long)
+                Data["RESULT"] = (long)result;
+            else if (result is string)
+                Data["RESULTS"] = (string)result;
         }
 
         public object Call(string methodName, params object[] args)
