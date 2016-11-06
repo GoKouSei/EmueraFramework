@@ -188,8 +188,10 @@ namespace MinorShift.Emuera.GameData.Variable
         __COUNT_INTEGER_ARRAY_2D__ = 0x06,
 
 		__COUNT_STRING_ARRAY_2D__ = 0x00,
-        
-        __COUNT_INTEGER_ARRAY_3D__ = 0x00,
+
+		TA = 0x00 | __INTEGER__ | __ARRAY_3D__ | __SAVE_EXTENDED__ | __EXTENDED__ | __CAN_FORBID__,
+        TB = 0x01 | __INTEGER__ | __ARRAY_3D__ | __SAVE_EXTENDED__ | __EXTENDED__ | __CAN_FORBID__,
+        __COUNT_INTEGER_ARRAY_3D__ = 0x02,
 
         __COUNT_STRING_ARRAY_3D__ = 0x00,
 
