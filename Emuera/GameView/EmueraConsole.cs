@@ -224,6 +224,7 @@ namespace MinorShift.Emuera.GameView
 
             EmueraPlatform.ConfigDic.Save(Program.ExeDir + Program.ConfigFileName);
 
+            EmueraPlatform.framework.Print("This program is based on the Emuera 1821");
             EmueraPlatform.framework.Run();
             //callEmueraProgram("");
             //RefreshStrings(true);
