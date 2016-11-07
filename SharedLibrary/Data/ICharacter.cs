@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace YeongHun.EmueraFramework.Data
 {
-    public interface ICharacter
+    public interface ICharacter:IDataBase<string>,IDataBase<long>
     {
         long RegistrationNumber { get; }
         string Name { get; }
         string CallName { get; }
-        object this[string name, object index] { get; set; }
     }
 
     public class DefaultCharaInfo

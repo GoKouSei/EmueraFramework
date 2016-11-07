@@ -11,7 +11,7 @@ using YeongHun.EmueraFramework.Function;
 
 namespace Framework
 {
-    public class Main : IFramework
+    public class Main : DataBase, IFramework
     {
         public string Root => _frontEnd.Root;
 
@@ -53,90 +53,20 @@ namespace Framework
 
         public Alignment Align { get; set; }
 
-        public object this[string name, object index]
-        {
-            get
-            {
-                if (_intVariables.ContainsKey(name))
-                    return _intVariables[name][index];
-                else
-                    return _strVariables[name][index];
-            }
-            set
-            {
-                if (_intVariables.ContainsKey(name))
-                    _intVariables[name][index] = (long)value;
-                else
-                    _strVariables[name][index] = (string)value;
-            }
-        }
-
-        private Dictionary<string, Variable<long>> _intVariables;
-        private Dictionary<string, Variable<string>> _strVariables;
-
-        public long GetIntValue(string name, int index)
-        {
-            return _intVariables[name][index];
-        }
-        public long GetIntValue(string name, string index)
-        {
-            return _intVariables[name][index];
-        }
-
-        public void SetIntValue(string name, int index, long value)
-        {
-            _intVariables[name][index] = value;
-        }
-        public void SetIntValue(string name, string index, long value)
-        {
-            _intVariables[name][index] = value;
-        }
-
-        public string GetStrValue(string name, int index)
-        {
-            return _strVariables[name][index];
-        }
-        public string GetStrValue(string name, string index)
-        {
-            return _strVariables[name][index];
-        }
-
-        public void SetstrValue(string name, int index, string value)
-        {
-            _strVariables[name][index] = value;
-        }
-        public void SetstrValue(string name, string index, string value)
-        {
-            _strVariables[name][index] = value;
-        }
-
-        public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd,Config config)
+        public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config)
         {
             State = FrameworkState.Initializing;
-            
+
             string errMes = "";
 
             try
             {
                 _frontEnd = frontEnd;
 
+                base.Initialize(config.VariableInfo);
+
                 _methods = platforms.Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
                 _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
-
-                _intVariables = new Dictionary<string, Variable<long>>();
-                _strVariables = new Dictionary<string, Variable<string>>();
-
-                foreach(var info in config.VariableInfo.Info)
-                {
-                    if (info.Item2 == typeof(string))
-                    {
-                        _strVariables.Add(info.Item1, new Variable<string>(info.Item1, info.Item3, config.VariableInfo.NameDic[info.Item1]));
-                    }
-                    else if (info.Item2 == typeof(long))
-                    {
-                        _intVariables.Add(info.Item1, new Variable<long>(info.Item1, info.Item3, config.VariableInfo.NameDic[info.Item1]));
-                    }
-                }
 
                 _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
@@ -146,37 +76,20 @@ namespace Framework
             }
         }
 
-
-        public void AddCustomVariable(string name, object instance)
-        {
-            if (_customVariables.ContainsKey(name))
-                throw new ArgumentException($"이미 정의된 변수이름 {name}입니다");
-            else
-                _customVariables.Add(name, instance);
-        }
-
-        public void AddCharaCustomVariable(string name, object instance)
-        {
-            if (_customCharaVariables.ContainsKey(name))
-                throw new ArgumentException($"이미 정의된 변수이름 {name}입니다");
-            else
-                _customCharaVariables.Add(name, instance);
-        }
-
         public void ErbCall(string methodName, params object[] args)
         {
             var result = Call(methodName, args);
             if (result is int)
-                Data["RESULT"] = (int)result;
+                ((IDataBase<long>)this)["RESULT"] = (int)result;
             else if (result is long)
-                Data["RESULT"] = (long)result;
+                ((IDataBase<long>)this)["RESULT"] = (long)result;
             else if (result is string)
-                Data["RESULTS"] = (string)result;
+                ((IDataBase<string>)this)["RESULT"] = (string)result;
         }
 
         public object Call(string methodName, params object[] args)
         {
-            if(!_methods.ContainsKey(methodName))
+            if (!_methods.ContainsKey(methodName))
             {
                 throw new ArgumentException($"정의되지 않은 메소드 {methodName}입니다", nameof(methodName));
             }
@@ -191,18 +104,6 @@ namespace Framework
             {
                 Task.Delay(500).Wait();
             }
-        }
-
-        public void DeleteCustomVariable(string name)
-        {
-            if (_customVariables.ContainsKey(name))
-                _customVariables.Remove(name);
-        }
-
-        public void DeleteCharaCustomVariable(string name)
-        {
-            if (_customCharaVariables.ContainsKey(name))
-                _customCharaVariables.Remove(name);
         }
 
         public void EnterInput(ConsoleInput input)
@@ -247,7 +148,7 @@ namespace Framework
                     {
                         return e;
                     }
-                },TaskCreationOptions.LongRunning
+                }, TaskCreationOptions.LongRunning
                 );
         }
 
@@ -278,14 +179,14 @@ namespace Framework
             Wait();
         }
 
-        public void PrintButton(string str,int value,PrintFlags flag)
+        public void PrintButton(string str, int value, PrintFlags flag)
         {
 
         }
 
         public long GetChara(long num)
         {
-            if(num<_characters.Count)
+            if (num < _characters.Count)
             {
                 return _characters[(int)num].RegistrationNumber;
             }
@@ -314,7 +215,7 @@ namespace Framework
             {
                 throw new ArgumentException($"이미 등록된 캐릭터 번호 [{num}] 입니다", nameof(num));
             }
-            _characters.Add(new CharacterInfo(num, _config.CharaVariableInfo, _customCharaVariables));
+            _characters.Add(new CharacterInfo(num, _config.CharaVariableInfo));
         }
 
         public void DelChara(long num)

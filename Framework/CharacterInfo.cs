@@ -19,20 +19,6 @@ namespace Framework
         public string Name => Data.NAME;
         public long RegistrationNumber { get; private set; }
 
-        public dynamic Data { get; }
-
-        public object this[string name, object index]
-        {
-            get
-            {
-                return Data[name, index];
-            }
-            set
-            {
-                Data[name, index] = value;
-            }
-        }
-
         public override string ToString()
         {
             return Name;
