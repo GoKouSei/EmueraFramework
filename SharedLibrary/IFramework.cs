@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Draw;
 using YeongHun.EmueraFramework.Function;
 
 namespace YeongHun.EmueraFramework
@@ -26,13 +27,6 @@ namespace YeongHun.EmueraFramework
         STRING,
     }
 
-    public enum Alignment
-    {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
-
     public interface IFramework : IDataBase<string>, IDataBase<long>
     {
         string Root { get; }
@@ -42,7 +36,8 @@ namespace YeongHun.EmueraFramework
         IDataBase<string> StrValues { get; }
         IDataBase<long> IntValues { get; }
 
-        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config);
+        void SetFrontEnd(IFrontEnd frontEnd);
+        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config);
 
         /// <summary>
         /// Start Script
@@ -59,7 +54,7 @@ namespace YeongHun.EmueraFramework
         int Color { get; set; }
         int BackGroundColor { get; set; }
 
-        Alignment Align { get; set; }
+        LineAlign LineAlign { get; set; }
 
 
         void ResetColor();

@@ -72,7 +72,7 @@ namespace YeongHun.EmueraFramework.Platforms
                     try
                     {
                         ExternSystemFunctionAttribute attribute = sysFun.GetCustomAttribute<ExternSystemFunctionAttribute>();
-                        Action<IFramework> dele = sysFun.CreateDelegate(typeof(Action<IFramework>)) as Action<IFramework>;
+                        Action<IFramework> dele = sysFun.CreateDelegate(typeof(Action<IFramework>), instance) as Action<IFramework>;
                         if (dele != null)
                             systemFunctions.Add(new SystemFunction(attribute.Code, dele, attribute.Priority));
                     }

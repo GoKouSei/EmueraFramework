@@ -12,16 +12,17 @@ namespace YeongHun.EmueraFramework.Platforms.Test
         }
 
         [ExternSystemFunction(SystemFunctionCode.TITLE)]
-        public void SystemTitle()
+        public void SystemTitle(IFramework framework)
         {
-            _framework.Call("FrontEnd Test");
-            _framework.Call("FlagSet");
+            framework.LineAlign = Draw.LineAlign.CENTER;
+            framework.Print("FrontEnd Test", PrintFlags.NEWLINE);
+            framework.Call("FlagSet");
         }
 
         [ExternMethod]
         public void FlagSet()
         {
-            _framework.IntValues["FLAG", 100] = 100;
+            _framework.IntValues["FLAG", "AAA"] = 100;
             _framework.Print("FLAG:100 = " + _framework.IntValues["FLAG", 100]);
         }
     }

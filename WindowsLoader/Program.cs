@@ -26,10 +26,9 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
 
             if (frontEnd == null)
                 throw new DllNotFoundException("Can't find FrontEnd");
-            if (framework == null)
-                throw new DllNotFoundException("Can't find Framework");
 
             frontEnd.Initialize(framework);
+            framework.SetFrontEnd(frontEnd);
 
             var platformPaths = Directory.GetFiles(dllPath).Where(file => Regex.IsMatch(file, "[^(Platform).]+Platform.dll"));
 
@@ -65,8 +64,18 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             };
             csvDic.Initialize(framework.Root, varInfo);
             charaCsvDic.Initialize(framework.Root, charaVarInfo);
-            framework.Initialize(new AssemblyLoader(), platforms.ToArray(), frontEnd, new Config(new VariableInfo(csvDic, varInfo), new VariableInfo(charaCsvDic, charaVarInfo), new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)));
+            framework.Initialize(new AssemblyLoader(), platforms.ToArray(), new Config(new VariableInfo(csvDic, varInfo), new VariableInfo(charaCsvDic, charaVarInfo), new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)));
             framework.Run();
+            framework.End();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Press Any Key to continue...");
+            Console.ReadKey(true);
+            frontEnd.Exit();
         }
         private class AssemblyLoader : IAssemblyLoader
         {

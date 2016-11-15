@@ -51,7 +51,7 @@ namespace Framework
 
         public object Result { get; private set; }
 
-        public Alignment Align { get; set; }
+        public LineAlign LineAlign { get; set; }
 
         public IAssemblyLoader AssemblyLoader { get; private set; }
 
@@ -59,7 +59,12 @@ namespace Framework
 
         public IDataBase<long> IntValues => this;
 
-        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config)
+        public void SetFrontEnd(IFrontEnd frontEnd)
+        {
+            _frontEnd = frontEnd;
+        }
+
+        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config)
         {
             State = FrameworkState.Initializing;
             AssemblyLoader = assemblyLoader;
@@ -68,7 +73,6 @@ namespace Framework
 
             try
             {
-                _frontEnd = frontEnd;
 
                 base.Initialize(config.VariableInfo);
 
@@ -145,7 +149,9 @@ namespace Framework
             {
                 var functions = _systemFunctions[sysFunc];
                 foreach (var func in functions)
+                {
                     func.Run(this);
+                }
             }
             catch (ArgumentException)
             {
@@ -166,6 +172,7 @@ namespace Framework
                     }
                     catch (Exception e)
                     {
+                        Print(e.Message);
                         return e;
                     }
                 }, TaskCreationOptions.LongRunning
@@ -182,6 +189,7 @@ namespace Framework
         {
             if (_frontEnd == null)
                 return;
+
             if (flag.HasFlag(PrintFlags.WAIT))
             {
                 State = FrameworkState.Waiting;
@@ -190,12 +198,13 @@ namespace Framework
 
             if (flag.HasFlag(PrintFlags.NEWLINE))
             {
-                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, Color)));
+                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : Color), LineAlign));
             }
             else
             {
-                _frontEnd.LastLine += new ConsoleStringPart(str, Color);
+                _frontEnd.LastLine += new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : Color);
             }
+            _frontEnd.Draw();
             Wait();
         }
 
