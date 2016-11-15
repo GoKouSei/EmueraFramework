@@ -11,7 +11,7 @@ namespace YeongHun.EmueraFramework.Data
 
     public delegate void VariableChangedHandler<T>(string varName, T oldValue, ref T newValue);
 
-    public class Variable<T>
+    public class Variable<T>:ISerializer<T>
     {
         public string Name { get; }
         public Type Type => typeof(T);
@@ -114,6 +114,29 @@ namespace YeongHun.EmueraFramework.Data
             }
         }
 
+        public void Serialize(Stream stream)
+        {
+            
+        }
+
+        public T DeSerialize(byte[] bytes)
+        {
+            throw new NotImplementedException();
+        }
+
         public long Length => _data.Length;
+    }
+
+    public class ReadOnlyVariable<T> : Variable<T>
+    {
+        public ReadOnlyVariable(string name, int capacity, Dictionary<string, int> dic = null) : base(name, capacity, dic)
+        {
+            base.VariableChanged += ReadOnlyVariable_VariableChanged;
+        }
+
+        private void ReadOnlyVariable_VariableChanged(string varName, T oldValue, ref T newValue)
+        {
+            throw new InvalidOperationException("Can't edit readonly variable");
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace YeongHun.EmueraFramework
         string Name { get; }
         FrameworkState State { get; }
 
-        void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config);
+        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config);
 
         /// <summary>
         /// Start Script

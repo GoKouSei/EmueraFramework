@@ -4,20 +4,26 @@ using YeongHun.EmueraFramework.Data;
 
 namespace Framework
 {
-    class CharacterInfo : ICharacter
+    class CharacterInfo : DataBase
     {
         internal CharacterInfo(
             long registrationNumber,
             VariableInfo variableInfo,
-            Dictionary<string, Tuple<object, object>[]> defaultInfo=null
+            Dictionary<string, Tuple<object, object>[]> defaultInfos=null
             )
         {
-            RegistrationNumber = registrationNumber;
+            base.Initialize(variableInfo);
+            ((IDataBase<long>)this)["NO"] = registrationNumber;
+
+            foreach(var defaultInfo in defaultInfos)
+            {
+
+            }
         }
 
-        public string CallName => Data.CALLNAME;
-        public string Name => Data.NAME;
-        public long RegistrationNumber { get; private set; }
+        public string CallName => ((IDataBase<string>)this)["CALLNAME"];
+        public string Name => ((IDataBase<string>)this)["NAME"];
+        public long RegistrationNumber => ((IDataBase<long>)this)["NO"];
 
         public override string ToString()
         {

@@ -53,9 +53,12 @@ namespace Framework
 
         public Alignment Align { get; set; }
 
-        public void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config)
+        public IAssemblyLoader AssemblyLoader { get; private set; }
+
+        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config)
         {
             State = FrameworkState.Initializing;
+            AssemblyLoader = assemblyLoader;
 
             string errMes = "";
 
