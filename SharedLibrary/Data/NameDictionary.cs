@@ -6,21 +6,10 @@ using System.Threading.Tasks;
 
 namespace YeongHun.EmueraFramework.Data
 {
-    public class NameDictionary : Dictionary<string, Dictionary<string, int>>
+    public interface INameDictionary
     {
-        public new Dictionary<string,int> this[string index]
-        {
-            get
-            {
-                if (ContainsKey(index))
-                    return base[index];
-                else
-                    return null;
-            }
-            set
-            {
-                base[index] = value;
-            }
-        }
+        void Initialize(string rootPath, Tuple<string, Type, int>[] varInfo);
+        Dictionary<string, int> this[string variableName] { get; }
+        Dictionary<string, string[]> Names { get; }
     }
 }

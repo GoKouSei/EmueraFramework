@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD450DB0-C1D5-4BAC-BBA9-95B0DCE6B3CF}</ProjectGuid>
+    <ProjectGuid>{DFF5A463-22CB-4F12-902B-3D97D7D57DFA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YeongHun.EmueraFramework.FrontEnds</RootNamespace>
-    <AssemblyName>ConsoleFrontEnd</AssemblyName>
+    <RootNamespace>YeongHun.EmueraFramework.Platforms.Test</RootNamespace>
+    <AssemblyName>CSharpTest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,16 +50,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleFrontEnd.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +63,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetFileName)" "$(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.dll"
-copy "$(TargetName).pdb" $(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.pdb"</PostBuildEvent>
+    <PostBuildEvent>if not exist "$(SolutionDir)\Binary\$(PlatformName)\CSharp\" md "$(SolutionDir)\Binary\$(PlatformName)\CSharp\"
+copy "$(TargetFileName)" "$(SolutionDir)\Binary\$(PlatformName)\CSharp\"
+copy "$(TargetName).pdb" "$(SolutionDir)\Binary\$(PlatformName)\CSharp\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,19 +13,21 @@ namespace YeongHun.EmueraFramework.Platforms
         private List<IDisposable> disposList = new List<IDisposable>();
 
         public Method[] Methods { get; private set; }
+        public SystemFunction[] SystemFunctions { get; private set; }
 
-        public string Name => "C#";
+        public string Name => "C# Platform";
+
 
         public void Initialize(IFramework framework)
         {
-            if (!Directory.Exists(framework.Root + "Plugins"))
+            if (!Directory.Exists(framework.Root + "CSharp"))
             {
                 Methods = new Method[0];
-                framework.Print("Can't find Plugins folder", PrintFlags.NEWLINE);
+                framework.Print("Can't find CSharp folder", PrintFlags.NEWLINE);
                 return;
             }
 
-            var assemblys = Directory.GetFiles(framework.Root + "Plugins", "*.plg", SearchOption.TopDirectoryOnly).Select(
+            var assemblys = Directory.GetFiles(framework.Root + "CSharp", "*.dll", SearchOption.TopDirectoryOnly).Select(
                 file =>
                 {
                     try
@@ -40,6 +42,7 @@ namespace YeongHun.EmueraFramework.Platforms
 
             var types = assemblys.SelectMany(asm => asm.GetExportedTypes()).Where(type => type.IsDefined(typeof(ExternTypeAttribute)));
             List<Method> methods = new List<Method>();
+            List<SystemFunction> systemFunctions = new List<SystemFunction>();
             foreach (var type in types)
             {
                 if (type == typeof(object))
@@ -61,6 +64,22 @@ namespace YeongHun.EmueraFramework.Platforms
                 if (instance is IDisposable)
                 {
                     disposList.Add((IDisposable)instance);
+                }
+
+                var sysFuns = type.GetMethods().Where(method => method.IsDefined(typeof(ExternSystemFunctionAttribute)));
+                foreach(var sysFun in sysFuns)
+                {
+                    try
+                    {
+                        ExternSystemFunctionAttribute attribute = sysFun.GetCustomAttribute<ExternSystemFunctionAttribute>();
+                        Action<IFramework> dele = sysFun.CreateDelegate(typeof(Action<IFramework>)) as Action<IFramework>;
+                        if (dele != null)
+                            systemFunctions.Add(new SystemFunction(attribute.Code, dele, attribute.Priority));
+                    }
+                    catch
+                    {
+                        continue;
+                    }
                 }
 
                 var externMethods = type.GetMethods().Where(method => method.IsDefined(typeof(ExternMethodAttribute)));
@@ -112,6 +131,7 @@ namespace YeongHun.EmueraFramework.Platforms
                 }
             }
             Methods = methods.ToArray();
+            SystemFunctions = systemFunctions.ToArray();
         }
 
         #region IDisposable Support

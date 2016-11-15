@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using YeongHun.EmueraFramework;
 using YeongHun.EmueraFramework.Function;
 
-namespace EmueraPlatform
+namespace YeongHun.EmueraFramework.Platforms
 {
     public class EmueraPlatform : IPlatform
     {
@@ -15,6 +15,14 @@ namespace EmueraPlatform
         public Method[] Methods { get; private set; }
 
         public string Name => "ERA";
+
+        public SystemFunction[] SystemFunctions
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public void Dispose()
         {

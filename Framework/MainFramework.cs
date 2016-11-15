@@ -11,13 +11,13 @@ using YeongHun.EmueraFramework.Function;
 
 namespace Framework
 {
-    public class Main : DataBase, IFramework
+    public class MainFramework : DataBase, IFramework
     {
         public string Root => _frontEnd.Root;
 
         private Config _config = null;
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
-        private Dictionary<SystemFunctionCode, SystemFunction> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
+        private Dictionary<SystemFunctionCode, SystemFunction[]> _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction[]>();
         private List<CharacterInfo> _characters = new List<CharacterInfo>();
         private Dictionary<long, CharacterInfo> _defaultCharacters = new Dictionary<long, CharacterInfo>();
 
@@ -55,6 +55,10 @@ namespace Framework
 
         public IAssemblyLoader AssemblyLoader { get; private set; }
 
+        public IDataBase<string> StrValues => this;
+
+        public IDataBase<long> IntValues => this;
+
         public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config)
         {
             State = FrameworkState.Initializing;
@@ -69,7 +73,18 @@ namespace Framework
                 base.Initialize(config.VariableInfo);
 
                 _methods = platforms.Where(platform => platform.Methods != null).SelectMany(platform => platform.Methods).ToDictionary(method => method.Name);
-                _systemFunctions = new Dictionary<SystemFunctionCode, SystemFunction>();
+
+                var systemFunctions = platforms.SelectMany(platform => platform.SystemFunctions).OrderBy(sysFunc => sysFunc.Priority);
+                var sysFuncTemp = new Dictionary<SystemFunctionCode, List<SystemFunction>>();
+                foreach (SystemFunctionCode code in Enum.GetValues(typeof(SystemFunctionCode)))
+                    sysFuncTemp.Add(code, new List<SystemFunction>());
+                foreach (var systemFunction in systemFunctions)
+                    sysFuncTemp[systemFunction.Code].Add(systemFunction);
+                foreach (var temp in sysFuncTemp)
+                    _systemFunctions.Add(temp.Key, temp.Value.ToArray());
+                systemFunctions = null;
+                sysFuncTemp = null;
+                
 
                 _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
@@ -128,7 +143,9 @@ namespace Framework
         {
             try
             {
-                _systemFunctions[sysFunc].Run(this);
+                var functions = _systemFunctions[sysFunc];
+                foreach (var func in functions)
+                    func.Run(this);
             }
             catch (ArgumentException)
             {

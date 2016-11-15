@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BD450DB0-C1D5-4BAC-BBA9-95B0DCE6B3CF}</ProjectGuid>
+    <ProjectGuid>{3885A68E-C138-42AA-887B-10FD62E88C95}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YeongHun.EmueraFramework.FrontEnds</RootNamespace>
-    <AssemblyName>ConsoleFrontEnd</AssemblyName>
+    <RootNamespace>YeongHun.EmueraFramework.Loaders.Windows</RootNamespace>
+    <AssemblyName>CsvLoader</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -50,15 +50,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleFrontEnd.cs" />
+    <Compile Include="CharaCsvLoader.cs" />
+    <Compile Include="CsvNameDic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,10 +63,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetFileName)" "$(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.dll"
-copy "$(TargetName).pdb" $(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.pdb"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

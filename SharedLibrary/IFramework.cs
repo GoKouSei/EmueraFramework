@@ -39,6 +39,9 @@ namespace YeongHun.EmueraFramework
         string Name { get; }
         FrameworkState State { get; }
 
+        IDataBase<string> StrValues { get; }
+        IDataBase<long> IntValues { get; }
+
         void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, IFrontEnd frontEnd, Config config);
 
         /// <summary>

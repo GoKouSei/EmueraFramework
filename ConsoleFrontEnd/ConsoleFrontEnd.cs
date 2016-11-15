@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using YeongHun.EmueraFramework;
 using YeongHun.EmueraFramework.Draw;
 
-namespace YeongHun.EmueraFramework.FrontEnds
+namespace YeongHun.EmueraFramework.FrontEnds.Windows
 {
     public class ConsoleFrontEnd : IFrontEnd
     {

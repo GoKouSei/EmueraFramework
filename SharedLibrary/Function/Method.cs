@@ -44,4 +44,16 @@ namespace YeongHun.EmueraFramework.Function
     public class ExternTypeAttribute : Attribute
     {
     }
+
+    [AttributeUsage(AttributeTargets.Method,AllowMultiple =false)]
+    public class ExternSystemFunctionAttribute : Attribute
+    {
+        public SystemFunctionCode Code { get; }
+        public SystemFunctionPriority Priority { get; set; } = SystemFunctionPriority.NORMAL;
+
+        public ExternSystemFunctionAttribute(SystemFunctionCode code)
+        {
+            Code = code;
+        }
+    }
 }

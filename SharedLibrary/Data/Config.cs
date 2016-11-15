@@ -9,16 +9,16 @@ namespace YeongHun.EmueraFramework.Data
     public sealed class VariableInfo
     {
         private Tuple<string, Type, int>[] _info;
-        private NameDictionary _nameDic;
+        private INameDictionary _nameDic;
 
-        public VariableInfo(NameDictionary nameDic,Tuple<string, Type, int>[] info)
+        public VariableInfo(INameDictionary nameDic,Tuple<string, Type, int>[] info)
         {
             _nameDic = nameDic;
             _info = info;
         }
 
         public Tuple<string, Type, int>[] Info => _info;
-        public NameDictionary NameDic => _nameDic;
+        public INameDictionary NameDic => _nameDic;
     }
     public sealed class Config
     {
