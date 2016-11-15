@@ -2,12 +2,13 @@ This is Cross-Platform Framework based on Emuera(https://ko.osdn.jp/projects/emu
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-Framework manage method(Call, Begin), variable(dynamic), characters 
+Framework manage method(Call, Begin), variable, characters 
 
 FrontEnd draw ConsoleLines, get user input
 
 Platform has its Methods(Func<object, object[]>)
 It would be a ERB,C#... etc
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -17,4 +18,4 @@ csv -> NameDictionary
 
 chara csv -> DefaultCharaInfo
 
-erb -> FunctionLabeledLine(using EmueraCore.dll) -> Method
+erb -> ERB Compiler -> C# -> EraPlatform -> Method, SystemFunction
