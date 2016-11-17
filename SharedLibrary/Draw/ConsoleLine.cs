@@ -24,7 +24,7 @@ namespace YeongHun.EmueraFramework.Draw
             _parts.Add(part);
             _setting = setting;
             Align = align;
-            Width = _setting.StringCalculator.GetStringWidth(part.Str);
+            Width = _setting.StringCalculator.GetStringWidth(setting.FontSize, part.Str);
         }
 
         public ConsoleLine(ConsoleLinePart[] parts, DrawSetting setting, LineAlign align = LineAlign.LEFT)
@@ -34,7 +34,7 @@ namespace YeongHun.EmueraFramework.Draw
             UpdateWidth();
         }
 
-        private void UpdateWidth()=> Width = _parts.Select(part => _setting.StringCalculator.GetStringWidth(part.Str)).Sum();
+        private void UpdateWidth() => Width = _parts.Select(part => _setting.StringCalculator.GetStringWidth(_setting.FontSize, part.Str)).Sum();
 
         public static ConsoleLine operator +(ConsoleLine line, ConsoleLinePart part)
         {

@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using YeongHun.Common.Config;
 using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Draw;
 
 namespace YeongHun.EmueraFramework.Loaders.Windows
 {
@@ -28,7 +30,7 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
                 throw new DllNotFoundException("Can't find FrontEnd");
 
             frontEnd.Initialize(framework);
-            framework.SetFrontEnd(frontEnd);
+            framework.SetFrontEnd(frontEnd, AppDomain.CurrentDomain.BaseDirectory);
 
             var platformPaths = Directory.GetFiles(dllPath).Where(file => Regex.IsMatch(file, "[^(Platform).]+Platform.dll"));
 
@@ -56,6 +58,8 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             Tuple<string, Type, int>[] varInfo = new Tuple<string, Type, int>[]
             {
                 Tuple.Create("FLAG",typeof(long),10000),
+                Tuple.Create("COUNT",typeof(long),100),
+                Tuple.Create("RESULT",typeof(long),100),
             };
             var charaCsvDic = new CsvNameDic();
             Tuple<string, Type, int>[] charaVarInfo = new Tuple<string, Type, int>[]
@@ -64,7 +68,12 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             };
             csvDic.Initialize(framework.Root, varInfo);
             charaCsvDic.Initialize(framework.Root, charaVarInfo);
-            framework.Initialize(new AssemblyLoader(), platforms.ToArray(), new Config(new VariableInfo(csvDic, varInfo), new VariableInfo(charaCsvDic, charaVarInfo), new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)));
+
+            var drawSetting = new DrawSetting(new StringCalculator());
+            var config = new ConfigDic();
+            drawSetting.Load(config);
+
+            framework.Initialize(new AssemblyLoader(), platforms.ToArray(), new Config(new VariableInfo(csvDic, varInfo), new VariableInfo(charaCsvDic, charaVarInfo), new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)), drawSetting);
             framework.Run();
             framework.End();
             Console.WriteLine();
@@ -82,6 +91,21 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             public Assembly Load(string path)
             {
                 return Assembly.Load(File.ReadAllBytes(path));
+            }
+        }
+        private class StringCalculator : IStringCalculator
+        {
+            public int LineHeight
+            {
+                get
+                {
+                    return 1;
+                }
+            }
+
+            public int GetStringWidth(int fontSize, string str)
+            {
+                return str.Length;
             }
         }
     }

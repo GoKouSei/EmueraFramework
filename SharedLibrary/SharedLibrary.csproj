@@ -60,12 +60,12 @@
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\ConsoleInput.cs" />
     <Compile Include="Data\Serializers.cs" />
+    <Compile Include="Draw\Color.cs" />
     <Compile Include="Draw\ConsoleButtonPart.cs" />
     <Compile Include="Draw\ConsoleLine.cs" />
     <Compile Include="Draw\ConsoleLinePart.cs" />
     <Compile Include="Draw\ConsoleStringPart.cs" />
     <Compile Include="Draw\DrawSetting.cs" />
-    <Compile Include="Draw\IColorSelector.cs" />
     <Compile Include="Draw\IStringCalculator.cs" />
     <Compile Include="Draw\Point.cs" />
     <Compile Include="Data\ICharacter.cs" />

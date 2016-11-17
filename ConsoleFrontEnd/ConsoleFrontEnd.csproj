@@ -72,7 +72,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetFileName)" "$(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.dll"
-copy "$(TargetName).pdb" $(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.pdb"</PostBuildEvent>
+copy "$(TargetName).pdb" $(SolutionDir)\Binary\$(PlatformName)\DLL\FrontEnd.pdb"
+copy Colorful.Console.dll "$(SolutionDir)\Binary\$(PlatformName)\DLL\"
+copy Colorful.Console.xml "$(SolutionDir)\Binary\$(PlatformName)\DLL\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

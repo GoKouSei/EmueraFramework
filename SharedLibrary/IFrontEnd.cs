@@ -8,7 +8,7 @@ namespace YeongHun.EmueraFramework
         List<ConsoleLine> Lines { get; }
         ConsoleLine LastLine { get; set; }
 
-        void Initialize(IFramework framework, DrawSetting setting);
+        void Initialize(IFramework framework);
 
         void Draw();
         void Exit();

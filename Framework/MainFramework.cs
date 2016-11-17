@@ -26,8 +26,10 @@ namespace Framework
         private Task<Exception> _displayTask;
         private ConsoleInput _lastInput;
         private ConsoleInputType _requiredInputType;
-
-        public Method CurrentMethod { get; private set; }
+        
+        public Method CurrentMethod => _methodStack.Count > 0 ? _methodStack.Peek() : null;
+        private Stack<Method> _methodStack = new Stack<Method>();
+        public DrawSetting DrawSetting { get; private set; }
 
 
         #region IDataBase<long>
@@ -43,6 +45,21 @@ namespace Framework
                     return _intVariables[name];
             }
         }
+        void IDataBase<long>.SetValue(string name, long index, long value)
+        {
+            switch (name)
+            {
+                case "LOCAL":
+                    CurrentMethod.LOCAL[index] = value;
+                    break;
+                case "ARG":
+                    CurrentMethod.ARG[index] = value;
+                    break;
+                default:
+                    _intVariables[name][index] = value;
+                    break;
+            }
+        }
         long IDataBase<long>.this[string name, long index]
         {
             get
@@ -54,7 +71,7 @@ namespace Framework
                     case "ARG":
                         return CurrentMethod.ARG[index];
                     default:
-                        return _intVariables[name];
+                        return _intVariables[name][index];
                 }
             }
             set
@@ -85,9 +102,26 @@ namespace Framework
                 case "ARGS":
                     return CurrentMethod.ARGS[index];
                 default:
-                    return _strVariables[name];
+                    return _strVariables[name][index];
             }
         }
+
+        void IDataBase<string>.SetValue(string name, long index, string value)
+        {
+            switch (name)
+            {
+                case "LOCALS":
+                    CurrentMethod.LOCALS[index] = value;
+                    break;
+                case "ARGS":
+                    CurrentMethod.ARGS[index] = value;
+                    break;
+                default:
+                    _strVariables[name][index] = value;
+                    break;
+            }
+        }
+
         string IDataBase<string>.this[string name, long index]
         {
             get
@@ -99,7 +133,7 @@ namespace Framework
                     case "ARGS":
                         return CurrentMethod.ARGS[index];
                     default:
-                        return _strVariables[name];
+                        return _strVariables[name][index];
                 }
             }
             set
@@ -136,11 +170,11 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public int TextColor { get; set; }
+        public Color TextColor { get; set; }
 
         public FrameworkState State { get; private set; }
 
-        public int BackGroundColor { get; set; }
+        public Color BackGroundColor { get; set; }
 
         public object Result { get; private set; }
 
@@ -170,17 +204,20 @@ namespace Framework
 
         private TimeSpan _refreshInterval;
 
-        public void SetFrontEnd(IFrontEnd frontEnd)
+        public void SetFrontEnd(IFrontEnd frontEnd, string root)
         {
             TargetFPS = 10;
             _frontEnd = frontEnd;
+            Root = root;
         }
 
-        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config,string root)
+        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting)
         {
-            Root = root;
             State = FrameworkState.Initializing;
             AssemblyLoader = assemblyLoader;
+            DrawSetting = drawSetting;
+            TextColor = drawSetting.TextColor;
+            BackGroundColor = drawSetting.BackGroundColor;
 
             string errMes = "";
 
@@ -228,8 +265,10 @@ namespace Framework
             {
                 throw new ArgumentException($"정의되지 않은 메소드 {methodName}입니다", nameof(methodName));
             }
-            var result = _methods[methodName].Run(args);
+            _methodStack.Push(_methods[methodName]);
+            var result = CurrentMethod.Run(args);
             Wait();
+            _methodStack.Pop();
             return result;
         }
 
@@ -270,7 +309,9 @@ namespace Framework
                 var functions = _systemFunctions[sysFunc];
                 foreach (var func in functions)
                 {
+                    _methodStack.Push(func);
                     func.Run(this);
+                    _methodStack.Pop();
                 }
             }
             catch (ArgumentException)
@@ -328,7 +369,7 @@ namespace Framework
         public Exception End()
         {
             var result = _scriptTask.Result;
-            _displayTask.Wait(2000);
+            _displayTask.Wait();
             return result;
         }
 
@@ -350,11 +391,11 @@ namespace Framework
 
             if (flag.HasFlag(PrintFlags.NEWLINE))
             {
-                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : TextColor), LineAlign));
+                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? DrawSetting.TextColor : TextColor), DrawSetting, LineAlign));
             }
             else
             {
-                _frontEnd.LastLine += new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : TextColor);
+                _frontEnd.LastLine += new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? DrawSetting.TextColor : TextColor);
             }
 
             Wait();

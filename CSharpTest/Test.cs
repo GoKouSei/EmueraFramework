@@ -14,9 +14,7 @@ namespace YeongHun.EmueraFramework.Platforms.Test
         [ExternSystemFunction(SystemFunctionCode.TITLE)]
         public void SystemTitle(IFramework framework)
         {
-            framework.LineAlign = Draw.LineAlign.CENTER;
-            framework.Print("FrontEnd Test", PrintFlags.NEWLINE);
-            framework.Call("FlagSet");
+            framework.Call("SYSTEM_TITLE");
         }
 
         [ExternMethod]

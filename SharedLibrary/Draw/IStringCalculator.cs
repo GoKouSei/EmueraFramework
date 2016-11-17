@@ -8,6 +8,7 @@ namespace YeongHun.EmueraFramework.Draw
 {
     public interface IStringCalculator
     {
-        int GetStringWidth(string str);
+        int GetStringWidth(int fontSize, string str);
+        int LineHeight { get; }
     }
 }

@@ -45,8 +45,6 @@ namespace YeongHun.EmueraFramework.Platforms
             List<SystemFunction> systemFunctions = new List<SystemFunction>();
             foreach (var type in types)
             {
-                if (type == typeof(object))
-                    continue;
                 ConstructorInfo ctor = type.GetConstructor(new[] { typeof(IFramework) });
                 if (ctor == null)
                     continue;
@@ -83,7 +81,11 @@ namespace YeongHun.EmueraFramework.Platforms
                     }
                 }
 
-                var externMethods = type.GetMethods().Where(method => method.IsDefined(typeof(ExternMethodAttribute)));
+                var externMethods = type.GetMethods().Where(
+                    method =>
+                    {
+                        return method.IsDefined(typeof(ExternMethodAttribute));
+                    });
 
                 foreach (var method in externMethods)
                 {

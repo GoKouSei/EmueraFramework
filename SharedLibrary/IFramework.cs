@@ -28,8 +28,8 @@ namespace YeongHun.EmueraFramework
         IDataBase<string> StrValues { get; }
         IDataBase<long> IntValues { get; }
 
-        void SetFrontEnd(IFrontEnd frontEnd);
-        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting, string root);
+        void SetFrontEnd(IFrontEnd frontEnd,string root);
+        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting);
 
         /// <summary>
         /// Start Script
@@ -43,12 +43,11 @@ namespace YeongHun.EmueraFramework
         Exception End();
 
         #region IPlatform
-        int TextColor { get; set; }
-        int BackGroundColor { get; set; }
 
         LineAlign LineAlign { get; set; }
 
-
+        Color TextColor { get; set; }
+        Color BackGroundColor { get; set; }
         void ResetColor();
         void ResetBGColor();
 
@@ -76,6 +75,7 @@ namespace YeongHun.EmueraFramework
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);
+        DrawSetting DrawSetting { get;}
         #endregion
     }
 }

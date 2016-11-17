@@ -19,8 +19,12 @@ namespace YeongHun.EmueraFramework
             public string Key { get; set; } = null;
             public string DefaultValue { get; set; } = null;
         }
+
+        protected abstract void AddParser(ConfigDic config);
+
         public void Load(ConfigDic config)
         {
+            AddParser(config);
             Type type = GetType();
             string tag = type.Name;
             var fields = type.GetRuntimeFields().Where(field => field.IsDefined(typeof(LoadableFieldAttribute)));
@@ -54,6 +58,10 @@ namespace YeongHun.EmueraFramework
                 var key = attr.Key ?? property.Name;
                 try
                 {
+                    if (!config.HasTag(tag))
+                    {
+                        config.AddTag(tag);
+                    }
                     if (!config.HasKey(tag, key))
                     {
                         if (attr.DefaultValue != null)

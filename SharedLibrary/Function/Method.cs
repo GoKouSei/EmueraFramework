@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace YeongHun.EmueraFramework.Function
 {
@@ -44,6 +43,11 @@ namespace YeongHun.EmueraFramework.Function
         }
 
         public object Run(params object[] args) => _body(args);
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
@@ -53,12 +57,16 @@ namespace YeongHun.EmueraFramework.Function
         public int LocalsSize { get; set; }
         public int ArgSize { get; set; }
         public int ArgsSize { get; set; }
-        public ExternMethodAttribute()
+        public ExternMethodAttribute() : this(0, 0, 0, 0)
         {
-            LocalSize = 1000;
-            LocalsSize = 100;
-            ArgSize = 1000;
-            ArgsSize = 100;
+        }
+
+        public ExternMethodAttribute(int argSize, int argsSize,int localSize,int localsSize)
+        {
+            ArgSize = Math.Max(0, argSize);
+            ArgsSize = Math.Max(0, argsSize);
+            LocalSize = localSize <= 0 ? 1000 : localSize;
+            LocalsSize = localSize <= 0 ? 100 : localsSize;
         }
     }
 
