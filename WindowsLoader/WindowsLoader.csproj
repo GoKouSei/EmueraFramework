@@ -110,8 +110,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>move CsvLoader.dll DLL\
+move CsvLoader.pdb DLL\
+move Framework.dll DLL\
+move Framework.pdb DLL\
+move SharedLibrary.dll DLL\
+move SharedLibrary.pdb DLL\
+move Config.dll DLL\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
