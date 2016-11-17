@@ -56,6 +56,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConfig.cs" />
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\ConsoleInput.cs" />
     <Compile Include="Data\Serializers.cs" />
@@ -63,6 +64,9 @@
     <Compile Include="Draw\ConsoleLine.cs" />
     <Compile Include="Draw\ConsoleLinePart.cs" />
     <Compile Include="Draw\ConsoleStringPart.cs" />
+    <Compile Include="Draw\DrawSetting.cs" />
+    <Compile Include="Draw\IColorSelector.cs" />
+    <Compile Include="Draw\IStringCalculator.cs" />
     <Compile Include="Draw\Point.cs" />
     <Compile Include="Data\ICharacter.cs" />
     <Compile Include="Data\DataBase.cs" />
@@ -76,6 +80,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Function\SystemFunction.cs" />
     <Compile Include="Data\Variable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Config">
+      <HintPath>..\Library\Config.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>

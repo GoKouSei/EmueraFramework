@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YeongHun.EmueraFramework;
+using Colorful;
 using YeongHun.EmueraFramework.Draw;
 
 namespace YeongHun.EmueraFramework.FrontEnds.Windows
@@ -12,13 +9,11 @@ namespace YeongHun.EmueraFramework.FrontEnds.Windows
     {
         private IFramework _framework;
 
-        public string Root => AppDomain.CurrentDomain.BaseDirectory;
-
         public ConsoleLine LastLine
         {
             get
             {
-                return Lines.Count > 0 ? null : Lines[0];
+                return Lines.Count > 0 ? new ConsoleLine(0) : Lines[0];
             }
 
             set
@@ -32,10 +27,11 @@ namespace YeongHun.EmueraFramework.FrontEnds.Windows
 
         public void Draw()
         {
+            Console.BackgroundColor = System.Drawing.Color.FromArgb(_framework.BackGroundColor);
             Console.Clear();
-            foreach(var line in Lines)
+            foreach (var line in Lines)
             {
-                string str = string.Concat(line.Parts.Select(part => part.Str));
+                string str = line.AllPartString;
 
                 switch(line.Align)
                 {
@@ -47,6 +43,7 @@ namespace YeongHun.EmueraFramework.FrontEnds.Windows
                         break;
                 }
 
+                Console.ForegroundColor = System.Drawing.Color.FromArgb(line.Color);
                 Console.WriteLine(str);
             }
         }
@@ -58,7 +55,7 @@ namespace YeongHun.EmueraFramework.FrontEnds.Windows
             System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
 
-        public void Initialize(IFramework framework)
+        public void Initialize(IFramework framework,DrawSetting drawSetting)
         {
             _framework = framework;
         }

@@ -13,7 +13,7 @@ namespace Framework
 {
     public class MainFramework : DataBase, IFramework
     {
-        public string Root => _frontEnd.Root;
+        public string Root { get; private set; }
 
         private Config _config = null;
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
@@ -22,8 +22,10 @@ namespace Framework
         private Dictionary<long, CharacterInfo> _defaultCharacters = new Dictionary<long, CharacterInfo>();
 
         private IFrontEnd _frontEnd;
-        private Task<Exception> _scriptTast;
+        private Task<Exception> _scriptTask;
+        private Task<Exception> _displayTask;
         private ConsoleInput _lastInput;
+        private ConsoleInputType _requiredInputType;
 
 
 
@@ -43,7 +45,7 @@ namespace Framework
 
         public string Name => "EmueraFramework";
 
-        public int Color { get; set; }
+        public int TextColor { get; set; }
 
         public FrameworkState State { get; private set; }
 
@@ -59,13 +61,33 @@ namespace Framework
 
         public IDataBase<long> IntValues => this;
 
+        private int _targetFPS;
+        public int TargetFPS
+        {
+            get
+            {
+                return _targetFPS;
+            }
+            set
+            {
+                if (value <= 0)
+                    value = 1;
+                _targetFPS = value;
+                _refreshInterval = TimeSpan.FromTicks((long)((1.0 / value) * 10000000));
+            }
+        }
+
+        private TimeSpan _refreshInterval;
+
         public void SetFrontEnd(IFrontEnd frontEnd)
         {
+            TargetFPS = 10;
             _frontEnd = frontEnd;
         }
 
-        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config)
+        public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config,string root)
         {
+            Root = root;
             State = FrameworkState.Initializing;
             AssemblyLoader = assemblyLoader;
 
@@ -128,14 +150,21 @@ namespace Framework
             }
         }
 
+        //This Method call by another Thread(IFrontEnd)
         public void EnterInput(ConsoleInput input)
         {
             if (State != FrameworkState.Waiting)
             {
                 return;
             }
-            State = FrameworkState.Running;
-            LastInput = input;
+            if (input.Type == _requiredInputType)
+            {
+                lock (this)
+                {
+                    State = FrameworkState.Running;
+                    LastInput = input;
+                }
+            }
         }
 
         /// <summary>
@@ -162,7 +191,7 @@ namespace Framework
         public void Run()
         {
             State = FrameworkState.Running;
-            _scriptTast = Task.Factory.StartNew
+            _scriptTask = Task.Factory.StartNew
                 (() =>
                 {
                     try
@@ -172,16 +201,44 @@ namespace Framework
                     }
                     catch (Exception e)
                     {
+                        Print("Exception occured in Script Task");
                         Print(e.Message);
                         return e;
                     }
                 }, TaskCreationOptions.LongRunning
                 );
+
+            _displayTask = Task.Factory.StartNew
+                (() =>
+                {
+                    DateTime previousDrawTime = DateTime.Now;
+                    try
+                    {
+                        while (!_scriptTask.IsCompleted)
+                        {
+                            if (DateTime.Now - previousDrawTime >= _refreshInterval)
+                            {
+                                _frontEnd.Draw();
+                                previousDrawTime = DateTime.Now;
+                            }
+                        }
+                        _frontEnd.Draw();
+                        return null;
+                    }
+                    catch (Exception e)
+                    {
+                        Print("Exception occured in Draw Task");
+                        Print(e.Message);
+                        return e;
+                    }
+                }, TaskCreationOptions.LongRunning);
         }
 
         public Exception End()
         {
-            return _scriptTast.Result;
+            var result = _scriptTask.Result;
+            _displayTask.Wait(2000);
+            return result;
         }
 
 
@@ -192,25 +249,34 @@ namespace Framework
 
             if (flag.HasFlag(PrintFlags.WAIT))
             {
-                State = FrameworkState.Waiting;
+                lock (this)
+                {
+                    State = FrameworkState.Waiting;
+                }
+                _requiredInputType = ConsoleInputType.ANYKEY;
                 flag |= PrintFlags.NEWLINE;
             }
 
             if (flag.HasFlag(PrintFlags.NEWLINE))
             {
-                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : Color), LineAlign));
+                _frontEnd.Lines.Add(new ConsoleLine(new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : TextColor), LineAlign));
             }
             else
             {
-                _frontEnd.LastLine += new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : Color);
+                _frontEnd.LastLine += new ConsoleStringPart(str, flag.HasFlag(PrintFlags.IGNORE_COLOR) ? _config.TextColor : TextColor);
             }
-            _frontEnd.Draw();
+
             Wait();
         }
 
-        public void PrintButton(string str, int value, PrintFlags flag)
+        public void PrintButton(string str, int value)
         {
+            _frontEnd.LastLine += new ConsoleButtonPart(str, TextColor, value);
+        }
 
+        public void PrintButton(string str, string value)
+        {
+            _frontEnd.LastLine += new ConsoleButtonPart(str, TextColor, value);
         }
 
         public long GetChara(long num)
@@ -255,9 +321,12 @@ namespace Framework
             }
         }
 
-        public void Wait(WaitType type)
+        public void Wait(ConsoleInputType type)
         {
-            throw new NotImplementedException();
+            if (State == FrameworkState.Waiting)
+                return;
+            State = FrameworkState.Waiting;
+            _requiredInputType = type;
         }
 
         public void ResetColor()

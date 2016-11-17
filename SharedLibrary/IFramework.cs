@@ -18,14 +18,6 @@ namespace YeongHun.EmueraFramework
         Running,
         Waiting,
     }
-    
-    public enum WaitType
-    {
-        ANYKEY = 0,
-        ENTERKEY,
-        INTEGER,
-        STRING,
-    }
 
     public interface IFramework : IDataBase<string>, IDataBase<long>
     {
@@ -37,7 +29,7 @@ namespace YeongHun.EmueraFramework
         IDataBase<long> IntValues { get; }
 
         void SetFrontEnd(IFrontEnd frontEnd);
-        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config);
+        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting, string root);
 
         /// <summary>
         /// Start Script
@@ -51,7 +43,7 @@ namespace YeongHun.EmueraFramework
         Exception End();
 
         #region IPlatform
-        int Color { get; set; }
+        int TextColor { get; set; }
         int BackGroundColor { get; set; }
 
         LineAlign LineAlign { get; set; }
@@ -69,7 +61,7 @@ namespace YeongHun.EmueraFramework
         void DrawLine();
         void DrawLine(string str);
 
-        void Wait(WaitType type);
+        void Wait(ConsoleInputType type);
         void TWait(long time, long flag);
 
         void Save();

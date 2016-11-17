@@ -22,8 +22,6 @@ namespace YeongHun.EmueraFramework.Data
     }
     public sealed class Config
     {
-        public int TextColor { get; set; } = -1;//0xFFFFFFFF
-        public int BackColor { get; set; } = -16777216;//0xFF000000
         public VariableInfo VariableInfo { get; private set; }
         public VariableInfo CharaVariableInfo { get; private set; }
         public DefaultCharaInfo[] DefaultCharas { get; private set; }
