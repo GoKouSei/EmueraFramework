@@ -32,8 +32,18 @@ namespace YeongHun.EmueraFramework.Data
             }
         }
 
-        private Dictionary<string, Variable<string>> _strVariables;
-        private Dictionary<string, Variable<long>> _intVariables;
+        protected Dictionary<string, Variable<string>> _strVariables;
+        protected Dictionary<string, Variable<long>> _intVariables;
+
+        public bool HasVariable(Type type, string name)
+        {
+            if (type == typeof(string))
+                return _strVariables.ContainsKey(name);
+            else if (type == typeof(long))
+                return _intVariables.ContainsKey(name);
+            else
+                return false;
+        }
 
         #region IDataBase<long>
         long IDataBase<long>.this[string name, long index]

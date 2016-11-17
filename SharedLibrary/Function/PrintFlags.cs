@@ -13,5 +13,7 @@ namespace YeongHun.EmueraFramework.Function
         NEWLINE = 0x1,
         WAIT = 0x2,
         IGNORE_COLOR = 0x4,
+        LEFT_ALIGN = 0x8,
+        RIGHT_ALIGN = 0x10,
     }
 }

@@ -25,7 +25,98 @@ namespace Framework
         private Task<Exception> _scriptTast;
         private ConsoleInput _lastInput;
 
+        public Method CurrentMethod { get; private set; }
 
+
+        #region IDataBase<long>
+        long IDataBase<long>.GetValue(string name, long index)
+        {
+            switch (name)
+            {
+                case "LOCAL":
+                    return CurrentMethod.LOCAL[index];
+                case "ARG":
+                    return CurrentMethod.ARG[index];
+                default:
+                    return _intVariables[name];
+            }
+        }
+        long IDataBase<long>.this[string name, long index]
+        {
+            get
+            {
+                switch (name)
+                {
+                    case "LOCAL":
+                        return CurrentMethod.LOCAL[index];
+                    case "ARG":
+                        return CurrentMethod.ARG[index];
+                    default:
+                        return _intVariables[name];
+                }
+            }
+            set
+            {
+                switch (name)
+                {
+                    case "LOCAL":
+                        CurrentMethod.LOCAL[index] = value;
+                        break;
+                    case "ARG":
+                        CurrentMethod.ARG[index] = value;
+                        break;
+                    default:
+                        _intVariables[name][index] = value;
+                        break;
+                }
+            }
+        }
+        #endregion
+
+        #region IDataBase<string>
+        string IDataBase<string>.GetValue(string name, long index)
+        {
+            switch (name)
+            {
+                case "LOCALS":
+                    return CurrentMethod.LOCALS[index];
+                case "ARGS":
+                    return CurrentMethod.ARGS[index];
+                default:
+                    return _strVariables[name];
+            }
+        }
+        string IDataBase<string>.this[string name, long index]
+        {
+            get
+            {
+                switch (name)
+                {
+                    case "LOCALS":
+                        return CurrentMethod.LOCALS[index];
+                    case "ARGS":
+                        return CurrentMethod.ARGS[index];
+                    default:
+                        return _strVariables[name];
+                }
+            }
+            set
+            {
+                switch (name)
+                {
+                    case "LOCALS":
+                        CurrentMethod.LOCALS[index] = value;
+                        break;
+                    case "ARGS":
+                        CurrentMethod.ARGS[index] = value;
+                        break;
+                    default:
+                        _strVariables[name][index] = value;
+                        break;
+                }
+            }
+        }
+        #endregion
 
         private ConsoleInput LastInput
         {
@@ -88,7 +179,7 @@ namespace Framework
                     _systemFunctions.Add(temp.Key, temp.Value.ToArray());
                 systemFunctions = null;
                 sysFuncTemp = null;
-                
+
 
                 _defaultCharacters = config.DefaultCharas.Select(def => new CharacterInfo(def.CharacterNumber, config.CharaVariableInfo, def.Info)).ToDictionary(info => info.RegistrationNumber);
             }
