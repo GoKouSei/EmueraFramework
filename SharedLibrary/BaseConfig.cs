@@ -34,6 +34,10 @@ namespace YeongHun.EmueraFramework
                 var key = attr.Key ?? field.Name;
                 try
                 {
+                    if (!config.HasTag(tag))
+                    {
+                        config.AddTag(tag);
+                    }
                     if (!config.HasKey(tag, key))
                     {
                         if (attr.DefaultValue != null)
