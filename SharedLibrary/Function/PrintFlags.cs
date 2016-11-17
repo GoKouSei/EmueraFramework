@@ -14,6 +14,6 @@ namespace YeongHun.EmueraFramework.Function
         WAIT = 0x2,
         IGNORE_COLOR = 0x4,
         LEFT_ALIGN = 0x8,
-        RIGHT_ALIGN = 0x16,
+        RIGHT_ALIGN = 0x10,
     }
 }

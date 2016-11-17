@@ -20,6 +20,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Loaders", "Loaders", "{D2A52743-A6B5-4816-A061-526617A85546}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsLoader", "WindowsLoader\WindowsLoader.csproj", "{14C52D86-13A0-4F05-B228-6AF4FBD6AEFE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3885A68E-C138-42AA-887B-10FD62E88C95} = {3885A68E-C138-42AA-887B-10FD62E88C95}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{02F89B94-5411-432A-A38B-FFCF675DB0A1}"
 EndProject

@@ -8,7 +8,6 @@ using System.IO;
 
 namespace YeongHun.EmueraFramework.Data
 {
-
     public delegate void VariableChangedHandler<T>(string varName, T oldValue, ref T newValue);
 
     public class Variable<T>
@@ -21,11 +20,18 @@ namespace YeongHun.EmueraFramework.Data
         private Dictionary<string, int> _nameDic;
         private T[] _data;
 
-        public Variable(string name, int capacity, Dictionary<string, int> dic = null)
+        public Variable(string name, int capacity)
         {
             Name = name;
             _data = new T[capacity];
-            _nameDic = dic ?? new Dictionary<string, int>();
+            _nameDic = new Dictionary<string, int>();
+        }
+
+        public Variable(string name, int capacity, Dictionary<string,int> dic)
+        {
+            Name = name;
+            _data = new T[capacity];
+            _nameDic = dic;
         }
 
         public T this[long index]
@@ -99,19 +105,6 @@ namespace YeongHun.EmueraFramework.Data
         public static implicit operator T(Variable<T> var)
         {
             return var[0];
-        }
-
-        public bool IsCompatible<K>(K value, ref T result)
-        {
-            try
-            {
-                result = (T)Convert.ChangeType(value, typeof(T));
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
 
         public void Save(Stream stream)

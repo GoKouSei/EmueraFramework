@@ -74,7 +74,8 @@ namespace YeongHun.EmueraFramework.Platforms
                         ExternSystemFunctionAttribute attribute = sysFun.GetCustomAttribute<ExternSystemFunctionAttribute>();
                         Action<IFramework> dele = sysFun.CreateDelegate(typeof(Action<IFramework>), instance) as Action<IFramework>;
                         if (dele != null)
-                            systemFunctions.Add(new SystemFunction(attribute.Code, dele, attribute.Priority));
+                            systemFunctions.Add(
+                                new SystemFunction(attribute.Code, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, dele, attribute.Priority));
                     }
                     catch
                     {
@@ -86,21 +87,23 @@ namespace YeongHun.EmueraFramework.Platforms
 
                 foreach (var method in externMethods)
                 {
+                    ExternMethodAttribute attribute = method.GetCustomAttribute<ExternMethodAttribute>();
                     var paramaters = method.GetParameters();
                     switch (method.GetParameters().Length)
                     {
                         case 0:
                             {
                                 if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name, () => { method.Invoke(instance, null); }));
+                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, () => { method.Invoke(instance, null); }));
                                 else
-                                    methods.Add(new Method(method.Name, () => method.Invoke(instance, null)));
+                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, () => method.Invoke(instance, null)));
                                 break;
                             }
                         default:
                             {
                                 if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name, (args) =>
+                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, 
+                                        (args) =>
                                     {
                                         if (args.Length < paramaters.Length)
                                         {
@@ -113,7 +116,8 @@ namespace YeongHun.EmueraFramework.Platforms
                                         else method.Invoke(instance, args);
                                     }));
                                 else
-                                    methods.Add(new Method(method.Name, (args) =>
+                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize
+                                        , (args) =>
                                     {
                                         if (args.Length < paramaters.Length && paramaters[paramaters.Length - 1].IsOptional)
                                         {
