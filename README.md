@@ -18,4 +18,4 @@ csv -> NameDictionary
 
 chara csv -> DefaultCharaInfo
 
-erb -> ERB Compiler -> C# -> EraPlatform -> Method, SystemFunction
+erb -> ERB Compiler -> MSIL -> Method, SystemFunction
