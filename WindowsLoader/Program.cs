@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using WindowsDisk;
 using YeongHun.Common.Config;
 using YeongHun.EmueraFramework.Data;
 using YeongHun.EmueraFramework.Draw;
@@ -66,8 +67,9 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             {
                 Tuple.Create("ABL",typeof(long),100),
             };
-            csvDic.Initialize(framework.Root, varInfo);
-            charaCsvDic.Initialize(framework.Root, charaVarInfo);
+            var fileSystem = new WindowsFileSystem(framework.Root);
+            csvDic.Initialize(fileSystem, varInfo);
+            charaCsvDic.Initialize(fileSystem, charaVarInfo);
 
             var drawSetting = new DrawSetting(new StringCalculator());
             var config = new ConfigDic();

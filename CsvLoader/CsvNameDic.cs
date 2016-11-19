@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
 using YeongHun.EmueraFramework.Data;
+using PCLStorage;
+using PCLStorage.Exceptions;
 
 namespace YeongHun.EmueraFramework.Loaders.Windows
 {
@@ -12,6 +14,9 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
     {
         private Dictionary<string, Dictionary<string, int>> _nameDictionarys = new Dictionary<string, Dictionary<string, int>>();
         private Dictionary<string, string[]> _nameValues = new Dictionary<string, string[]>();
+        private IFileSystem _fileSystem;
+
+
         public Dictionary<string, int> this[string variableName]
         {
             get
@@ -28,30 +33,33 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             }
         }
 
-        public void Initialize(string rootPath, Tuple<string, Type, int>[] varInfo)
+        public void Initialize(IFileSystem fileSystem, Tuple<string, Type, int>[] varInfo)
         {
-            if (!Directory.Exists(Path.Combine(rootPath, "CSV")))
+            if (fileSystem.LocalStorage.CheckExistsAsync("CSV").Result != ExistenceCheckResult.FolderExists)
                 throw new DirectoryNotFoundException("Can't Find CSV Folder");
+
+            _fileSystem = fileSystem;
+
             foreach (var info in varInfo)
             {
                 _nameValues.Add(info.Item1, new string[info.Item3]);
                 _nameDictionarys.Add(info.Item1, new Dictionary<string, int>());
             }
 
-            Regex csvRegex = new Regex("[^(CHARA).]+.csv", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var csvFiles = Directory.GetFiles(Path.Combine(rootPath,"CSV"), "*", SearchOption.AllDirectories).Where(file => csvRegex.IsMatch(file));
+            Regex csvRegex = new Regex("[^(CHARA).]+.csv", RegexOptions.IgnoreCase);
+            var csvFiles = fileSystem.LocalStorage.GetFolderAsync("CSV").Result.GetFilesAsync().Result.Where(file => csvRegex.IsMatch(file.Name));
 
             foreach (var csvFile in csvFiles)
                 LoadCSV(csvFile);
 
         }
 
-        private void LoadCSV(string csvPath)
+        private void LoadCSV(IFile csvFile)
         {
-            string variableName = Path.GetFileNameWithoutExtension(csvPath);
+            string variableName = Path.GetFileNameWithoutExtension(csvFile.Name);
             if (!_nameDictionarys.ContainsKey(variableName))
                 return;
-            using(FileStream fs = new FileStream(csvPath, FileMode.Open))
+            using (var fs = csvFile.OpenAsync(FileAccess.Read).Result)
             {
                 using (StreamReader reader = new StreamReader(fs, true))
                 {
@@ -60,7 +68,7 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
                         try
                         {
                             string rawLine = reader.ReadLine();
-                            if (rawLine.Contains(';'))
+                            if (rawLine.Contains(";"))
                                 rawLine = rawLine.Substring(rawLine.LastIndexOf(';'));
                             if (rawLine.Length == 0)
                                 continue;

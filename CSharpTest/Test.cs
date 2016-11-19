@@ -14,6 +14,9 @@ namespace YeongHun.EmueraFramework.Platforms.Test
         [ExternSystemFunction(SystemFunctionCode.TITLE)]
         public void SystemTitle(IFramework framework)
         {
+            framework.TextColor = new Draw.Color("RED");
+            framework.Print("Color Test");
+            framework.ResetColor();
             framework.Call("SYSTEM_TITLE");
         }
 
