@@ -43,7 +43,7 @@ namespace YeongHun.EmueraFramework.Function
         {
         }
 
-        public SystemFunction(SystemFunctionCode code, int argSize, int argsSize, int localSize, int localsSize, Action<IFramework> body, SystemFunctionPriority Priority) : base("SYSTEM_FUNCTION_" + code.ToString(), argSize, argsSize, localSize, localsSize)
+        public SystemFunction(SystemFunctionCode code, int argSize, int argsSize, int localSize, int localsSize, Action<IFramework> body, SystemFunctionPriority Priority) : base("SYSTEM_FUNCTION_" + code.ToString(), DefaultLocalVariables, argSize, argsSize, localSize, localsSize)
         {
             Code = code;
             _body = body;

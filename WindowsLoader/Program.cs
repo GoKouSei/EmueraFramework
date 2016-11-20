@@ -31,7 +31,10 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
                 throw new DllNotFoundException("Can't find FrontEnd");
 
             frontEnd.Initialize(framework);
-            framework.SetFrontEnd(frontEnd, AppDomain.CurrentDomain.BaseDirectory);
+
+            var fileSystem = new WindowsFileSystem(AppDomain.CurrentDomain.BaseDirectory);
+
+            framework.SetFrontEnd(frontEnd, fileSystem);
 
             var platformPaths = Directory.GetFiles(dllPath).Where(file => Regex.IsMatch(file, "[^(Platform).]+Platform.dll"));
 
@@ -56,18 +59,17 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
                 }
             }
             var csvDic = new CsvNameDic();
-            Tuple<string, Type, int>[] varInfo = new Tuple<string, Type, int>[]
+            (string name, Type type, int size, bool hasNameVariable)[] varInfo = new (string name, Type type, int size, bool hasNameVariable)[]
             {
-                Tuple.Create("FLAG",typeof(long),10000),
-                Tuple.Create("COUNT",typeof(long),100),
-                Tuple.Create("RESULT",typeof(long),100),
+                ("FLAG",typeof(long),10000,true),
+                ("COUNT",typeof(long),100,false),
+                ("RESULT",typeof(long),100,false),
             };
             var charaCsvDic = new CsvNameDic();
-            Tuple<string, Type, int>[] charaVarInfo = new Tuple<string, Type, int>[]
+            (string name, Type type, int size, bool hasNameVariable)[] charaVarInfo = new (string name, Type type, int size, bool hasNameVariable)[]
             {
-                Tuple.Create("ABL",typeof(long),100),
+                ("ABL",typeof(long),100,true),
             };
-            var fileSystem = new WindowsFileSystem(framework.Root);
             csvDic.Initialize(fileSystem, varInfo);
             charaCsvDic.Initialize(fileSystem, charaVarInfo);
 
@@ -75,7 +77,12 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             var config = new ConfigDic();
             drawSetting.Load(config);
 
-            framework.Initialize(new AssemblyLoader(), platforms.ToArray(), new Config(new VariableInfo(csvDic, varInfo), new VariableInfo(charaCsvDic, charaVarInfo), new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)), drawSetting);
+            framework.Initialize(new AssemblyLoader(), platforms.ToArray(),
+                new Config(
+                    new VariableInfo(csvDic, varInfo), 
+                    new VariableInfo(charaCsvDic, charaVarInfo), 
+                    new CharaCsvLoader().GetDefaultCharaInfos(framework.Root)),
+                drawSetting);
             framework.Run();
             framework.End();
             Console.WriteLine();

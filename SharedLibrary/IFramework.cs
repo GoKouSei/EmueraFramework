@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace YeongHun.EmueraFramework
         IDataBase<string> StrValues { get; }
         IDataBase<long> IntValues { get; }
 
-        void SetFrontEnd(IFrontEnd frontEnd,string root);
+        void SetFrontEnd(IFrontEnd frontEnd, IFileSystem fileSystem);
         void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting);
 
         /// <summary>

@@ -33,7 +33,7 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
             }
         }
 
-        public void Initialize(IFileSystem fileSystem, Tuple<string, Type, int>[] varInfo)
+        public void Initialize(IFileSystem fileSystem, (string name, Type type, int size, bool hasNameVariable)[] varInfo)
         {
             if (fileSystem.LocalStorage.CheckExistsAsync("CSV").Result != ExistenceCheckResult.FolderExists)
                 throw new DirectoryNotFoundException("Can't Find CSV Folder");
@@ -42,8 +42,8 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
 
             foreach (var info in varInfo)
             {
-                _nameValues.Add(info.Item1, new string[info.Item3]);
-                _nameDictionarys.Add(info.Item1, new Dictionary<string, int>());
+                _nameValues.Add(info.name, new string[info.size]);
+                _nameDictionarys.Add(info.name, new Dictionary<string, int>());
             }
 
             Regex csvRegex = new Regex("[^(CHARA).]+.csv", RegexOptions.IgnoreCase);
@@ -77,9 +77,7 @@ namespace YeongHun.EmueraFramework.Loaders.Windows
 
                             if (tokens.Length < 2)
                                 continue;
-
-                            int index;
-                            if (!int.TryParse(tokens[0], out index))
+                            if (!int.TryParse(tokens[0], out int index))
                                 continue;
 
                             _nameValues[variableName][index] = tokens[1];

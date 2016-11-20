@@ -20,18 +20,22 @@ namespace YeongHun.EmueraFramework.Data
         private Dictionary<string, int> _nameDic;
         private T[] _data;
 
-        public Variable(string name, int capacity)
+        private static readonly Dictionary<string, int> _emptyNameDic = new Dictionary<string, int>();
+
+        public Variable(string name, int capacity) : this(name, capacity, dic: null)
         {
-            Name = name;
-            _data = new T[capacity];
-            _nameDic = new Dictionary<string, int>();
+        }
+
+        public Variable(string name, int capacity, T[] defaultValue) : this(name, capacity, dic: null)
+        {
+            defaultValue.CopyTo(_data, 0);
         }
 
         public Variable(string name, int capacity, Dictionary<string,int> dic)
         {
             Name = name;
             _data = new T[capacity];
-            _nameDic = dic;
+            _nameDic = dic ?? _emptyNameDic;
         }
 
         public T this[long index]
@@ -118,6 +122,47 @@ namespace YeongHun.EmueraFramework.Data
         }
 
         public long Length => _data.Length;
+
+        public void Resize(int size)
+        {
+#if DEBUG
+            try
+            {
+#endif
+                if (size <= 0)
+                {
+                    _data = _data.Length == 0 ? _data : new T[0];
+                    return;
+                }
+                T[] newData = new T[size];
+                if (_data.Length > 0)
+                {
+                    if (_data.Length < size)
+                        Array.Copy(_data, newData, size);
+                    else
+                        _data.CopyTo(newData, 0);
+                }
+                _data = newData;
+#if DEBUG
+            }
+            catch
+            {
+
+            }
+#endif
+        }
+
+        internal void Reset(T defaultValue)
+        {
+            int length = _data.Length;
+            for (int i = 0; i < length; i++)
+                _data[i] = defaultValue;
+        }
+
+        internal void Reset(T[] array, int startIndex,int targetIndex, int length)
+        {
+            Array.Copy(array, startIndex, _data, targetIndex, length);
+        }
     }
 
     public class ReadOnlyVariable<T> : Variable<T>

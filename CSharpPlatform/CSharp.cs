@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using YeongHun.EmueraFramework.Function;
+using YeongHun.EmueraFramework.Data;
 
 namespace YeongHun.EmueraFramework.Platforms
 {
@@ -81,59 +82,44 @@ namespace YeongHun.EmueraFramework.Platforms
                     }
                 }
 
-                var externMethods = type.GetMethods().Where(
-                    method =>
-                    {
-                        return method.IsDefined(typeof(ExternMethodAttribute));
-                    });
+                var externMethods = type.GetMethods().Where(method =>method.IsDefined(typeof(ExternMethodAttribute)) && !method.IsDefined(typeof(ExternSystemFunctionAttribute)));
 
                 foreach (var method in externMethods)
                 {
-                    ExternMethodAttribute attribute = method.GetCustomAttribute<ExternMethodAttribute>();
-                    var paramaters = method.GetParameters();
-                    switch (method.GetParameters().Length)
+                    DefaultMethod dele = null;
+                    try
                     {
-                        case 0:
-                            {
-                                if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, () => { method.Invoke(instance, null); }));
-                                else
-                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, () => method.Invoke(instance, null)));
-                                break;
-                            }
-                        default:
-                            {
-                                if (method.ReturnType == typeof(void))
-                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize, 
-                                        (args) =>
-                                    {
-                                        if (args.Length < paramaters.Length)
-                                        {
-                                            object[] newPara = new object[paramaters.Length];
-                                            args.CopyTo(newPara, 0);
-                                            for (int i = paramaters.Length - args.Length - 1; i >= 0; i--)
-                                                newPara[args.Length + i] = Type.Missing;
-                                            method.Invoke(instance, newPara);
-                                        }
-                                        else method.Invoke(instance, args);
-                                    }));
-                                else
-                                    methods.Add(new Method(method.Name, attribute.ArgSize, attribute.ArgsSize, attribute.LocalSize, attribute.LocalsSize
-                                        , (args) =>
-                                    {
-                                        if (args.Length < paramaters.Length && paramaters[paramaters.Length - 1].IsOptional)
-                                        {
-                                            object[] newPara = new object[paramaters.Length];
-                                            args.CopyTo(newPara, 0);
-                                            for (int i = paramaters.Length - args.Length; i >= 0; i--)
-                                                newPara[args.Length + i] = Type.Missing;
-                                            return method.Invoke(instance, newPara);
-                                        }
-                                        else return method.Invoke(instance, args);
-                                    }));
-                                break;
-                            }
+                        dele = method.CreateDelegate(typeof(DefaultMethod), instance) as DefaultMethod;
+                        if (dele == null)
+                            continue;
                     }
+                    catch
+                    {
+                        continue;
+                    }
+                    ExternMethodAttribute attribute = method.GetCustomAttribute<ExternMethodAttribute>();
+
+                    List<(string, Type, int, bool)> varInfos = new List<(string, Type, int, bool)>()
+                    {
+                        ("ARG", typeof(long), 0, false),
+                        ("ARGS", typeof(string), 0, false),
+                        ("LOCAL", typeof(long), 0, false),
+                        ("LOCALS", typeof(string), 0, false),
+                    };
+
+                    var customVariables = method.GetCustomAttributes<CustomVariableAttribute>();
+
+                    foreach(var customVariable in customVariables)
+                    {
+                        varInfos.Add((customVariable.Name, customVariable.Type, customVariable.Size, false));
+                    }
+
+                    methods.Add(
+                        new Method(
+                            method.Name, dele,
+                            new DataBase(new VariableInfo(new EmptyNameDictionary(), varInfos.ToArray())),
+                            attribute.ArgSize,attribute.ArgsSize,attribute.LocalSize,attribute.LocalsSize));
+                    
                 }
             }
             Methods = methods.ToArray();
@@ -178,4 +164,5 @@ namespace YeongHun.EmueraFramework.Platforms
         }
         #endregion
     }
+
 }

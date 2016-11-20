@@ -17,14 +17,18 @@ namespace YeongHun.EmueraFramework.Platforms.Test
             framework.TextColor = new Draw.Color("RED");
             framework.Print("Color Test");
             framework.ResetColor();
-            framework.Call("SYSTEM_TITLE");
+            framework.Call("FlagSet");
         }
 
         [ExternMethod]
-        public void FlagSet()
+        [CustomVariable("LocalValue", typeof(long), 1)]
+        public object FlagSet(object[] args)
         {
-            _framework.IntValues["FLAG", "AAA"] = 100;
-            _framework.Print("FLAG:100 = " + _framework.IntValues["FLAG", 100]);
+            _framework.IntValues["LocalValue"] = 10000;
+            _framework.IntValues["FLAG", "영"] = 100;
+            _framework.Print("FLAG:영 = " + _framework.IntValues["FLAG", "영"]);
+            _framework.Print("LocalValue = " + _framework.IntValues["LocalValue"]);
+            return null;
         }
     }
 }

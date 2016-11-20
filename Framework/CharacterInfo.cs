@@ -4,21 +4,40 @@ using YeongHun.EmueraFramework.Data;
 
 namespace Framework
 {
-    class CharacterInfo : DataBase
+    internal class CharacterInfo : DataBase
     {
         internal CharacterInfo(
             long registrationNumber,
             VariableInfo variableInfo,
-            Dictionary<string, Tuple<object, object>[]> defaultInfos=null
+            Dictionary<string, (int index, object value)[]> defaultInfos=null
             )
         {
             base.Initialize(variableInfo);
-            ((IDataBase<long>)this)["NO"] = registrationNumber;
+
+            var intValues = this as IDataBase<long>;
+            var strValues = this as IDataBase<string>;
 
             foreach(var defaultInfo in defaultInfos)
             {
-
+                if (intValues.HasVariable(defaultInfo.Key))
+                {
+                    foreach(var defaultValue in defaultInfo.Value)
+                    {
+                        if (defaultValue.value is long num)
+                            intValues[defaultInfo.Key, defaultValue.index] = num;
+                    }
+                }
+                else if (strValues.HasVariable(defaultInfo.Key))
+                {
+                    foreach(var defaultValue in defaultInfo.Value)
+                    {
+                        if (defaultValue.value is string str)
+                            strValues[defaultInfo.Key, defaultValue.index] = str;
+                    }
+                }
             }
+
+            ((IDataBase<long>)this)["NO"] = registrationNumber;
         }
 
         public string CallName => ((IDataBase<string>)this)["CALLNAME"];

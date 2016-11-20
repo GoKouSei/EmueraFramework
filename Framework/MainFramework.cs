@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace Framework
 {
     public class MainFramework : DataBase, IFramework
     {
-        public string Root { get; private set; }
+        public string Root => FileSystem.LocalStorage.Path;
 
         private Config _config = null;
         private Dictionary<string, Method> _methods = new Dictionary<string, Method>();
@@ -35,59 +36,33 @@ namespace Framework
         #region IDataBase<long>
         long IDataBase<long>.GetValue(string name, long index)
         {
-            switch (name)
-            {
-                case "LOCAL":
-                    return CurrentMethod.LOCAL[index];
-                case "ARG":
-                    return CurrentMethod.ARG[index];
-                default:
-                    return _intVariables[name];
-            }
+            if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                return CurrentMethod.LocalVariable.IntValues[name, index];
+            else
+                return _intVariables[name][index];
         }
         void IDataBase<long>.SetValue(string name, long index, long value)
         {
-            switch (name)
-            {
-                case "LOCAL":
-                    CurrentMethod.LOCAL[index] = value;
-                    break;
-                case "ARG":
-                    CurrentMethod.ARG[index] = value;
-                    break;
-                default:
-                    _intVariables[name][index] = value;
-                    break;
-            }
+            if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                CurrentMethod.LocalVariable.IntValues[name, index] = value;
+            else
+                _intVariables[name][index] = value;
         }
         long IDataBase<long>.this[string name, long index]
         {
             get
             {
-                switch (name)
-                {
-                    case "LOCAL":
-                        return CurrentMethod.LOCAL[index];
-                    case "ARG":
-                        return CurrentMethod.ARG[index];
-                    default:
-                        return _intVariables[name][index];
-                }
+                if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                    return CurrentMethod.LocalVariable.IntValues[name, index];
+                else
+                    return _intVariables[name][index];
             }
             set
             {
-                switch (name)
-                {
-                    case "LOCAL":
-                        CurrentMethod.LOCAL[index] = value;
-                        break;
-                    case "ARG":
-                        CurrentMethod.ARG[index] = value;
-                        break;
-                    default:
-                        _intVariables[name][index] = value;
-                        break;
-                }
+                if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                    CurrentMethod.LocalVariable.IntValues[name, index] = value;
+                else
+                    _intVariables[name][index] = value;
             }
         }
         #endregion
@@ -95,61 +70,35 @@ namespace Framework
         #region IDataBase<string>
         string IDataBase<string>.GetValue(string name, long index)
         {
-            switch (name)
-            {
-                case "LOCALS":
-                    return CurrentMethod.LOCALS[index];
-                case "ARGS":
-                    return CurrentMethod.ARGS[index];
-                default:
-                    return _strVariables[name][index];
-            }
+            if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                return CurrentMethod.LocalVariable.StrValues[name, index];
+            else
+                return _strVariables[name][index];
         }
 
         void IDataBase<string>.SetValue(string name, long index, string value)
         {
-            switch (name)
-            {
-                case "LOCALS":
-                    CurrentMethod.LOCALS[index] = value;
-                    break;
-                case "ARGS":
-                    CurrentMethod.ARGS[index] = value;
-                    break;
-                default:
-                    _strVariables[name][index] = value;
-                    break;
-            }
+            if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                CurrentMethod.LocalVariable.StrValues[name, index] = value;
+            else
+                _strVariables[name][index] = value;
         }
 
         string IDataBase<string>.this[string name, long index]
         {
             get
             {
-                switch (name)
-                {
-                    case "LOCALS":
-                        return CurrentMethod.LOCALS[index];
-                    case "ARGS":
-                        return CurrentMethod.ARGS[index];
-                    default:
-                        return _strVariables[name][index];
-                }
+                if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                    return CurrentMethod.LocalVariable.StrValues[name, index];
+                else
+                    return _strVariables[name][index];
             }
             set
             {
-                switch (name)
-                {
-                    case "LOCALS":
-                        CurrentMethod.LOCALS[index] = value;
-                        break;
-                    case "ARGS":
-                        CurrentMethod.ARGS[index] = value;
-                        break;
-                    default:
-                        _strVariables[name][index] = value;
-                        break;
-                }
+                if (CurrentMethod.LocalVariable.HasVariable(typeof(long), name))
+                    CurrentMethod.LocalVariable.StrValues[name, index] = value;
+                else
+                    _strVariables[name][index] = value;
             }
         }
         #endregion
@@ -182,10 +131,6 @@ namespace Framework
 
         public IAssemblyLoader AssemblyLoader { get; private set; }
 
-        public IDataBase<string> StrValues => this;
-
-        public IDataBase<long> IntValues => this;
-
         private int _targetFPS;
         public int TargetFPS
         {
@@ -202,13 +147,15 @@ namespace Framework
             }
         }
 
+        public IFileSystem FileSystem { get; private set; }
+
         private TimeSpan _refreshInterval;
 
-        public void SetFrontEnd(IFrontEnd frontEnd, string root)
+        public void SetFrontEnd(IFrontEnd frontEnd, IFileSystem fileSystem)
         {
             TargetFPS = 10;
             _frontEnd = frontEnd;
-            Root = root;
+            FileSystem = fileSystem;
         }
 
         public void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting)
@@ -252,11 +199,11 @@ namespace Framework
         {
             var result = Call(methodName, args);
             if (result is int)
-                ((IDataBase<long>)this)["RESULT"] = (int)result;
+                ((IDataBase<long>)this)["RESULT", 0] = (int)result;
             else if (result is long)
-                ((IDataBase<long>)this)["RESULT"] = (long)result;
+                ((IDataBase<long>)this)["RESULT", 0] = (long)result;
             else if (result is string)
-                ((IDataBase<string>)this)["RESULT"] = (string)result;
+                ((IDataBase<string>)this)["RESULT", 0] = (string)result;
         }
 
         public object Call(string methodName, params object[] args)
@@ -425,10 +372,9 @@ namespace Framework
 
         public void AddChara(long num)
         {
-            CharacterInfo defaultChara;
-            if (_defaultCharacters.TryGetValue(num, out defaultChara))
+            if (_defaultCharacters.TryGetValue(num, out var defaultChara))
             {
-                _characters.Add(_defaultCharacters[num]);
+                _characters.Add(defaultChara);
             }
             else
             {
@@ -463,12 +409,12 @@ namespace Framework
 
         public void ResetColor()
         {
-            throw new NotImplementedException();
+            TextColor = DrawSetting.TextColor;
         }
 
         public void ResetBGColor()
         {
-            throw new NotImplementedException();
+            BackGroundColor = DrawSetting.BackGroundColor;
         }
 
         public void TWait(long time, long flag)
