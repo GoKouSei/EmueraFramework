@@ -19,3 +19,7 @@ csv -> NameDictionary
 chara csv -> DefaultCharaInfo
 
 erb -> ERB Compiler -> MSIL -> Method, SystemFunction
+
+
+
+Need C# 7.0 Compiler (VS 2017)
