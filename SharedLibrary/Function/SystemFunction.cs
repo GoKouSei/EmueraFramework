@@ -7,7 +7,14 @@ using System.Threading.Tasks;
 
 namespace YeongHun.EmueraFramework.Function
 {
-    public enum SystemFunctionCode:int
+    public enum SystemFunctionPriority : int
+    {
+        LAST,
+        NORMAL,
+        FIRST,
+        ONLY,
+    }
+    public enum SystemFunctionCode : int
     {
         NULL = 0,
         SHOP = 2,
@@ -18,13 +25,25 @@ namespace YeongHun.EmueraFramework.Function
         FIRST = 7,
         TITLE = 8,
     }
-    public class SystemFunction
+    public sealed class SystemFunctionComparer : IComparer<SystemFunction>
+    {
+        public int Compare(SystemFunction x, SystemFunction y)
+        {
+            return x.Priority.CompareTo(y);
+        }
+    }
+    public class SystemFunction : Method
     {
         private Action<IFramework> _body;
 
+        public SystemFunctionPriority Priority { get; }
         public SystemFunctionCode Code { get; }
-        
-        public SystemFunction(SystemFunctionCode code,Action<IFramework> body)
+
+        public SystemFunction(SystemFunctionCode code, int argSize, int argsSize, int localSize, int localsSize, Action<IFramework> body) : this(code, argSize, argsSize, localSize, localsSize, body, SystemFunctionPriority.NORMAL)
+        {
+        }
+
+        public SystemFunction(SystemFunctionCode code, int argSize, int argsSize, int localSize, int localsSize, Action<IFramework> body, SystemFunctionPriority Priority) : base("SYSTEM_FUNCTION_" + code.ToString(), DefaultLocalVariables, argSize, argsSize, localSize, localsSize)
         {
             Code = code;
             _body = body;

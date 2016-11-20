@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using YeongHun.EmueraFramework.Data;
+using YeongHun.EmueraFramework.Draw;
 using YeongHun.EmueraFramework.Function;
 
 namespace YeongHun.EmueraFramework
@@ -17,21 +19,6 @@ namespace YeongHun.EmueraFramework
         Running,
         Waiting,
     }
-    
-    public enum WaitType
-    {
-        ANYKEY = 0,
-        ENTERKEY,
-        INTEGER,
-        STRING,
-    }
-
-    public enum Alignment
-    {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
 
     public interface IFramework : IDataBase<string>, IDataBase<long>
     {
@@ -39,7 +26,11 @@ namespace YeongHun.EmueraFramework
         string Name { get; }
         FrameworkState State { get; }
 
-        void Initialize(IPlatform[] platforms, IFrontEnd frontEnd, Config config);
+        IDataBase<string> StrValues { get; }
+        IDataBase<long> IntValues { get; }
+
+        void SetFrontEnd(IFrontEnd frontEnd, IFileSystem fileSystem);
+        void Initialize(IAssemblyLoader assemblyLoader, IPlatform[] platforms, Config config, DrawSetting drawSetting);
 
         /// <summary>
         /// Start Script
@@ -53,12 +44,11 @@ namespace YeongHun.EmueraFramework
         Exception End();
 
         #region IPlatform
-        int Color { get; set; }
-        int BackGroundColor { get; set; }
 
-        Alignment Align { get; set; }
+        LineAlign LineAlign { get; set; }
 
-
+        Color TextColor { get; set; }
+        Color BackGroundColor { get; set; }
         void ResetColor();
         void ResetBGColor();
 
@@ -71,7 +61,7 @@ namespace YeongHun.EmueraFramework
         void DrawLine();
         void DrawLine(string str);
 
-        void Wait(WaitType type);
+        void Wait(ConsoleInputType type);
         void TWait(long time, long flag);
 
         void Save();
@@ -86,6 +76,7 @@ namespace YeongHun.EmueraFramework
         #endregion
         #region IFrontEnd
         void EnterInput(ConsoleInput input);
+        DrawSetting DrawSetting { get;}
         #endregion
     }
 }

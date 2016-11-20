@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YeongHun.EmueraFramework;
+using Colorful;
 using YeongHun.EmueraFramework.Draw;
 
-namespace YeongHun.EmueraFramework.FrontEnds
+namespace YeongHun.EmueraFramework.FrontEnds.Windows
 {
     public class ConsoleFrontEnd : IFrontEnd
     {
         private IFramework _framework;
-
-        public string Root => AppDomain.CurrentDomain.BaseDirectory;
+        private DrawSetting _drawSetting;
 
         public ConsoleLine LastLine
         {
             get
             {
-                return Lines.Count > 0 ? null : Lines[0];
+                return Lines.Count > 0 ? new ConsoleLine(new ConsoleStringPart("", new Color(0)), _framework.DrawSetting) : Lines[0];
             }
 
             set
@@ -32,22 +28,25 @@ namespace YeongHun.EmueraFramework.FrontEnds
 
         public void Draw()
         {
+            Console.BackgroundColor = System.Drawing.Color.FromArgb(_framework.BackGroundColor.ToArgb());
             Console.Clear();
-            foreach(var line in Lines)
+            foreach (var line in Lines)
             {
-                string str = string.Concat(line.Parts.Select(part => part.Str));
-
-                switch(line.Align)
+                switch (line.Align)
                 {
                     case LineAlign.CENTER:
-                        Console.SetCursorPosition((Console.WindowWidth - str.Length) / 2, Console.CursorTop);
+                        Console.SetCursorPosition((Console.WindowWidth - line.Width) / 2, Console.CursorTop);
                         break;
                     case LineAlign.RIGHT:
-                        Console.SetCursorPosition(Console.WindowWidth - str.Length, Console.CursorTop);
+                        Console.SetCursorPosition(Console.WindowWidth - line.Width, Console.CursorTop);
                         break;
                 }
 
-                Console.WriteLine(str);
+                foreach (var part in line.Parts)
+                {
+                    Console.ForegroundColor = System.Drawing.Color.FromArgb(part.Color.ToArgb());
+                    Console.WriteLine(part.Str);
+                }
             }
         }
 
@@ -61,6 +60,7 @@ namespace YeongHun.EmueraFramework.FrontEnds
         public void Initialize(IFramework framework)
         {
             _framework = framework;
+            _drawSetting = framework.DrawSetting;
         }
     }
 }

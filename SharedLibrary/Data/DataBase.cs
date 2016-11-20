@@ -14,9 +14,17 @@ namespace YeongHun.EmueraFramework.Data
         void SetValue(string name, string index, T value);
         T this[string name, long index = 0] { get; set; }
         T this[string name, string index] { get; set; }
+
+        Variable<T> GetVariable(string name);
+        bool HasVariable(string name);
+        void Reset(string name, T value = default(T));
+        void Resize(string name, int size);
     }
     public class DataBase : IDataBase<long>, IDataBase<string>
     {
+        public DataBase(VariableInfo info) => Initialize(info);
+
+        protected DataBase() { }
 
         protected void Initialize(VariableInfo info)
         {
@@ -25,15 +33,34 @@ namespace YeongHun.EmueraFramework.Data
 
             foreach (var variableInfo in info.Info)
             {
-                if (variableInfo.Item2 == typeof(string))
-                    _strVariables.Add(variableInfo.Item1, new Variable<string>(variableInfo.Item1, variableInfo.Item3, info.NameDic[variableInfo.Item1]));
-                else if (variableInfo.Item2 == typeof(long))
-                    _intVariables.Add(variableInfo.Item1, new Variable<long>(variableInfo.Item1, variableInfo.Item3, info.NameDic[variableInfo.Item1]));
+                if (variableInfo.type == typeof(string))
+                    _strVariables.Add(variableInfo.name, new Variable<string>(variableInfo.name, variableInfo.size, info.NameDic[variableInfo.name]));
+                else if (variableInfo.type == typeof(long))
+                    _intVariables.Add(variableInfo.name, new Variable<long>(variableInfo.name, variableInfo.size, info.NameDic[variableInfo.name]));
+
+                if (variableInfo.hasNameVariable)
+                {
+                    var nameVar = variableInfo.name + "NAME";
+                    _strVariables.Add(nameVar, new Variable<string>(nameVar, variableInfo.size, info.NameDic.Names[variableInfo.name]));
+                }
             }
         }
 
-        private Dictionary<string, Variable<string>> _strVariables;
-        private Dictionary<string, Variable<long>> _intVariables;
+        protected Dictionary<string, Variable<string>> _strVariables;
+        protected Dictionary<string, Variable<long>> _intVariables;
+
+        public bool HasVariable(Type type, string name)
+        {
+            if (type == typeof(string))
+                return _strVariables.ContainsKey(name);
+            else if (type == typeof(long))
+                return _intVariables.ContainsKey(name);
+            else
+                return false;
+        }
+
+        public IDataBase<long> IntValues => this;
+        public IDataBase<string> StrValues => this;
 
         #region IDataBase<long>
         long IDataBase<long>.this[string name, long index]
@@ -81,6 +108,22 @@ namespace YeongHun.EmueraFramework.Data
         {
             _intVariables[name][index] = value;
         }
+
+        void IDataBase<long>.Reset(string name, long value)
+        {
+            if (_intVariables.ContainsKey(name))
+                _intVariables[name].Reset(value);
+        }
+
+        void IDataBase<long>.Resize(string name, int size)
+        {
+            if (_intVariables.ContainsKey(name))
+                _intVariables[name].Resize(size);
+        }
+
+        Variable<long> IDataBase<long>.GetVariable(string name) => _intVariables[name];
+
+        bool IDataBase<long>.HasVariable(string name) => _intVariables.ContainsKey(name);
         #endregion
         #region IDataBase<string>
         string IDataBase<string>.GetValue(string name, long index)
@@ -128,6 +171,22 @@ namespace YeongHun.EmueraFramework.Data
                 _strVariables[name][index] = value;
             }
         }
+
+        void IDataBase<string>.Reset(string name, string value)
+        {
+            if (_strVariables.ContainsKey(name))
+                _strVariables[name].Reset(value);
+        }
+
+        void IDataBase<string>.Resize(string name, int size)
+        {
+            if (_strVariables.ContainsKey(name))
+                _strVariables[name].Resize(size);
+        }
+
+        Variable<string> IDataBase<string>.GetVariable(string name) => _strVariables[name];
+
+        bool IDataBase<string>.HasVariable(string name) => _strVariables.ContainsKey(name);
         #endregion
     }
 }

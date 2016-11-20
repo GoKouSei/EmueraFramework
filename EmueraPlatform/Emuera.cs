@@ -7,13 +7,16 @@ using System.Threading.Tasks;
 using YeongHun.EmueraFramework;
 using YeongHun.EmueraFramework.Function;
 
-namespace EmueraPlatform
+namespace YeongHun.EmueraFramework.Platforms
 {
     public class EmueraPlatform : IPlatform
     {
+        private IFramework _framework;
         public Method[] Methods { get; private set; }
 
-        public string Name
+        public string Name => "ERA";
+
+        public SystemFunction[] SystemFunctions
         {
             get
             {
@@ -23,22 +26,34 @@ namespace EmueraPlatform
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+
         }
 
         public void Initialize(IFramework framework)
         {
+            _framework = framework;
             Assembly asm = Assembly.Load(framework.Root + "ERB.dll");
             Type erb = asm.GetType("ERB");
             object instance = Activator.CreateInstance(erb, framework);
-            Methods = erb.GetMethods()
-                .Select(method =>
-                {
-                    return new Method(method.Name, args =>
-                     {
-
-                     });
-                }).ToArray();
+            //Methods = erb.GetMethods()
+            //    .Select(method =>
+            //    {
+            //        var parameters = method.GetParameters();
+            //        if (parameters.Length > 0)
+            //        {
+            //            if (method.ReturnType == typeof(void))
+            //                return new Method(method.Name, args => { method.Invoke(instance, args); });
+            //            else
+            //                return new Method(method.Name, args => method.Invoke(instance, args));
+            //        }
+            //        else
+            //        {
+            //            if (method.ReturnType == typeof(void))
+            //                return new Method(method.Name, () => { method.Invoke(instance, null); });
+            //            else
+            //                return new Method(method.Name, () => method.Invoke(instance, null));
+            //        }
+            //    }).ToArray();
         }
     }
 }

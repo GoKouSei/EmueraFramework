@@ -10,12 +10,12 @@ namespace YeongHun.EmueraFramework.Draw
     {
         public override string Str { get; }
 
-        public ConsoleButtonPart(string str, int color, int value) : base(color, value)
+        public ConsoleButtonPart(string str, Color color, int value) : base(color, value)
         {
             Str = str;
         }
 
-        public ConsoleButtonPart(string str, int color, string value) : base(color, value)
+        public ConsoleButtonPart(string str, Color color, string value) : base(color, value)
         {
             Str = str;
         }

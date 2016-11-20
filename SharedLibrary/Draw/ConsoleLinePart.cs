@@ -8,13 +8,13 @@ namespace YeongHun.EmueraFramework.Draw
 {
     public abstract class ConsoleLinePart
     {
-        public int Color { get; }
+        public Color Color { get; }
         public bool IsButton { get; }
         public int? ButtonIntValue { get; }
         public string ButtonStrValue { get; }
         public abstract string Str { get; }
 
-        protected ConsoleLinePart(int color)
+        protected ConsoleLinePart(Color color)
         {
             Color = color;
             IsButton = false;
@@ -22,7 +22,7 @@ namespace YeongHun.EmueraFramework.Draw
             ButtonStrValue = null;
         }
 
-        protected ConsoleLinePart(int color, int intValue)
+        protected ConsoleLinePart(Color color, int intValue)
         {
             Color = color;
             IsButton = true;
@@ -30,7 +30,7 @@ namespace YeongHun.EmueraFramework.Draw
             ButtonStrValue = null;
         }
 
-        protected ConsoleLinePart(int color, string strValue)
+        protected ConsoleLinePart(Color color, string strValue)
         {
             Color = color;
             IsButton = true;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YeongHun.EmueraFramework.Data
 {
-    public interface ICharacter:IDataBase<string>,IDataBase<long>
+    public interface ICharacter : IDataBase<string>, IDataBase<long>
     {
         long RegistrationNumber { get; }
         string Name { get; }
@@ -15,13 +15,13 @@ namespace YeongHun.EmueraFramework.Data
 
     public class DefaultCharaInfo
     {
-        public DefaultCharaInfo(long characterNumber, Dictionary<string, Tuple<object, object>[]> info)
+        public DefaultCharaInfo(long characterNumber, Dictionary<string, (int index, object value)[]> info)
         {
             CharacterNumber = characterNumber;
             Info = info;
         }
 
         public long CharacterNumber { get; }
-        public Dictionary<string, Tuple<object, object>[]> Info { get; }
+        public Dictionary<string, (int index, object value)[]> Info { get; }
     }
 }

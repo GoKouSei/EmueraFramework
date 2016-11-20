@@ -1,26 +1,24 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace YeongHun.EmueraFramework.Data
 {
-    public class NameDictionary : Dictionary<string, Dictionary<string, int>>
+    public interface INameDictionary
     {
-        public new Dictionary<string,int> this[string index]
+        void Initialize(IFileSystem fileSystem, (string name, Type type, int size, bool hasNameVariable)[] varInfo);
+        Dictionary<string, int> this[string variableName] { get; }
+        Dictionary<string, string[]> Names { get; }
+    }
+    public class EmptyNameDictionary : INameDictionary
+    {
+        public Dictionary<string, int> this[string variableName] => null;
+
+        public Dictionary<string, string[]> Names => null;
+
+        public void Initialize(IFileSystem fileSystem, (string name, Type type, int size, bool hasNameVariable)[] varInfo)
         {
-            get
-            {
-                if (ContainsKey(index))
-                    return base[index];
-                else
-                    return null;
-            }
-            set
-            {
-                base[index] = value;
-            }
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,7 +8,7 @@
     <ProjectGuid>{855B38AF-349C-4ABB-A2BC-216189C54886}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharedLibrary</RootNamespace>
+    <RootNamespace>YeongHun.EmueraFramework</RootNamespace>
     <AssemblyName>SharedLibrary</AssemblyName>
     <DefaultLanguage>ko-KR</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -33,31 +33,79 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConfig.cs" />
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\ConsoleInput.cs" />
+    <Compile Include="Data\Serializers.cs" />
+    <Compile Include="Draw\Color.cs" />
     <Compile Include="Draw\ConsoleButtonPart.cs" />
     <Compile Include="Draw\ConsoleLine.cs" />
     <Compile Include="Draw\ConsoleLinePart.cs" />
     <Compile Include="Draw\ConsoleStringPart.cs" />
+    <Compile Include="Draw\DrawSetting.cs" />
+    <Compile Include="Draw\IStringCalculator.cs" />
     <Compile Include="Draw\Point.cs" />
     <Compile Include="Data\ICharacter.cs" />
     <Compile Include="Data\DataBase.cs" />
+    <Compile Include="IAssemblyLoader.cs" />
     <Compile Include="IFramework.cs" />
     <Compile Include="IFrontEnd.cs" />
     <Compile Include="IPlatform.cs" />
     <Compile Include="Function\Method.cs" />
     <Compile Include="Data\NameDictionary.cs" />
-    <Compile Include="Function\PrintFlags.cs" />
+    <Compile Include="PrintFlags.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Function\SystemFunction.cs" />
     <Compile Include="Data\Variable.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Config">
+      <HintPath>..\Library\Config.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\packages\PCLStorage.1.0.2\lib\portable-net45+wp8+wpa81+win8+monoandroid+monotouch+Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(SolutionDir)\Binary\" md "$(SolutionDir)\Binary\"
+if not exist "$(SolutionDir)\Binary\$(PlatformName)\" md "$(SolutionDir)\Binary\$(PlatformName)\"
+if not exist "$(SolutionDir)\Binary\$(PlatformName)\DLL\" md "$(SolutionDir)\Binary\$(PlatformName)\DLL\"
+copy "$(TargetFileName)" "$(SolutionDir)\Binary\$(PlatformName)\DLL\"
+copy "$(TargetName).pdb" $(SolutionDir)\Binary\$(PlatformName)\DLL\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

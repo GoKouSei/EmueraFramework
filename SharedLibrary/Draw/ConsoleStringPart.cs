@@ -9,7 +9,7 @@ namespace YeongHun.EmueraFramework.Draw
     public class ConsoleStringPart : ConsoleLinePart
     {
         public override string Str { get; }
-        public ConsoleStringPart(string str, int color) : base(color)
+        public ConsoleStringPart(string str, Color color) : base(color)
         {
             Str = str;
         }

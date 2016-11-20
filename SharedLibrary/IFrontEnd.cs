@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using YeongHun.EmueraFramework.Draw;
 
 namespace YeongHun.EmueraFramework
 {
     public interface IFrontEnd
     {
-        string Root { get; }
         List<ConsoleLine> Lines { get; }
         ConsoleLine LastLine { get; set; }
 
