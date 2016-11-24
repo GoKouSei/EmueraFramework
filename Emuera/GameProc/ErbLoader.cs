@@ -321,7 +321,7 @@ namespace MinorShift.Emuera.GameProc
 				while ((st = eReader.ReadEnabledLine()) != null)
 				{
 					rowLine = st.RowString;
-					position = new ScriptPosition(eReader.Filename, eReader.LineNo, rowLine);
+					position = new ScriptPosition(eReader.Filename, eReader.LineNo);
 					//rename処理をEraStreamReaderに移管
 					//変換できなかった[[～～]]についてはLexAnalyzerがエラーを投げる
 					if (st.Current == '[' && st.Next != '[')
@@ -436,7 +436,7 @@ namespace MinorShift.Emuera.GameProc
 					lastLine = addLine(nextLine, lastLine);
 				}
 				addLine(new NullLine(), lastLine);
-				position = new ScriptPosition(eReader.Filename, -1, null);
+				position = new ScriptPosition(eReader.Filename, -1);
 				ppstate.FileEnd(position);
 			}
 			finally
@@ -475,7 +475,6 @@ namespace MinorShift.Emuera.GameProc
 						errmes = exc.GetType().ToString() + ":" + errmes;
 					ParserMediator.Warn("関数@" + label.LabelName + " の引数のエラー:" + errmes, label, 2, true, false);
 					label.ErrMes = "ロード時に解析に失敗した関数が呼び出されました";
-                    label.IsError = true;
 				}
 				finally
 				{
@@ -727,7 +726,6 @@ namespace MinorShift.Emuera.GameProc
 						{
 							if (!label.NextLine.IsError)
 							{
-								label.NextLine.IsError = true;
 								label.NextLine.ErrMes = "呼び出されないはずの関数が呼ばれた";
 							}
 						}
@@ -799,7 +797,6 @@ namespace MinorShift.Emuera.GameProc
 			}
 			if (isError)
 			{
-				line.IsError = true;
 				line.ErrMes = str;
 			}
 			if (level < Config.DisplayWarningLevel)
