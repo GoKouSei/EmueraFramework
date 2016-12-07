@@ -109,7 +109,7 @@ namespace YeongHun.EmueraFramework.Platforms
         void IPlatform.Initialize(IFramework framework)
         {
             EmueraPlatform.framework = framework;
-            GlobalStatic.Console.state = MinorShift.Emuera.GameView.ConsoleState.Running;
+            GlobalStatic.Console.state = ConsoleState.Running;
         }
 
         object IEmuera.GetValue(string name, params object[] indexes)
@@ -120,22 +120,22 @@ namespace YeongHun.EmueraFramework.Platforms
             {
                 try
                 {
-                    if (indexes[i] is long)
-                        target[i] = (int)(long)indexes[i];
-                    else if (indexes[i] is int)
-                        target[i] = (int)indexes[i];
-                    else if (indexes[i] is string)
+                    switch (indexes[i])
                     {
-                        string temp;
-                        int num;
-                        if (!int.TryParse((string)(indexes[i]), out num))
-                            target[i] = GlobalStatic.ConstantData.GetKeywordDictionary(out temp, code, i)[(string)indexes[i]];
-                        else
-                            target[i] = num;
-                    }
-                    else
-                    {
-                        throw new Exception();
+                        case long l:
+                            target[i] = (int)l;
+                            break;
+                        case int n:
+                            target[i] = n;
+                            break;
+                        case string s:
+                            if (!int.TryParse(s, out int num))
+                                target[i] = GlobalStatic.ConstantData.GetKeywordDictionary(out string temp, code, i)[s];
+                            else
+                                target[i] = num;
+                            break;
+                        default:
+                            throw new Exception();
                     }
                 }
                 catch
