@@ -5,6 +5,8 @@ This is Cross-Platform Framework based on Emuera(https://ko.osdn.jp/projects/emu
 
 Example
 
+<pre><code>
+
 @SYSTEM_TITLE
 CALL SETFLAG, 1
 RETURN
@@ -28,3 +30,5 @@ Print FLAG:0 with NEWLINE
 
 RETURN
 End Function
+
+</code></pre>
