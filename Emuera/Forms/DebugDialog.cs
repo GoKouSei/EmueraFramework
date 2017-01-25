@@ -32,6 +32,11 @@ namespace MinorShift.Emuera.Forms
 			updateSize();
 			checkBoxTopMost.Checked = this.TopMost;
 			loadWatchList();
+            LoadBreakPoint();
+            breakPoint.Image = new Bitmap(breakPoint.Width, breakPoint.Height);
+            sourceText.BackColor = Color.White;
+            sourceText.ForeColor = Color.Black;
+            breakPoint.BackColor = BackColor;
 		}
 		private Process emuera = null;
 		private EmueraConsole mainConsole = null;
@@ -67,6 +72,178 @@ namespace MinorShift.Emuera.Forms
 				updateTrace();
 			else if (tabControlMain.SelectedTab == tabPageConsole)
 				updateConsole();
+		}
+
+        private bool wait = false;
+		private bool nextBreak = false;
+		private Dictionary<string,string[]>lines=new Dictionary<string, string[]>();
+        internal List<ScriptPosition> breakPoints = new List<ScriptPosition>();
+		private ScriptPosition lastPos = null;
+
+        private void SaveBreakPoint()
+        {
+            using(FileStream debugDat=new FileStream(Program.DebugDir + "Debug.dat", FileMode.Create))
+            {
+                var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                formatter.Serialize(debugDat, breakPoints);
+            }
+        }
+
+        private void LoadBreakPoint()
+        {
+            if (!File.Exists(Program.DebugDir + "Debug.dat"))
+                return;
+            try
+            {
+                using (FileStream debugDat = new FileStream(Program.DebugDir + "Debug.dat", FileMode.Open))
+                {
+                    var formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    breakPoints = formatter.Deserialize(debugDat) as List<ScriptPosition>;
+                }
+            }
+            catch
+            {
+                return;
+            }
+        }
+
+		private void InitSource(string fileName)
+		{
+			if(!lines.ContainsKey(fileName))
+			{
+				lines.Add(fileName, File.ReadAllLines(Program.ErbDir+fileName));
+			}
+			
+			sourceText.Clear();
+			sourceText.Lines=lines[fileName];
+		}
+
+		internal void UpdatePosition(ScriptPosition pos)
+		{
+            if (lastPos?.Filename != pos.Filename)
+            {
+                InitSource(pos.Filename);
+            }
+            else if (lastPos != null)
+            {
+                if (breakPoints.Contains(lastPos))
+                    MarkBreakPoint(lastPos);
+                else
+                    CleanLine(lastPos);
+            }
+            lastPos = pos;
+            SelectLine(pos.LineNo - 1, Color.FromArgb(0x00C6C971), Color.Black, true);
+            if (wait)
+            {
+                //sourceText.Refresh();
+                System.Threading.Tasks.Task.Delay(600).Wait();
+                wait = false;
+            }
+            if (nextBreak)
+            {
+                nextBreak = false;
+                SetBreak();
+            }
+
+            Application.DoEvents();
+        }
+        
+        private void MarkBreakPoint(ScriptPosition pos) => SelectLine(pos.LineNo - 1, Color.DarkRed, Color.White);
+        private void CleanLine(ScriptPosition pos) => SelectLine(pos.LineNo - 1, Color.White, Color.Black);
+
+        private void SelectLine(int lineNo,Color back,Color text,bool scroll=false)
+        {
+            var lineLength = sourceText.Lines[lineNo].Length;
+            sourceText.Select(sourceText.GetFirstCharIndexFromLine(lineNo), lineLength);
+            sourceText.SelectionColor = text;
+            sourceText.SelectionBackColor = back;
+            if(scroll)
+                sourceText.ScrollToCaret();
+            sourceText.DeselectAll();
+        }
+
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mainConsole.PressEnterKey(false, "", false);
+        }
+
+        void StepToolStripMenuItemClick(object sender, EventArgs e)
+		{
+            wait = true;
+            nextBreak = true;
+            if (mainConsole.IsWaitingEnterKey)
+			{
+				mainConsole.PressEnterKey(false, "", false);
+            }
+		}
+
+		void SetBreak()
+		{
+            mainConsole.ReadAnyKey(anykey: true);
+		}
+
+        void UpdateBreakPoint()
+        {
+            if (lastPos == null)
+                return;
+            var bitmap = new Bitmap(breakPoint.Width, breakPoint.Height);
+            var g = Graphics.FromImage(bitmap);
+            var b = new SolidBrush(breakPoint.BackColor);
+            g.FillRectangle(b, 0, 0, breakPoint.Width, breakPoint.Height);
+
+            var topPoint = sourceText.Location;
+            var firstLine = sourceText.GetLineFromCharIndex(sourceText.GetCharIndexFromPosition(topPoint));
+            var lastLine = sourceText.GetLineFromCharIndex(sourceText.GetCharIndexFromPosition(new Point(topPoint.X, topPoint.Y + sourceText.Height)));
+
+            var lineHeight = sourceText.Font.Height;
+            b.Color = Color.DarkRed;
+            for (int i = firstLine; i <= lastLine; i++)
+            {
+                var currentPos = new ScriptPosition(lastPos.Filename, i+1);
+                
+                if(breakPoints.Contains(currentPos))
+                {
+                    if (lastPos != currentPos)
+                        MarkBreakPoint(currentPos);
+                    var circle = new Rectangle((int)(sourceText.Font.Size / 3),
+                    sourceText.GetPositionFromCharIndex(sourceText.GetFirstCharIndexFromLine(i)).Y + (int)(sourceText.Font.Size / 2), (int)(sourceText.Font.Size), (int)(sourceText.Font.Size));
+                    g.FillEllipse(b, circle);
+                }
+            }
+            breakPoint.Image = bitmap;
+        }
+
+        private void sourceText_VScroll(object sender, EventArgs e)
+        {
+            UpdateBreakPoint();
+        }
+
+        void BreakPointMouseClick(object sender, MouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Left)
+			{
+                var lineNo = sourceText.GetLineFromCharIndex(
+                    sourceText.GetCharIndexFromPosition(new Point(0, e.Y + sourceText.Location.Y)));
+			    var selectedPos = new ScriptPosition(lastPos.Filename, lineNo + 1);
+                if (breakPoints.Contains(selectedPos))
+                {
+                    CleanLine(selectedPos);
+                    breakPoints.Remove(selectedPos);
+                }
+                else
+                {
+                    breakPoints.Add(selectedPos);
+                }
+                UpdateBreakPoint();
+			}
+		}
+
+		void SourceTextKeyDown(object sender, KeyEventArgs e)
+		{
+            if (e.KeyCode == Keys.F11)
+                StepToolStripMenuItemClick(sender, e);
+            else if (e.KeyCode == Keys.F5)
+                runToolStripMenuItem_Click(sender, e);
 		}
 
 		private void tabControlMain_Selected(object sender, TabControlEventArgs e)
@@ -200,6 +377,7 @@ namespace MinorShift.Emuera.Forms
 		private void saveData()
 		{
 			saveWatchList();
+            SaveBreakPoint();
 
 			StreamWriter writer = null;
 			//トレースの仕様をいじってるうちに保存する意味が無いものになった
@@ -320,6 +498,7 @@ namespace MinorShift.Emuera.Forms
 				return;
 			//環境依存かもしれない。誰かに指摘されたら考えよう。
 			tabControlMain.Height = this.Size.Height - 103;
+			sourceText.Height = tabControlMain.Height - 26;
 			updateSize();
 			
 		}
@@ -462,5 +641,5 @@ namespace MinorShift.Emuera.Forms
 			this.TopMost = tempTopMost;
 		}
 
-	}
+    }
 }

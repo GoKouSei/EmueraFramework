@@ -125,8 +125,18 @@ namespace MinorShift.Emuera.GameProc
 		BeginType begintype = BeginType.NULL;
 		public bool isBegun { get { return (begintype != BeginType.NULL) ? true : false; } }
 
-        public LogicalLine CurrentLine { get { return currentLine; } set { currentLine = value; } }
-        public LogicalLine ErrorLine
+	    public LogicalLine CurrentLine
+	    {
+	        get { return currentLine; }
+	        set
+	        {
+	            currentLine = value;
+	            if (Program.DebugMode && value.Position != null && value.Position.Filename != "")
+	                console.DebugDialog.UpdatePosition(currentLine.Position);
+	        }
+	    }
+
+	    public LogicalLine ErrorLine
 		{
 			get
 			{
@@ -158,7 +168,7 @@ namespace MinorShift.Emuera.GameProc
 
 		public void ShiftNextLine()
 		{
-            currentLine = currentLine.NextLine;
+            CurrentLine = currentLine.NextLine;
             //nextLine = nextLine.NextLine;
             //RunningLine = null;
             //sequential = true;
@@ -172,7 +182,7 @@ namespace MinorShift.Emuera.GameProc
 		/// <param name="line"></param>
 		public void JumpTo(LogicalLine line)
 		{
-            currentLine = line;
+            CurrentLine = line;
             lineCount++;
             //sequential = false;
 			//ShfitNextLine();
@@ -381,7 +391,7 @@ namespace MinorShift.Emuera.GameProc
 			{
                 if (called.TopLabel.hasPrivDynamicVar)
                     called.TopLabel.Out();
-                currentLine = null;
+                CurrentLine = null;
             }
 			else
 			{
@@ -396,7 +406,7 @@ namespace MinorShift.Emuera.GameProc
 					called.ShiftNextGroup();
 				else
                     called.ShiftNext();//次の同名関数に進む。
-                currentLine = called.CurrentLabel;//関数の始点(@～～)へ移動。呼ぶべき関数が無ければnull
+                CurrentLine = called.CurrentLabel;//関数の始点(@～～)へ移動。呼ぶべき関数が無ければnull
                 if (called.CurrentLabel != null)
                 {
                     lineCount++;
@@ -409,7 +419,7 @@ namespace MinorShift.Emuera.GameProc
 			//関数終了
             if (currentLine == null)
             {
-                currentLine = called.ReturnAddress;
+                CurrentLine = called.ReturnAddress;
                 functionList.RemoveAt(functionList.Count - 1);
 				if (currentLine == null)
 				{
@@ -482,8 +492,8 @@ namespace MinorShift.Emuera.GameProc
                     call.TopLabel.In();
             }
 			functionList.Add(call);
-			//sequential = false;
-            currentLine = call.CurrentLabel;
+            //sequential = false;
+            CurrentLine = call.CurrentLabel;
             lineCount++;
             //ShfitNextLine();
         }
@@ -515,9 +525,9 @@ namespace MinorShift.Emuera.GameProc
 			{
 				console.DebugRemoveTraceLog();
 			}
-			//OutはGetValue側で行う
-			//functionList[0].TopLabel.Out();
-            currentLine = functionList[functionList.Count - 1].ReturnAddress;
+            //OutはGetValue側で行う
+            //functionList[0].TopLabel.Out();
+            CurrentLine = functionList[functionList.Count - 1].ReturnAddress;
             functionList.RemoveAt(functionList.Count - 1);
             //nextLine = null;
             MethodReturnValue = ret;
