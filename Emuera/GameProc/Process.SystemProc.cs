@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MinorShift.Emuera.Sub;
 using MinorShift.Emuera.GameData;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameProc
 {
@@ -976,7 +977,7 @@ namespace MinorShift.Emuera.GameProc
 			}
 
 			if (!vEvaluator.LoadFrom((int)systemResult))
-				throw new ExeEE("ファイルのロード中に予期しないエラーが発生しました");
+				throw new ExeEE(Resources.FileLoadError);
 			deletePrevState();
 			beginDataLoaded();
 		}

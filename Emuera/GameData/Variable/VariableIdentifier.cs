@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MinorShift.Emuera.Properties;
 using MinorShift.Emuera.Sub;
 
 namespace MinorShift.Emuera.GameData.Variable
@@ -135,129 +136,135 @@ namespace MinorShift.Emuera.GameData.Variable
 		}
 
 
-		static VariableIdentifier()
-		{
-			Array array = Enum.GetValues(typeof(VariableCode));
+	    static VariableIdentifier()
+	    {
+	        Array array = Enum.GetValues(typeof(VariableCode));
 
-			nameDic.Add(VariableCode.__FILE__.ToString(), VariableCode.__FILE__);
-			nameDic.Add(VariableCode.__LINE__.ToString(), VariableCode.__LINE__);
-			nameDic.Add(VariableCode.__FUNCTION__.ToString(), VariableCode.__FUNCTION__);
-			foreach (object name in array)
-			{
-				VariableCode code = (VariableCode)name;
-				string key = code.ToString();
-				if ((key == null) || (key.StartsWith("__") && key.EndsWith("__")))
-					continue;
-				if (Config.ICVariable)
-					key = key.ToUpper();
-				if (nameDic.ContainsKey(key))
-					continue;
+	        nameDic.Add(VariableCode.__FILE__.ToString(), VariableCode.__FILE__);
+	        nameDic.Add(VariableCode.__LINE__.ToString(), VariableCode.__LINE__);
+	        nameDic.Add(VariableCode.__FUNCTION__.ToString(), VariableCode.__FUNCTION__);
+	        foreach (object name in array)
+	        {
+	            VariableCode code = (VariableCode) name;
+	            string key = code.ToString();
+	            if ((key == null) || (key.StartsWith("__") && key.EndsWith("__")))
+	                continue;
+	            if (Config.ICVariable)
+	                key = key.ToUpper();
+	            if (nameDic.ContainsKey(key))
+	                continue;
 #if DEBUG
-				if ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
-				{
-					if ((code & VariableCode.__ARRAY_1D__) == VariableCode.__ARRAY_1D__)
-						throw new ExeEE("ARRAY2DとARRAY1Dは排他");
-				}
-				if (((code & VariableCode.__INTEGER__) != VariableCode.__INTEGER__)
-					&& ((code & VariableCode.__STRING__) != VariableCode.__STRING__))
-						throw new ExeEE("INTEGERとSTRINGのどちらかは必須");
-				if (((code & VariableCode.__INTEGER__) == VariableCode.__INTEGER__)
-					&& ((code & VariableCode.__STRING__) == VariableCode.__STRING__))
-						throw new ExeEE("INTEGERとSTRINGは排他");
-				if((code & VariableCode.__EXTENDED__) != VariableCode.__EXTENDED__)
-				{
-					if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-							throw new ExeEE("SAVE_EXTENDEDにはEXTENDEDフラグ必須");
-					if ((code & VariableCode.__LOCAL__) == VariableCode.__LOCAL__)
-							throw new ExeEE("LOCALにはEXTENDEDフラグ必須");
-					if ((code & VariableCode.__GLOBAL__) == VariableCode.__GLOBAL__)
-							throw new ExeEE("GLOBALにはEXTENDEDフラグ必須");
-					if ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
-							throw new ExeEE("ARRAY2DにはEXTENDEDフラグ必須");
-				}
-				if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-					&& ((code & VariableCode.__UNCHANGEABLE__) == VariableCode.__UNCHANGEABLE__))
-						throw new ExeEE("CALCとSAVE_EXTENDEDは排他");
-				if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-					&& ((code & VariableCode.__CALC__) == VariableCode.__CALC__))
-						throw new ExeEE("UNCHANGEABLEとSAVE_EXTENDEDは排他");
-				if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-					&& ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
-					&& ((code & VariableCode.__STRING__) == VariableCode.__STRING__))
-						throw new ExeEE("STRINGかつARRAY2DのSAVE_EXTENDEDは未実装");
+	            if ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
+	            {
+	                if ((code & VariableCode.__ARRAY_1D__) == VariableCode.__ARRAY_1D__)
+	                    throw new ExeEE(string.Format(Resources.VariableIdentifier_Collision, "ARRAY2D", "ARRAY1D"));
+	            }
+	            if (((code & VariableCode.__INTEGER__) != VariableCode.__INTEGER__)
+	                && ((code & VariableCode.__STRING__) != VariableCode.__STRING__))
+	                throw new ExeEE(Resources.ExeEE_VariableIdentifier_TypeNotDefined);
+	            if (((code & VariableCode.__INTEGER__) == VariableCode.__INTEGER__)
+	                && ((code & VariableCode.__STRING__) == VariableCode.__STRING__))
+	                throw new ExeEE(string.Format(Resources.VariableIdentifier_Collision, "INTEGER", "STRING"));
+	            if ((code & VariableCode.__EXTENDED__) != VariableCode.__EXTENDED__)
+	            {
+	                if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	                    throw new ExeEE(string.Format(Resources.VariableIdentifier_InsufficientDependency, 
+                            "SAVE_EXTENDED", "EXTENDED"));
+	                if ((code & VariableCode.__LOCAL__) == VariableCode.__LOCAL__)
+	                    throw new ExeEE(string.Format(Resources.VariableIdentifier_InsufficientDependency, 
+                            "LOCAL", "EXTENDED"));
+	                if ((code & VariableCode.__GLOBAL__) == VariableCode.__GLOBAL__)
+	                    throw new ExeEE(string.Format(Resources.VariableIdentifier_InsufficientDependency,
+                            "GLOBAL", "EXTENDED"));
+	                if ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
+	                    throw new ExeEE(string.Format(Resources.VariableIdentifier_InsufficientDependency,
+                            "ARRAY2D", "EXTENDED"));
+	            }
+	            if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	                && ((code & VariableCode.__UNCHANGEABLE__) == VariableCode.__UNCHANGEABLE__))
+	                throw new ExeEE(string.Format(Resources.VariableIdentifier_Collision, "CALC", "SAVE_EXTENDED"));
+	            if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	                && ((code & VariableCode.__CALC__) == VariableCode.__CALC__))
+	                throw new ExeEE(string.Format(Resources.VariableIdentifier_Collision, "UNCHANGEABLE", "SAVE_EXTENDED"));
+	            if (((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	                && ((code & VariableCode.__ARRAY_2D__) == VariableCode.__ARRAY_2D__)
+	                && ((code & VariableCode.__STRING__) == VariableCode.__STRING__))
+	                throw new ExeEE(string.Format(Resources.VariableIdentifier_NotImple, "STRINGかつARRAY2DのSAVE_EXTENDED"));
 #endif
-				nameDic.Add(key, code);
-				////セーブが必要な変数リストの作成
+	            nameDic.Add(key, code);
+	            ////セーブが必要な変数リストの作成
 
-				////__SAVE_EXTENDED__フラグ持ち
-				//if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-				//{
-				//    if ((code & VariableCode.__CHARACTER_DATA__) == VariableCode.__CHARACTER_DATA__)
-				//        charaSaveDataList.Add(code);
-				//    else
-				//        saveDataList.Add(code);
-				//}
-				//else if ( ((code & VariableCode.__EXTENDED__) != VariableCode.__EXTENDED__)
-				//    && ((code & VariableCode.__CALC__) != VariableCode.__CALC__)
-				//    && ((code & VariableCode.__UNCHANGEABLE__) != VariableCode.__UNCHANGEABLE__)
-				//    && ((code & VariableCode.__LOCAL__) != VariableCode.__LOCAL__)
-				//    && (!key.StartsWith("NOTUSE_")) )
-				//{//eramaker由来の変数でセーブするもの
+	            ////__SAVE_EXTENDED__フラグ持ち
+	            //if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	            //{
+	            //    if ((code & VariableCode.__CHARACTER_DATA__) == VariableCode.__CHARACTER_DATA__)
+	            //        charaSaveDataList.Add(code);
+	            //    else
+	            //        saveDataList.Add(code);
+	            //}
+	            //else if ( ((code & VariableCode.__EXTENDED__) != VariableCode.__EXTENDED__)
+	            //    && ((code & VariableCode.__CALC__) != VariableCode.__CALC__)
+	            //    && ((code & VariableCode.__UNCHANGEABLE__) != VariableCode.__UNCHANGEABLE__)
+	            //    && ((code & VariableCode.__LOCAL__) != VariableCode.__LOCAL__)
+	            //    && (!key.StartsWith("NOTUSE_")) )
+	            //{//eramaker由来の変数でセーブするもの
 
-				//    VariableCode flag = code & (VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ | VariableCode.__STRING__ | VariableCode.__INTEGER__ | VariableCode.__CHARACTER_DATA__);
-				//    int codeInt = (int)VariableCode.__LOWERCASE__ & (int)code;
-				//    switch (flag)
-				//    {
-				//        case VariableCode.__CHARACTER_DATA__ | VariableCode.__INTEGER__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_INTEGER__)
-				//                charaSaveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_STRING__)
-				//                charaSaveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__CHARACTER_DATA__ | VariableCode.__INTEGER__ | VariableCode.__ARRAY_1D__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_INTEGER_ARRAY__)
-				//                charaSaveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__ | VariableCode.__ARRAY_1D__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_STRING_ARRAY__)
-				//                charaSaveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__INTEGER__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_INTEGER__)
-				//                saveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__STRING__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_STRING__)
-				//                saveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__INTEGER__ | VariableCode.__ARRAY_1D__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_INTEGER_ARRAY__)
-				//                saveDataList.Add(code);
-				//            break;
-				//        case VariableCode.__STRING__ | VariableCode.__ARRAY_1D__:
-				//            if (codeInt < (int)VariableCode.__COUNT_SAVE_STRING_ARRAY__)
-				//                saveDataList.Add(code);
-				//            break;
-				//    }
-				//}
+	            //    VariableCode flag = code & (VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ | VariableCode.__STRING__ | VariableCode.__INTEGER__ | VariableCode.__CHARACTER_DATA__);
+	            //    int codeInt = (int)VariableCode.__LOWERCASE__ & (int)code;
+	            //    switch (flag)
+	            //    {
+	            //        case VariableCode.__CHARACTER_DATA__ | VariableCode.__INTEGER__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_INTEGER__)
+	            //                charaSaveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_STRING__)
+	            //                charaSaveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__CHARACTER_DATA__ | VariableCode.__INTEGER__ | VariableCode.__ARRAY_1D__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_INTEGER_ARRAY__)
+	            //                charaSaveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__ | VariableCode.__ARRAY_1D__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_CHARACTER_STRING_ARRAY__)
+	            //                charaSaveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__INTEGER__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_INTEGER__)
+	            //                saveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__STRING__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_STRING__)
+	            //                saveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__INTEGER__ | VariableCode.__ARRAY_1D__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_INTEGER_ARRAY__)
+	            //                saveDataList.Add(code);
+	            //            break;
+	            //        case VariableCode.__STRING__ | VariableCode.__ARRAY_1D__:
+	            //            if (codeInt < (int)VariableCode.__COUNT_SAVE_STRING_ARRAY__)
+	            //                saveDataList.Add(code);
+	            //            break;
+	            //    }
+	            //}
 
-				
-				if ((code & VariableCode.__LOCAL__) == VariableCode.__LOCAL__)
-					localvarNameDic.Add(key, code);
-				if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
-				{
-					VariableCode flag = code &
-						(VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ | VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__ | VariableCode.__INTEGER__);
-					if (!extSaveListDic.ContainsKey(flag))
-						extSaveListDic.Add(flag, new List<VariableCode>());
-					extSaveListDic[flag].Add(code);
-				}
-			}
-		}
 
-		public static List<VariableCode> GetExtSaveList(VariableCode flag)
+	            if ((code & VariableCode.__LOCAL__) == VariableCode.__LOCAL__)
+	                localvarNameDic.Add(key, code);
+	            if ((code & VariableCode.__SAVE_EXTENDED__) == VariableCode.__SAVE_EXTENDED__)
+	            {
+	                VariableCode flag = code &
+	                                    (VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ |
+	                                     VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__ |
+	                                     VariableCode.__INTEGER__);
+	                if (!extSaveListDic.ContainsKey(flag))
+	                    extSaveListDic.Add(flag, new List<VariableCode>());
+	                extSaveListDic[flag].Add(code);
+	            }
+	        }
+	    }
+
+	    public static List<VariableCode> GetExtSaveList(VariableCode flag)
 		{
 			VariableCode gFlag = flag &
 				(VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ | VariableCode.__CHARACTER_DATA__ | VariableCode.__STRING__ | VariableCode.__INTEGER__);

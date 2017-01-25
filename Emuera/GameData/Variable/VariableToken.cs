@@ -4,6 +4,7 @@ using System.Text;
 using MinorShift.Emuera.Sub;
 using MinorShift.Emuera.GameProc;
 using MinorShift.Emuera.GameData.Expression;
+using System.Globalization;
 
 namespace MinorShift.Emuera.GameData.Variable
 {
@@ -42,7 +43,7 @@ namespace MinorShift.Emuera.GameData.Variable
 				&& ((Code & VariableCode.__CALC__) != VariableCode.__CALC__)
 				&& ((Code & VariableCode.__UNCHANGEABLE__) != VariableCode.__UNCHANGEABLE__)
 				&& ((Code & VariableCode.__LOCAL__) != VariableCode.__LOCAL__)
-				&& (!varName.StartsWith("NOTUSE_")))
+				&& (!varName.StartsWith("NOTUSE_", false, CultureInfo.InvariantCulture)))
 			{
 				VariableCode flag = Code & (VariableCode.__ARRAY_1D__ | VariableCode.__ARRAY_2D__ | VariableCode.__ARRAY_3D__ | VariableCode.__STRING__ | VariableCode.__INTEGER__ | VariableCode.__CHARACTER_DATA__);
 				switch (flag)

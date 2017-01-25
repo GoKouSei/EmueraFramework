@@ -4,6 +4,7 @@ using MinorShift.Emuera.Sub;
 using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameData.Function;
 using System.Windows.Forms;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameData.Expression
 {
@@ -44,7 +45,7 @@ namespace MinorShift.Emuera.GameData.Expression
 		public static IOperandTerm[] ReduceArguments(WordCollection wc, ArgsEndWith endWith, bool isDefine)
 		{
 			if(wc == null)
-				throw new ExeEE("空のストリームを渡された");
+				throw new ExeEE(Resources.ExeEE_ExpressionParser_EmptyStream);
 			List<IOperandTerm> terms = new List<IOperandTerm>();
 			TermEndWith termEndWith = TermEndWith.EoL;
 			switch (endWith)
@@ -269,7 +270,7 @@ namespace MinorShift.Emuera.GameData.Expression
 					return new SingleTerm(idStr);
 				GlobalStatic.IdentifierDictionary.ThrowException(idStr, false);
 			}
-			throw new ExeEE("エラー投げ損ねた");//ここまででthrowかreturnのどちらかをするはず。
+			throw new ExeEE(Resources.ExeEE_ExpressionParser_DontThrowError);//ここまででthrowかreturnのどちらかをするはず。
 		}
 
 		#endregion
@@ -425,7 +426,7 @@ namespace MinorShift.Emuera.GameData.Expression
 							goto end;
 						throw new CodeEE("構文解釈中に予期しない記号'" + token.Type + "'を発見しました");
 					case 'M':
-						throw new ExeEE("マクロ解決失敗");
+						throw new ExeEE(Resources.ExeEE_ExpressionParser_CantResolveMacro);
 					default:
 						throw new CodeEE("構文解釈中に予期しない記号'" + token.Type + "'を発見しました");
 				}

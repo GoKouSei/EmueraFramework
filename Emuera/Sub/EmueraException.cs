@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.Sub
 {
@@ -59,11 +60,11 @@ namespace MinorShift.Emuera.Sub
     internal sealed class NotImplCodeEE : CodeEE
 	{
 		public NotImplCodeEE(ScriptPosition position)
-			: base("この機能は現バージョンでは使えません", position)
+			: base(Resources.NotImplCodeEE_Message, position)
 		{
 		}
 		public NotImplCodeEE()
-			: base("この機能は現バージョンでは使えません")
+			: base(Resources.NotImplCodeEE_Message)
 		{
 		}
 	}

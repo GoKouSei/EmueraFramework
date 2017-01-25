@@ -59,5 +59,338 @@ namespace MinorShift.Emuera.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @の使い方が不正です.
+        /// </summary>
+        internal static string CodeEE_IdentifierDictionary_InvaildAt {
+            get {
+                return ResourceManager.GetString("CodeEE_IdentifierDictionary_InvaildAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 不正な指定です.
+        /// </summary>
+        internal static string Config_ParseError {
+            get {
+                return ResourceManager.GetString("Config_ParseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 値をColor指定子として認識できません.
+        /// </summary>
+        internal static string Config_ParseError_Color {
+            get {
+                return ResourceManager.GetString("Config_ParseError_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 数字でない文字が含まれています.
+        /// </summary>
+        internal static string Config_ParseError_Number_UnexpectedString {
+            get {
+                return ResourceManager.GetString("Config_ParseError_Number_UnexpectedString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 文字列分割異常.
+        /// </summary>
+        internal static string ConsoleButtonString_StringSplitError {
+            get {
+                return ResourceManager.GetString("ConsoleButtonString_StringSplitError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 配列変数{0}の要素を文字列で指定することはできません.
+        /// </summary>
+        internal static string ConstantData_CantFindKeyword {
+            get {
+                return ResourceManager.GetString("ConstantData_CantFindKeyword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}の中に&quot;{1}&quot;の定義がありません.
+        /// </summary>
+        internal static string ConstantData_CantFindKeyword_ErrPos {
+            get {
+                return ResourceManager.GetString("ConstantData_CantFindKeyword_ErrPos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 配列変数{0}の{1}番目の要素を文字列で指定することはできません.
+        /// </summary>
+        internal static string ConstantData_CantFindKeyword2D {
+            get {
+                return ResourceManager.GetString("ConstantData_CantFindKeyword2D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CDFLAGの要素数とCDFLAGNAME1及びCDFLAGNAME2の要素数が一致していません.
+        /// </summary>
+        internal static string ConstantData_CDFLAG_Count_NotMatch {
+            get {
+                return ResourceManager.GetString("ConstantData_CDFLAG_Count_NotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CDFLAGの要素数が多すぎます（CDFLAGNAME1とCDFLAGNAME2の要素数の積が100万を超えています）.
+        /// </summary>
+        internal static string ConstantData_CDFLAG_ElementTooMany {
+            get {
+                return ResourceManager.GetString("ConstantData_CDFLAG_ElementTooMany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to キーワードを空には出来ません.
+        /// </summary>
+        internal static string ConstantData_KeywordEmpty {
+            get {
+                return ResourceManager.GetString("ConstantData_KeywordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 型チェックは呼び出し元が行うこと.
+        /// </summary>
+        internal static string ExeEE_ArgumentTypeCheck_NotCaller {
+            get {
+                return ResourceManager.GetString("ExeEE_ArgumentTypeCheck_NotCaller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to マクロ解決失敗.
+        /// </summary>
+        internal static string ExeEE_ExpressionParser_CantResolveMacro {
+            get {
+                return ResourceManager.GetString("ExeEE_ExpressionParser_CantResolveMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to エラー投げ損ねた.
+        /// </summary>
+        internal static string ExeEE_ExpressionParser_DontThrowError {
+            get {
+                return ResourceManager.GetString("ExeEE_ExpressionParser_DontThrowError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 空のストリームを渡された.
+        /// </summary>
+        internal static string ExeEE_ExpressionParser_EmptyStream {
+            get {
+                return ResourceManager.GetString("ExeEE_ExpressionParser_EmptyStream", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 存在しないパスを呼び出した.
+        /// </summary>
+        internal static string ExeEE_FileNotExists {
+            get {
+                return ResourceManager.GetString("ExeEE_FileNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 関数:型が違います（GETCONFIGS関数を使用してください）.
+        /// </summary>
+        internal static string ExeEE_Function_InvaildArgument {
+            get {
+                return ResourceManager.GetString("ExeEE_Function_InvaildArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 関数:不正な呼び出し.
+        /// </summary>
+        internal static string ExeEE_Function_InvaildCall {
+            get {
+                return ResourceManager.GetString("ExeEE_Function_InvaildCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 戻り値の型が違う or 未実装.
+        /// </summary>
+        internal static string ExeEE_FunctionMethod_NotImple {
+            get {
+                return ResourceManager.GetString("ExeEE_FunctionMethod_NotImple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CanForbidでない変数&quot;{0}&quot;にIsForbidがついている.
+        /// </summary>
+        internal static string ExeEE_IdentifierDictionary_InvaildIsForbid_NotCanForbid {
+            get {
+                return ResourceManager.GetString("ExeEE_IdentifierDictionary_InvaildIsForbid_NotCanForbid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 呼び出された変数&quot;{0}&quot;は設定により使用が禁止されています.
+        /// </summary>
+        internal static string ExeEE_IdentifierDictionary_IsForbidVariable {
+            get {
+                return ResourceManager.GetString("ExeEE_IdentifierDictionary_IsForbidVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ローカル変数でない変数{0}に対して@が使われました.
+        /// </summary>
+        internal static string ExeEE_IdentifierDictionary_UnExpectedAt_NotLocalVariable {
+            get {
+                return ResourceManager.GetString("ExeEE_IdentifierDictionary_UnExpectedAt_NotLocalVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 戻り値の型が違う.
+        /// </summary>
+        internal static string ExeEE_Invaild_ReturnType {
+            get {
+                return ResourceManager.GetString("ExeEE_Invaild_ReturnType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未実装.
+        /// </summary>
+        internal static string ExeEE_NotImple {
+            get {
+                return ResourceManager.GetString("ExeEE_NotImple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 何かおかしい.
+        /// </summary>
+        internal static string ExeEE_StrForm_InvalidSymbol {
+            get {
+                return ResourceManager.GetString("ExeEE_StrForm_InvalidSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 異常な変数宣言.
+        /// </summary>
+        internal static string ExeEE_VariableData_Invaild_Dimension {
+            get {
+                return ResourceManager.GetString("ExeEE_VariableData_Invaild_Dimension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INTEGERとSTRINGのどちらかは必須.
+        /// </summary>
+        internal static string ExeEE_VariableIdentifier_TypeNotDefined {
+            get {
+                return ResourceManager.GetString("ExeEE_VariableIdentifier_TypeNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ファイルのロード中に予期しないエラーが発生しました.
+        /// </summary>
+        internal static string FileLoadError {
+            get {
+                return ResourceManager.GetString("FileLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未定義の関数.
+        /// </summary>
+        internal static string FunctionNotDefined {
+            get {
+                return ResourceManager.GetString("FunctionNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}異常.
+        /// </summary>
+        internal static string Instraction_InvaildOperation {
+            get {
+                return ResourceManager.GetString("Instraction_InvaildOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 未実装 or 呼び出しミス.
+        /// </summary>
+        internal static string Instruction_CallAbstractInstruction {
+            get {
+                return ResourceManager.GetString("Instruction_CallAbstractInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 不正なデータをロードしようとしました.
+        /// </summary>
+        internal static string InvaildDataLoad {
+            get {
+                return ResourceManager.GetString("InvaildDataLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to この機能は現バージョンでは使えません.
+        /// </summary>
+        internal static string NotImplCodeEE_Message {
+            get {
+                return ResourceManager.GetString("NotImplCodeEE_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to リソースファイルのロード中にエラーが発生しました.
+        /// </summary>
+        internal static string Resource_FileLoadError {
+            get {
+                return ResourceManager.GetString("Resource_FileLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}と{1}は排他.
+        /// </summary>
+        internal static string VariableIdentifier_Collision {
+            get {
+                return ResourceManager.GetString("VariableIdentifier_Collision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}には{1}フラグ必須.
+        /// </summary>
+        internal static string VariableIdentifier_InsufficientDependency {
+            get {
+                return ResourceManager.GetString("VariableIdentifier_InsufficientDependency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}わ未実装.
+        /// </summary>
+        internal static string VariableIdentifier_NotImple {
+            get {
+                return ResourceManager.GetString("VariableIdentifier_NotImple", resourceCulture);
+            }
+        }
     }
 }

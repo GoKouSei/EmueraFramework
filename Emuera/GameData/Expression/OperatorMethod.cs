@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using MinorShift.Emuera.Sub;
 using MinorShift.Emuera.GameData.Function;
 using MinorShift.Emuera.GameData.Variable;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameData.Expression
 {
@@ -17,7 +18,7 @@ namespace MinorShift.Emuera.GameData.Expression
 		{
 			argumentTypeArray = null;
 		}
-		public override string CheckArgumentType(string name, IOperandTerm[] arguments) { throw new ExeEE("型チェックは呼び出し元が行うこと"); }
+		public override string CheckArgumentType(string name, IOperandTerm[] arguments) { throw new ExeEE(Resources.ExeEE_ArgumentTypeCheck_NotCaller); }
 	}
 
 	internal static class OperatorMethodManager

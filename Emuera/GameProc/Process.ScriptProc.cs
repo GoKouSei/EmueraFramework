@@ -8,6 +8,7 @@ using MinorShift.Emuera.GameData.Variable;
 using MinorShift.Emuera.GameView;
 using MinorShift.Emuera.GameData.Function;
 using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameProc
 {
@@ -750,7 +751,7 @@ namespace MinorShift.Emuera.GameProc
 					}
 #if DEBUG
 				default:
-					throw new ExeEE("未定義の関数");
+					throw new ExeEE(Resources.FunctionNotDefined);
 #endif
 			}
 			return;
@@ -778,10 +779,10 @@ namespace MinorShift.Emuera.GameProc
 						//EraDataResult result = vEvaluator.checkData((int)target);
 						EraDataResult result = vEvaluator.CheckData((int)target, EraSaveFileType.Normal);
 						if (result.State != EraDataState.OK)
-							throw new CodeEE("不正なデータをロードしようとしました");
+							throw new CodeEE(Resources.InvaildDataLoad);
 
 						if (!vEvaluator.LoadFrom((int)target))
-							throw new ExeEE("ファイルのロード中に予期しないエラーが発生しました");
+							throw new ExeEE(Resources.FileLoadError);
 						state.ClearFunctionList();
 						state.SystemState = SystemStateCode.LoadData_DataLoaded;
 						return false;
@@ -890,7 +891,7 @@ namespace MinorShift.Emuera.GameProc
 					}
 #if DEBUG
 				default:
-					throw new ExeEE("未定義の関数です");
+					throw new ExeEE(Resources.FunctionNotDefined);
 #endif
 			}
 			return true;

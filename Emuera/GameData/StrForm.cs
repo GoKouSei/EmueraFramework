@@ -6,6 +6,7 @@ using MinorShift.Emuera.Sub;
 using MinorShift._Library;
 using MinorShift.Emuera.GameData.Function;
 using System.Collections.Generic;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameData
 {
@@ -78,7 +79,7 @@ namespace MinorShift.Emuera.GameData
 							termArray[i] = CallnameTarget;
 							continue;
 					}
-					throw new ExeEE("何かおかしい");
+					throw new ExeEE(Resources.ExeEE_StrForm_InvalidSymbol);
 				}
                 WordCollection wc = null;
 				IOperandTerm operand = null;
@@ -225,8 +226,8 @@ namespace MinorShift.Emuera.GameData
 				ReturnType = typeof(string);
 				argumentTypeArray = null;
 			}
-			public override string CheckArgumentType(string name, IOperandTerm[] arguments) { throw new ExeEE("型チェックは呼び出し元が行うこと"); }
-			public override Int64 GetIntValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE("戻り値の型が違う"); }
+			public override string CheckArgumentType(string name, IOperandTerm[] arguments) { throw new ExeEE(Resources.ExeEE_ArgumentTypeCheck_NotCaller); }
+			public override Int64 GetIntValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE(Resources.ExeEE_Invaild_ReturnType); }
 			public override SingleTerm GetReturnValue(ExpressionMediator exm, IOperandTerm[] arguments) { return new SingleTerm(GetStrValue(exm, arguments)); }
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using MinorShift.Emuera.GameData.Expression;
 
@@ -45,7 +46,7 @@ namespace MinorShift.Emuera.Sub
 		public override char Type { get { return '0'; } }
 		public override string ToString()
 		{
-			return code.ToString();
+			return code.ToString(CultureInfo.InvariantCulture);
 		}
 	}
 
@@ -122,7 +123,7 @@ namespace MinorShift.Emuera.Sub
 		public override char Type { get { return 'M'; } }
 		public override string ToString()
 		{
-			return "Arg" + num.ToString();
+			return "Arg" + num.ToString(CultureInfo.InvariantCulture);
 		}
 	}
 	

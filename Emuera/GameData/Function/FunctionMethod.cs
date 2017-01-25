@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MinorShift.Emuera.GameData.Expression;
+using MinorShift.Emuera.Properties;
 using MinorShift.Emuera.Sub;
 
 namespace MinorShift.Emuera.GameData.Function
@@ -35,8 +36,8 @@ namespace MinorShift.Emuera.GameData.Function
 		public bool HasUniqueRestructure { get; protected set; }
 
 		//実際の計算。
-		public virtual Int64 GetIntValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE("戻り値の型が違う or 未実装"); }
-		public virtual string GetStrValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE("戻り値の型が違う or 未実装"); }
+		public virtual Int64 GetIntValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE(Resources.ExeEE_FunctionMethod_NotImple); }
+		public virtual string GetStrValue(ExpressionMediator exm, IOperandTerm[] arguments) { throw new ExeEE(Resources.ExeEE_FunctionMethod_NotImple); }
 		public virtual SingleTerm GetReturnValue(ExpressionMediator exm, IOperandTerm[] arguments)
 		{
 			if (ReturnType == typeof(Int64))
@@ -52,7 +53,7 @@ namespace MinorShift.Emuera.GameData.Function
 		/// <param name="arguments"></param>
 		/// <returns></returns>
 		public virtual bool UniqueRestructure(ExpressionMediator exm, IOperandTerm[] arguments)
-		{ throw new ExeEE("未実装？"); }
+		{ throw new ExeEE(Resources.ExeEE_NotImple); }
 		
 	}
 }

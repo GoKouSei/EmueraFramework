@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using MinorShift.Emuera.Properties;
 using YeongHun.EmueraFramework.Platforms;
 
 namespace MinorShift.Emuera.GameProc.Function
@@ -97,7 +98,7 @@ namespace MinorShift.Emuera.GameProc.Function
 					flag |= METHOD_SAFE;
 				}
 				if ((ArgBuilder == null) || (!st.EOS))
-					throw new ExeEE("PRINT異常");
+					throw new ExeEE(string.Format(Resources.Instraction_InvaildOperation, "PRINT"));
 			}
 
 			readonly bool isPrintV;
@@ -182,7 +183,7 @@ namespace MinorShift.Emuera.GameProc.Function
 					flag |= METHOD_SAFE;
 				}
 				if ((ArgBuilder == null) || (!st.EOS))
-					throw new ExeEE("PRINTDATA異常");
+					throw new ExeEE(string.Format(Resources.Instraction_InvaildOperation, "PRINTDATA"));
 			}
 
 			public override void DoInstruction(ExpressionMediator exm, InstructionLine func, ProcessState state)
@@ -2036,7 +2037,7 @@ namespace MinorShift.Emuera.GameProc.Function
 						state.JumpTo(tFunc);//LOOP
 					return;
 				}
-				throw new ExeEE("異常なCONTINUE");
+				throw new ExeEE(string.Format(Resources.Instraction_InvaildOperation, "CONTINUE"));
 			}
 		}
 

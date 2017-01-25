@@ -5,6 +5,7 @@ using System.IO;
 using MinorShift.Emuera.Sub;
 using MinorShift.Emuera.GameView;
 using MinorShift.Emuera.GameData.Variable;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameData
 {
@@ -562,7 +563,7 @@ check1break:
 			{
 				//調整が面倒なので投げる
 				if ((length1 != MaxDataList[cdflag1Index]) || (length2 != MaxDataList[cdflag2Index]))
-					throw new CodeEE("CDFLAGの要素数とCDFLAGNAME1及びCDFLAGNAME2の要素数が一致していません", position);
+					throw new CodeEE(Resources.ConstantData_CDFLAG_Count_NotMatch, position);
 			}
 			else if (cdflagNameLengthChanged && !changedCode.Contains(VariableCode.CDFLAG))
 			{
@@ -571,7 +572,7 @@ check1break:
 				if (length1 * length2 > 1000000)
 				{
 					//調整が面倒なので投げる
-					throw new CodeEE("CDFLAGの要素数が多すぎます（CDFLAGNAME1とCDFLAGNAME2の要素数の積が100万を超えています）", position);
+					throw new CodeEE(Resources.ConstantData_CDFLAG_ElementTooMany, position);
 				}
 				CharacterIntArray2DLength[mainLengthIndex] = (((Int64)length1) << 32) + ((Int64)length2);
 			}
@@ -692,16 +693,16 @@ check1break:
 		public int KeywordToInteger(VariableCode code, string key, int index)
 		{
 			if (string.IsNullOrEmpty(key))
-				throw new CodeEE("キーワードを空には出来ません");
+				throw new CodeEE(Resources.ConstantData_KeywordEmpty);
 			int ret = -1;
 			string errPos;
             Dictionary<string, int> dic = GetKeywordDictionary(out errPos, code, index);
 			if (dic.TryGetValue(key, out ret))
 				return ret;
 			if (errPos == null)
-				throw new CodeEE("配列変数" + code.ToString() + "の要素を文字列で指定することはできません");
+				throw new CodeEE(string.Format(Resources.ConstantData_CantFindKeyword, code));
 			else
-				throw new CodeEE(errPos + "の中に\"" + key + "\"の定義がありません");
+				throw new CodeEE(string.Format(Resources.ConstantData_CantFindKeyword_ErrPos, errPos, key));
 		}
 
 		public Dictionary<string, int> GetKeywordDictionary(out string errPos, VariableCode code, int index)
@@ -848,7 +849,7 @@ check1break:
 						errPos = "cdflag2.csv";
 					}
 					else if (index >= 0)
-						throw new CodeEE("配列変数" + code.ToString() + "の" + (index + 1).ToString() + "番目の要素を文字列で指定することはできません");
+						throw new CodeEE(string.Format("配列変数{0}の{1}番目の要素を文字列で指定することはできません", code, (index + 1)));
 					else
 						throw new CodeEE("CDFLAGの要素の取得にはCDFLAGNAME1又はCDFLAGNAME2を使用します");
 					return ret;

@@ -11,6 +11,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using MinorShift.Emuera.GameProc.Function;
 using MinorShift.Emuera.GameData.Expression;
+using MinorShift.Emuera.Properties;
 using MinorShift._Library;
 
 namespace MinorShift.Emuera
@@ -510,15 +511,15 @@ namespace MinorShift.Emuera
                 if (ret.IsForbid)
                 {
 					if(!ret.CanForbid)
-						throw new ExeEE("CanForbidでない変数\"" + ret.Name +"\"にIsForbidがついている");
-                    throw new CodeEE("呼び出された変数\"" + ret.Name +"\"は設定により使用が禁止されています");
+						throw new ExeEE(string.Format(Resources.ExeEE_IdentifierDictionary_InvaildIsForbid_NotCanForbid, ret.Name));
+                    throw new CodeEE(string.Format(Resources.ExeEE_IdentifierDictionary_IsForbidVariable, ret.Name));
                 }
 				if (subKey != null)
-					throw new CodeEE("ローカル変数でない変数" + key + "に対して@が使われました");
+					throw new CodeEE(string.Format(Resources.ExeEE_IdentifierDictionary_UnExpectedAt_NotLocalVariable, key));
                 return ret;
             }
 			if (subKey != null)
-				throw new CodeEE("@の使い方が不正です");
+				throw new CodeEE(Resources.CodeEE_IdentifierDictionary_InvaildAt);
 			return null;
 		}
 

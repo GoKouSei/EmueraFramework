@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.Content
 {
@@ -56,7 +57,7 @@ namespace MinorShift.Emuera.Content
 			}
 			catch
 			{
-				throw new CodeEE("リソースファイルのロード中にエラーが発生しました");
+				throw new CodeEE(Resources.Resource_FileLoadError);
 			}
 		}
 

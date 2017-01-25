@@ -11,6 +11,7 @@ using System.Drawing;
 using Microsoft.VisualBasic;
 using System.Windows.Forms;
 using MinorShift.Emuera.GameView;
+using MinorShift.Emuera.Properties;
 
 namespace MinorShift.Emuera.GameData.Function
 {
@@ -2568,16 +2569,16 @@ namespace MinorShift.Emuera.GameData.Function
 			public override Int64 GetIntValue(ExpressionMediator exm, IOperandTerm[] arguments)
 			{
 				if(ReturnType != typeof(Int64))
-					throw new ExeEE(funcname + "関数:不正な呼び出し");
+					throw new ExeEE(funcname + Resources.ExeEE_Function_InvaildCall);
 				SingleTerm term = getSingleTerm(exm, arguments);
 				if(term.GetOperandType() != typeof(Int64))
-					throw new CodeEE(funcname + "関数:型が違います（GETCONFIGS関数を使用してください）");
+					throw new CodeEE(funcname + Resources.ExeEE_Function_InvaildArgument);
 				return term.Int;
 			}
 			public override string GetStrValue(ExpressionMediator exm, IOperandTerm[] arguments)
 			{
 				if(ReturnType != typeof(string))
-					throw new ExeEE(funcname + "関数:不正な呼び出し");
+					throw new ExeEE(funcname + Resources.ExeEE_Function_InvaildCall);
 				SingleTerm term = getSingleTerm(exm, arguments);
 				if (term.GetOperandType() != typeof(string))
 					throw new CodeEE(funcname + "関数:型が違います（GETCONFIG関数を使用してください）");

@@ -10,6 +10,8 @@ using MinorShift.Emuera.GameData.Expression;
 using MinorShift.Emuera.GameProc;
 using MinorShift._Library;
 using MinorShift.Emuera.GameProc.Function;
+using MinorShift.Emuera.Properties;
+
 //using System.Windows.Forms;
 
 namespace MinorShift.Emuera.GameData.Variable
@@ -2355,7 +2357,7 @@ namespace MinorShift.Emuera.GameData.Variable
 		{
 			string filepath = getSaveDataPath(dataIndex);
 			if (!File.Exists(filepath))
-				throw new ExeEE("存在しないパスを呼び出した");
+				throw new ExeEE(Resources.ExeEE_FileNotExists);
 			EraDataReader reader = null;
 			EraBinaryDataReader bReader = null;
 			FileStream fs = null;

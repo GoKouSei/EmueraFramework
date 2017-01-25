@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,133 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExeEE_ExpressionParser_EmptyStream" xml:space="preserve">
+    <value>空のストリームを渡された</value>
+  </data>
+  <data name="ExeEE_ExpressionParser_DontThrowError" xml:space="preserve">
+    <value>エラー投げ損ねた</value>
+  </data>
+  <data name="ExeEE_ExpressionParser_CantResolveMacro" xml:space="preserve">
+    <value>マクロ解決失敗</value>
+  </data>
+  <data name="ExeEE_ArgumentTypeCheck_NotCaller" xml:space="preserve">
+    <value>型チェックは呼び出し元が行うこと</value>
+    <comment>The caller must perform type checking.</comment>
+  </data>
+  <data name="ExeEE_Function_InvaildCall" xml:space="preserve">
+    <value>関数:不正な呼び出し</value>
+  </data>
+  <data name="ExeEE_Function_InvaildArgument" xml:space="preserve">
+    <value>関数:型が違います（GETCONFIGS関数を使用してください）</value>
+  </data>
+  <data name="ExeEE_FunctionMethod_NotImple" xml:space="preserve">
+    <value>戻り値の型が違う or 未実装</value>
+  </data>
+  <data name="ExeEE_NotImple" xml:space="preserve">
+    <value>未実装</value>
+  </data>
+  <data name="ExeEE_IdentifierDictionary_InvaildIsForbid_NotCanForbid" xml:space="preserve">
+    <value>CanForbidでない変数"{0}"にIsForbidがついている</value>
+    <comment>{0} = variable name</comment>
+  </data>
+  <data name="ExeEE_IdentifierDictionary_IsForbidVariable" xml:space="preserve">
+    <value>呼び出された変数"{0}"は設定により使用が禁止されています</value>
+    <comment>{0} = varaible name</comment>
+  </data>
+  <data name="ExeEE_IdentifierDictionary_UnExpectedAt_NotLocalVariable" xml:space="preserve">
+    <value>ローカル変数でない変数{0}に対して@が使われました</value>
+    <comment>{0} = variable name</comment>
+  </data>
+  <data name="CodeEE_IdentifierDictionary_InvaildAt" xml:space="preserve">
+    <value>@の使い方が不正です</value>
+  </data>
+  <data name="ExeEE_StrForm_InvalidSymbol" xml:space="preserve">
+    <value>何かおかしい</value>
+  </data>
+  <data name="ExeEE_Invaild_ReturnType" xml:space="preserve">
+    <value>戻り値の型が違う</value>
+  </data>
+  <data name="ExeEE_VariableData_Invaild_Dimension" xml:space="preserve">
+    <value>異常な変数宣言</value>
+  </data>
+  <data name="ExeEE_FileNotExists" xml:space="preserve">
+    <value>存在しないパスを呼び出した</value>
+  </data>
+  <data name="VariableIdentifier_Collision" xml:space="preserve">
+    <value>{0}と{1}は排他</value>
+    <comment>{0} and {1} collide with each other</comment>
+  </data>
+  <data name="ExeEE_VariableIdentifier_TypeNotDefined" xml:space="preserve">
+    <value>INTEGERとSTRINGのどちらかは必須</value>
+  </data>
+  <data name="VariableIdentifier_InsufficientDependency" xml:space="preserve">
+    <value>{0}には{1}フラグ必須</value>
+    <comment>{0} is need {1} flag</comment>
+  </data>
+  <data name="VariableIdentifier_NotImple" xml:space="preserve">
+    <value>{0}わ未実装</value>
+    <comment>{0} is something not implemented</comment>
+  </data>
+  <data name="Instraction_InvaildOperation" xml:space="preserve">
+    <value>{0}異常</value>
+    <comment>{0} is fuction code</comment>
+  </data>
+  <data name="Instruction_CallAbstractInstruction" xml:space="preserve">
+    <value>未実装 or 呼び出しミス</value>
+    <comment>Not implement or call error</comment>
+  </data>
+  <data name="FunctionNotDefined" xml:space="preserve">
+    <value>未定義の関数</value>
+  </data>
+  <data name="FileLoadError" xml:space="preserve">
+    <value>ファイルのロード中に予期しないエラーが発生しました</value>
+  </data>
+  <data name="InvaildDataLoad" xml:space="preserve">
+    <value>不正なデータをロードしようとしました</value>
+  </data>
+  <data name="ConsoleButtonString_StringSplitError" xml:space="preserve">
+    <value>文字列分割異常</value>
+  </data>
+  <data name="NotImplCodeEE_Message" xml:space="preserve">
+    <value>この機能は現バージョンでは使えません</value>
+  </data>
+  <data name="Config_ParseError_Color" xml:space="preserve">
+    <value>値をColor指定子として認識できません</value>
+  </data>
+  <data name="Config_ParseError_Number_UnexpectedString" xml:space="preserve">
+    <value>数字でない文字が含まれています</value>
+  </data>
+  <data name="Config_ParseError" xml:space="preserve">
+    <value>不正な指定です</value>
+  </data>
+  <data name="Resource_FileLoadError" xml:space="preserve">
+    <value>リソースファイルのロード中にエラーが発生しました</value>
+  </data>
+  <data name="ConstantData_CDFLAG_Count_NotMatch" xml:space="preserve">
+    <value>CDFLAGの要素数とCDFLAGNAME1及びCDFLAGNAME2の要素数が一致していません</value>
+  </data>
+  <data name="ConstantData_CDFLAG_ElementTooMany" xml:space="preserve">
+    <value>CDFLAGの要素数が多すぎます（CDFLAGNAME1とCDFLAGNAME2の要素数の積が100万を超えています）</value>
+    <comment>element is over then 1000,000</comment>
+  </data>
+  <data name="ConstantData_KeywordEmpty" xml:space="preserve">
+    <value>キーワードを空には出来ません</value>
+  </data>
+  <data name="ConstantData_CantFindKeyword" xml:space="preserve">
+    <value>配列変数{0}の要素を文字列で指定することはできません</value>
+    <comment>{0} = variable name</comment>
+  </data>
+  <data name="ConstantData_CantFindKeyword_ErrPos" xml:space="preserve">
+    <value>{0}の中に"{1}"の定義がありません</value>
+    <comment>{0} = script pos {1} = variable name</comment>
+  </data>
+  <data name="ConstantData_CantFindKeyword2D" xml:space="preserve">
+    <value>配列変数{0}の{1}番目の要素を文字列で指定することはできません</value>
+    <comment>{0} = variable name {1} = index</comment>
+  </data>
 </root>
