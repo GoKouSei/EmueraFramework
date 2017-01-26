@@ -635,7 +635,7 @@ namespace MinorShift.Emuera.GameProc
             framework.SetEmuera(emuera);
             emuera.Initialize(framework);
 
-            IPlatform csharp = new CSharpPlatform();
+            IPlatform csharp = new CSharpPlatform(new CsLoader().LoadCS(Program.CsDir));
             csharp.Initialize(framework);
             framework.Initialize(EmueraPlatform.ConfigDic, csharp);
 

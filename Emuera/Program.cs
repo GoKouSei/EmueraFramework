@@ -45,6 +45,7 @@ namespace MinorShift.Emuera
 			//debugMode = true;
 #endif
 			CsvDir = ExeDir + "csv\\";
+            CsDir = ExeDir + "cs\\";
 			ErbDir = ExeDir + "erb\\";
 			DebugDir = ExeDir + "debug\\";
 			DatDir = ExeDir + "dat\\";
@@ -184,6 +185,6 @@ namespace MinorShift.Emuera
 
 
 		public static uint StartTime { get; private set; }
-
-	}
+        public static string CsDir { get; internal set; }
+    }
 }

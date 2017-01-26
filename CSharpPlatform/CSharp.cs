@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using YeongHun.EmueraFramework.Function;
 
 namespace YeongHun.EmueraFramework.Platforms
 {
     public class CSharpPlatform : IPlatform
     {
+        private IEnumerable<Assembly> _assemblys;
+
+        public CSharpPlatform([NotNull] IEnumerable<Assembly> assemblys)
+        {
+            _assemblys = assemblys;
+        }
 
         private List<IDisposable> disposList = new List<IDisposable>();
 
@@ -18,40 +25,23 @@ namespace YeongHun.EmueraFramework.Platforms
 
         public void Initialize(IFramework framework)
         {
-            if (!Directory.Exists(framework.Root + "Plugins"))
-            {
-                Methods = new Method[0];
-                framework.Print("Can't find Plugins folder", PrintFlags.NEWLINE);
-                return;
-            }
-
-            var assemblys = Directory.GetFiles(framework.Root + "Plugins", "*.plg", SearchOption.TopDirectoryOnly).Select(
-                file =>
-                {
-                    try
-                    {
-                        return Assembly.Load(File.ReadAllBytes(file));
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }).Where(asm => asm != null);
-
-            var types = assemblys.SelectMany(asm => asm.GetExportedTypes()).Where(type => type.IsDefined(typeof(ExternTypeAttribute)));
-            List<Method> methods = new List<Method>();
+            var types = _assemblys.SelectMany(asm => asm.GetExportedTypes()).Where(type => type.IsDefined(typeof(ExternTypeAttribute)));
+            var methods = new List<Method>();
             foreach (var type in types)
             {
                 if (type == typeof(object))
                     continue;
-                ConstructorInfo ctor = type.GetConstructor(new[] { typeof(IFramework) });
+                ConstructorInfo ctor = type.GetConstructor(new[] { typeof(IFramework) }) ?? type.GetConstructor(Type.EmptyTypes);
                 if (ctor == null)
                     continue;
                 object instance = null;
 
                 try
                 {
-                    instance = ctor.Invoke(new object[] { framework });
+                    instance = 
+                        ctor.GetParameters().Length == 1 
+                        ? ctor.Invoke(new object[] { framework }) 
+                        : ctor.Invoke(null);
                 }
                 catch
                 {
