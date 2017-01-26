@@ -63,7 +63,12 @@ namespace MinorShift.Emuera
 				MessageBox.Show("多重起動を許可する場合、emuera.configを書き換えて下さい", "既に起動しています");
 				return;
 			}
-			if (!Directory.Exists(CsvDir))
+
+            if (!Directory.Exists(CsDir))
+            {
+                Directory.CreateDirectory(CsDir);
+            }
+            if (!Directory.Exists(CsvDir))
 			{
 				MessageBox.Show("csvフォルダが見つかりません", "フォルダなし");
 				return;
