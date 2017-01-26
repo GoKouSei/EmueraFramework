@@ -147,8 +147,11 @@ namespace MinorShift.Emuera.Forms
 
             Application.DoEvents();
         }
-        
-        private void MarkBreakPoint(ScriptPosition pos) => SelectLine(pos.LineNo - 1, Color.DarkRed, Color.White);
+
+	    private void MarkBreakPoint(ScriptPosition pos)
+	    {
+            //SelectLine(pos.LineNo - 1, Color.DarkRed, Color.White);
+        }
         private void CleanLine(ScriptPosition pos) => SelectLine(pos.LineNo - 1, Color.White, Color.Black);
 
         private void SelectLine(int lineNo,Color back,Color text,bool scroll=false)

@@ -79,6 +79,7 @@ namespace MinorShift.Emuera.Sub
 		{ }
 	}
 
+    [Serializable]
 	/// <summary>
 	/// エラー箇所を表示するための位置データ。整形前のデータなのでエラー表示以外の理由で参照するべきではない。
 	/// </summary>
